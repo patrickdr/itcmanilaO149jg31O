@@ -1,14 +1,57 @@
+<script type="text/javascript">
+  var Search = {
+    init : function(){
+      Search.Form = $('#SearchAdminIndexForm');
+    }
+  };
+  var Customer =  {
+    init : function(){
+      Customer.customerSelect = $('select[name="customer_id"]');
+    },
+    onChange : function(){
+      Customer.customerId = Customer.customerSelect.val();
+      Search.Form.submit();
+      //window.location.href = "?customer_id=" + Customer.customerId;
+    }
+  };
+  var Seller =  {
+    init : function(){
+      Seller.sellerSelect = $('select[name="seller_id"]');
+    },
+    onChange : function(){
+      Seller.sellerId = Seller.sellerSelect.val();
+      Search.Form.submit();
+      //window.location.href = "&seller_id=" + Seller.sellerId;
+    }
+  };  
+  $(document).ready(function(){
+    Search.init();
+    Customer.init();
+    Seller.init();
+    Customer.customerSelect.on('change', Customer.onChange);
+    Seller.sellerSelect.on('change', Seller.onChange);
+  });
+</script>
 <div class="buyers index">
+  <h2><?php echo __('Search Buyers'); ?></h2>
+  <?php echo $this->Form->create('Search', array('type' => 'get')); ?>
+  <table cellpadding="0" cellspacing="0">
+    <td><?= $this->Form->input('customer_id', array('empty' => '---Select---', 'selected' => isset($this->request->query['customer_id']) ? $this->request->query['customer_id'] : "")) ?></td>
+    <td><?= $this->Form->input('seller_id', array('empty' => '---Select---', 'selected' => isset($this->request->query['seller_id']) ? $this->request->query['seller_id'] : ""))  ?></td>
+    <td><?= $this->Form->input('name', array('label' => 'BuyerName', 'value' => isset($this->request->query['name']) ? $this->request->query['name'] : ""))  ?></td>
+    <td><?= $this->Form->submit('Search')  ?></td>
+  </table>
+  <?php echo $this->Form->end(); ?>
 	<h2><?php echo __('Buyers'); ?></h2>
 	<table cellpadding="0" cellspacing="0">
 	<tr>
 			<th><?php echo $this->Paginator->sort('id'); ?></th>
 			<th><?php echo $this->Paginator->sort('customer_id'); ?></th>
+      <th><?php echo $this->Paginator->sort('seller_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('area_id'); ?></th>
-			<th><?php echo $this->Paginator->sort('code'); ?></th>
+			<th><?php echo $this->Paginator->sort('code', 'BuyerCode'); ?></th>
+      <th><?php echo $this->Paginator->sort('customer_buyer_code', 'CustomerBuyerCode'); ?></th>
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
-			<th><?php echo $this->Paginator->sort('created'); ?></th>
-			<th><?php echo $this->Paginator->sort('modified'); ?></th>
 			<th><?php echo $this->Paginator->sort('contact_person'); ?></th>
 			<th><?php echo $this->Paginator->sort('contact_number'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
@@ -20,12 +63,14 @@
 			<?php echo $this->Html->link($buyer['Customer']['name'], array('controller' => 'customers', 'action' => 'view', $buyer['Customer']['id'])); ?>
 		</td>
 		<td>
-			<?php echo $this->Html->link($buyer['Area']['id'], array('controller' => 'areas', 'action' => 'view', $buyer['Area']['id'])); ?>
+			<?php echo $this->Html->link($buyer['Seller']['name'], array('controller' => 'sellers', 'action' => 'view', $buyer['Seller']['id'])); ?>
+		</td>    
+		<td>
+			<?php echo h($buyer['Area']['code']); ?>
 		</td>
 		<td><?php echo h($buyer['Buyer']['code']); ?>&nbsp;</td>
+    <td><?php echo h($buyer['Buyer']['customer_buyer_code']); ?>&nbsp;</td>
 		<td><?php echo h($buyer['Buyer']['name']); ?>&nbsp;</td>
-		<td><?php echo h($buyer['Buyer']['created']); ?>&nbsp;</td>
-		<td><?php echo h($buyer['Buyer']['modified']); ?>&nbsp;</td>
 		<td><?php echo h($buyer['Buyer']['contact_person']); ?>&nbsp;</td>
 		<td><?php echo h($buyer['Buyer']['contact_number']); ?>&nbsp;</td>
 		<td class="actions">
@@ -54,6 +99,7 @@
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('New Buyer'), array('action' => 'add')); ?></li>
+    <li><?php echo $this->Html->link(__('Upload Buyers'), array('action' => 'upload')); ?></li>
 		<li><?php echo $this->Html->link(__('List Customers'), array('controller' => 'customers', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Customer'), array('controller' => 'customers', 'action' => 'add')); ?> </li>
 		<li><?php echo $this->Html->link(__('List Areas'), array('controller' => 'areas', 'action' => 'index')); ?> </li>

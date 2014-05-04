@@ -8,6 +8,8 @@
 		echo $this->Form->input('area_id');
 		echo $this->Form->input('code');
 		echo $this->Form->input('name');
+    echo $this->Form->input('Address.address');
+    echo $this->Form->input('Address.id');
 		echo $this->Form->input('contact_person');
 		echo $this->Form->input('contact_number');
 	?>

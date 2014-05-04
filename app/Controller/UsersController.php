@@ -27,7 +27,6 @@ class UsersController extends AppController {
 	*
 	*/
 	public function admin_login(){
-		debug($this->Auth->user());
 		if($this->request->data){
 			if($this->_isAdmin($this->request->data['User']['username'])){
 				if($this->Auth->login()){

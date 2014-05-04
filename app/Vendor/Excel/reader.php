@@ -627,16 +627,18 @@ class Spreadsheet_Excel_Reader
                         }else{
                             $isdate = FALSE;
                             if ($indexCode > 0){
+                                $formatstr = "";
                                 if (isset($this->formatRecords[$indexCode]))
                                     $formatstr = $this->formatRecords[$indexCode];
                                 //echo '.other.';
                                 //echo "\ndate-time=$formatstr=\n";
-                                if ($formatstr)
-                                if (preg_match("/[^hmsday\/\-:\s]/i", $formatstr) == 0) { // found day and time format
-                                    $isdate = TRUE;
-                                    $formatstr = str_replace('mm', 'i', $formatstr);
-                                    $formatstr = str_replace('h', 'H', $formatstr);
-                                    //echo "\ndate-time $formatstr \n";
+                                if ($formatstr){
+                                  if (preg_match("/[^hmsday\/\-:\s]/i", $formatstr) == 0) { // found day and time format
+                                      $isdate = TRUE;
+                                      $formatstr = str_replace('mm', 'i', $formatstr);
+                                      $formatstr = str_replace('h', 'H', $formatstr);
+                                      //echo "\ndate-time $formatstr \n";
+                                  }
                                 }
                             }
 

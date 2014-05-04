@@ -25,13 +25,32 @@ class Buyer extends AppModel {
 		'code' => array(
 			'notEmpty' => array(
 				'rule' => array('notEmpty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
-		)
+      'isUnique'
+		),
+    'name' => 'notEmpty',
+    'customer_id' => array(
+      'notEmpty',
+      'validateId' => array(
+        'rule' => array('validateId', 'customer'),
+        'message' => 'Invalid Customer'
+      )
+    ),
+    'seller_id' => array(
+      'notEmpty',
+      'validateId' => array(
+        'rule' => array('validateId', 'seller'),
+        'message' => 'Invalid Sellers'
+      )
+    ),
+    'area_id' => array(
+      'notEmpty',
+      'validateId' => array(
+        'rule' => array('validateId', 'area'),
+        'message' => 'Invalid Area'
+      )
+    ),
+    'customer_buyer_code' => 'isUnique'
 	);
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
@@ -55,6 +74,13 @@ class Buyer extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
+		),
+    'Seller' => array(
+			'className' => 'Seller',
+			'foreignKey' => 'seller_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
 		)
 	);
   
@@ -62,6 +88,7 @@ class Buyer extends AppModel {
     'Address' => array(
       'className' => 'Address',
       'foreignKey' => 'source_id',
+      'dependent' => true,
       'conditions' => array(
         'Address.source_name' => 'buyers'
       )
@@ -78,7 +105,7 @@ class Buyer extends AppModel {
 		'Itinerary' => array(
 			'className' => 'Itinerary',
 			'foreignKey' => 'buyer_id',
-			'dependent' => false,
+			'dependent' => true,
 			'conditions' => '',
 			'fields' => '',
 			'order' => '',
@@ -89,10 +116,29 @@ class Buyer extends AppModel {
 			'counterQuery' => ''
 		)
 	);
+  public $validHeaders = array(
+    'buyername',
+    'clientbuyercode',
+    'buyercode',
+    'buyeraddress',
+    'ittype',
+    'contactnum',
+    'contactperson',
+    'areacode'
+  );  
   
-  public function beforeSave(){
+  public function beforeSave($options = array()){
     
-    parent::beforeSave();
+    parent::beforeSave($options);
   }
-
+  public function validateId($check, $table){
+    $id = intval($check[$table.'_id']);
+    $sql = "SELECT * FROM {$table}s WHERE id=".$id;
+    $area = $this->query($sql);
+    if($area){
+      return true;
+    }
+    return false;
+  }
+  
 }

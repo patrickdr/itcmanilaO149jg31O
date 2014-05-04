@@ -4,7 +4,6 @@
 		<legend><?php echo __('Admin Edit Customer'); ?></legend>
 	<?php
 		echo $this->Form->input('id');
-		echo $this->Form->input('area_id');
 		echo $this->Form->input('name');
 		echo $this->Form->input('code');
 		echo $this->Form->input('contact_person');

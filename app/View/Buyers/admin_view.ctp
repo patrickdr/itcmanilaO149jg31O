@@ -11,16 +11,32 @@
 			<?php echo $this->Html->link($buyer['Customer']['name'], array('controller' => 'customers', 'action' => 'view', $buyer['Customer']['id'])); ?>
 			&nbsp;
 		</dd>
+		<dt><?php echo __('Seller'); ?></dt>
+		<dd>
+			<?php echo $this->Html->link($buyer['Seller']['name'], array('controller' => 'sellers', 'action' => 'view', $buyer['Seller']['id'])); ?>
+			&nbsp;
+		</dd>    
 		<dt><?php echo __('Area'); ?></dt>
 		<dd>
-			<?php echo $this->Html->link($buyer['Area']['id'], array('controller' => 'areas', 'action' => 'view', $buyer['Area']['id'])); ?>
+			<?php echo $this->Html->link($buyer['Area']['code'], array('controller' => 'areas', 'action' => 'view', $buyer['Area']['id'])); ?>
 			&nbsp;
 		</dd>
+		<dt><?php echo __('Address'); ?></dt>
+		<dd>
+			<?php echo h($buyer['Address']['address']); ?>
+			&nbsp;
+		</dd>      
 		<dt><?php echo __('Code'); ?></dt>
 		<dd>
 			<?php echo h($buyer['Buyer']['code']); ?>
 			&nbsp;
 		</dd>
+ 
+		<dt><?php echo __('CustomerBuyerCode'); ?></dt>
+		<dd>
+			<?php echo h($buyer['Buyer']['customer_buyer_code']); ?>
+			&nbsp;
+		</dd>    
 		<dt><?php echo __('Name'); ?></dt>
 		<dd>
 			<?php echo h($buyer['Buyer']['name']); ?>

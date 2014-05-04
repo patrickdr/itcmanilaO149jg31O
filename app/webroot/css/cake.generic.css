@@ -26,7 +26,7 @@ body {
 	background: #003d4c;
 	color: #fff;
 	font-family:'lucida grande',verdana,helvetica,arial,sans-serif;
-	font-size:90%;
+	font-size:12px;
 	margin: 0;
 }
 a {
@@ -118,13 +118,13 @@ div.form,
 div.index,
 div.view {
 	float:right;
-	width:76%;
+	width:80%;
 	border-left:1px solid #666;
 	padding:10px 2%;
 }
 div.actions {
 	float:left;
-	width:16%;
+	width:12%;
 	padding:10px 1.5%;
 }
 div.actions h3 {
@@ -168,7 +168,7 @@ table tr:nth-child(even) {
 	background: #f9f9f9;
 }
 td.actions {
-	text-align: center;
+	text-align: left;
 	white-space: nowrap;
 }
 table td.actions a {
@@ -248,10 +248,10 @@ dt {
 	font-weight: bold;
 	padding-left: 4px;
 	vertical-align: top;
-	width: 10em;
+	width: 14em;
 }
 dd {
-	margin-left: 10em;
+	margin-left: 14em;
 	margin-top: -2em;
 	vertical-align: top;
 }
@@ -314,9 +314,9 @@ label {
 }
 input, textarea {
 	clear: both;
-	font-size: 140%;
+	font-size: 12px;
 	font-family: "frutiger linotype", "lucida grande", "verdana", sans-serif;
-	padding: 1%;
+	padding: 4px;
 	width:98%;
 }
 select {

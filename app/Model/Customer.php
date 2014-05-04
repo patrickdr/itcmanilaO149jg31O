@@ -51,11 +51,13 @@ class Customer extends AppModel {
  *
  * @var array
  */
-	public $belongsTo = array(
-		'Area' => array(
-			'className' => 'Area',
-			'foreignKey' => 'area_id',
-			'conditions' => '',
+	public $hasOne = array(
+		'Address' => array(
+			'className' => 'Address',
+			'foreignKey' => 'source_id',
+			'conditions' => array(
+        'Address.source_name' => 'customers'
+      ),
 			'fields' => '',
 			'order' => ''
 		)

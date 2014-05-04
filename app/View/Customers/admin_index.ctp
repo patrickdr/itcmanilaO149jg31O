@@ -3,27 +3,19 @@
 	<table cellpadding="0" cellspacing="0">
 	<tr>
 			<th><?php echo $this->Paginator->sort('id'); ?></th>
-			<th><?php echo $this->Paginator->sort('area_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
 			<th><?php echo $this->Paginator->sort('code'); ?></th>
 			<th><?php echo $this->Paginator->sort('contact_person'); ?></th>
 			<th><?php echo $this->Paginator->sort('contact_number'); ?></th>
-			<th><?php echo $this->Paginator->sort('created'); ?></th>
-			<th><?php echo $this->Paginator->sort('modified'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
 	<?php foreach ($customers as $customer): ?>
 	<tr>
 		<td><?php echo h($customer['Customer']['id']); ?>&nbsp;</td>
-		<td>
-			<?php echo $this->Html->link($customer['Area']['id'], array('controller' => 'areas', 'action' => 'view', $customer['Area']['id'])); ?>
-		</td>
 		<td><?php echo h($customer['Customer']['name']); ?>&nbsp;</td>
 		<td><?php echo h($customer['Customer']['code']); ?>&nbsp;</td>
 		<td><?php echo h($customer['Customer']['contact_person']); ?>&nbsp;</td>
 		<td><?php echo h($customer['Customer']['contact_number']); ?>&nbsp;</td>
-		<td><?php echo h($customer['Customer']['created']); ?>&nbsp;</td>
-		<td><?php echo h($customer['Customer']['modified']); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $customer['Customer']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $customer['Customer']['id'])); ?>

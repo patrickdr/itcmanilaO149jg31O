@@ -1,6 +1,5 @@
 <?php
 App::uses('AppController', 'Controller');
-App::import('Vendor', 'Spreadsheet_Excel_Reader', array('file' => 'Excel/reader.php'));
 /**
  * Buyers Controller
  *
@@ -17,14 +16,14 @@ class BuyersController extends AppController {
  */
 	public $components = array('Paginator', 'Session');
   private $_h = array(
-    'name' => 1,
-    'client_buyer_code' => 2,
-    'customer_buyer_code' => 3,
-    'address' => 4,
-    'ittype' => 5,
-    'contact_number' => 6,
-    'contact_person' => 7,
-    'area' => 8
+    1 => 'name',
+    2 => 'code', // client buyer code
+    3 => 'customer_buyer_code', // citi buyer code
+    4 => 'address',
+    5 => 'it_type',
+    6 => 'contact_number',
+    7 => 'contact_person',
+    8 => 'area_id',
   );
 
 /**
@@ -34,7 +33,25 @@ class BuyersController extends AppController {
  */
 	public function admin_index() {
 		$this->Buyer->recursive = 0;
-		$this->set('buyers', $this->Paginator->paginate());
+    $customers = $this->Buyer->Customer->find('list');
+    $sellers = array();
+    $conditions = array();
+    if(isset($this->request->query['customer_id']) && $this->request->query['customer_id']){
+      $sellers = $this->Buyer->Seller->find('list', array('conditions' => array('Seller.customer_id' => $this->request->query['customer_id'])));
+      $conditions['Buyer.customer_id'] = $this->request->query['customer_id'];
+    }
+    if(isset($this->request->query['seller_id']) && $this->request->query['seller_id']){
+      $conditions['Buyer.seller_id'] = $this->request->query['seller_id'];      
+    }
+    if(isset($this->request->query['name']) && $this->request->query['name']){
+      $conditions['Buyer.name LIKE'] = "%".$this->request->query['name']."%";      
+    }
+    $this->set(compact('customers', 'sellers'));
+    $this->paginate = array(
+      'conditions' => $conditions,
+      'limit' => 30
+    );
+		$this->set('buyers', $this->paginate());
 	}
 
 /**
@@ -83,8 +100,22 @@ class BuyersController extends AppController {
 		if (!$this->Buyer->exists($id)) {
 			throw new NotFoundException(__('Invalid buyer'));
 		}
+    
 		if ($this->request->is(array('post', 'put'))) {
-			if ($this->Buyer->save($this->request->data)) {
+      $address = $this->Buyer->Address->find('first', array(
+        'conditions' => array(
+          'Address.source_id' => $this->request->data['Buyer']['id'],
+          'Address.source_name' => 'buyers'
+        ),
+        'fields' => array('Address.id', 'Address.source_id', 'Address.source_name')
+      ));
+      if($address){
+        $this->request->data['Address'] += $address['Address'];
+      }
+      else{
+        $this->request->data['Address'] = array('source_name' => 'buyers');
+      }
+			if ($this->Buyer->saveAssociated($this->request->data)) {
 				$this->Session->setFlash(__('The buyer has been saved.'));
 				return $this->redirect(array('action' => 'index'));
 			} else {
@@ -124,25 +155,70 @@ class BuyersController extends AppController {
     $data = new Spreadsheet_Excel_Reader();
     // Set output Encoding.
     $data->setOutputEncoding('CP1251');
+    $customers = $this->Buyer->Customer->find('list');
+    $areas = $this->Buyer->Area->find('list', array('fields' => array('Area.code', 'Area.id')));
+    $sellers = array();
+    $customerId = isset($this->request->query['customer_id']) ? $this->request->query['customer_id'] : "";
     $cells = array();
+    if($customerId){
+      $sellers = $this->Buyer->Seller->find('list', array(
+        'conditions' => array(
+          'Seller.customer_id' => $customerId
+        )
+      ));
+    }    
     if ($this->request->is('post')) {
       $data->read($this->request->data['Buyer']['file']['tmp_name']);
-      if(isset($data->sheets[0]['cells'])){
+      $headers = isset($data->sheets[0]['cells'][3]) ? $data->sheets[0]['cells'][3] : array();
+      if(isset($data->sheets[0]['cells']) && $this->_validateBuyerExcel($headers, $this->Buyer->validHeaders)){
         $cells = $data->sheets[0]['cells'];
         $h = $this->_h;
-        foreach($cells as $key => $value){
+        $saved = 0;
+        $notSaved = 0;        
+        foreach($cells as $key => $value){          
           if($key > 3){
-            $data = array(
-              'Buyer' => array(
-                
-              )
-            );
-            $this->Buyer;
-            //$this->Buyer->save
-          }
+            $data = array('Buyer' => array());
+            $toPush = array();
+            $toPush['area_id'] = "";
+            foreach($value as $x => $y){               
+              if($h[$x] == 'area_id'){
+                $toPush['area_id'] = isset($areas[$y]) ? $areas[$y] : null;
+              }
+              else if($h[$x] == 'address' && $y){
+                $data['Address']['address'] = $y;
+                $data['Address']['source_name'] = 'buyers';
+              }
+              else{
+                $toPush[$h[$x]] = $y;
+              }              
+            }            
+            $toPush['seller_id'] = $this->request->data['Buyer']['seller_id'];
+            $toPush['customer_id'] = $this->request->data['Buyer']['customer_id'];
+            $data['Buyer'] = $toPush;
+            $this->Buyer->set($data);
+            if($this->Buyer->saveAssociated()){
+              $saved++;
+            }
+            else{
+              $notSaved++;
+            }
+          }          
         }
+        if($saved && !$notSaved){
+          $this->Session->setFlash(__("All buyers are saved."));
+        }
+        else if($saved && $notSaved){
+          $this->Session->setFlash(__("Buyers has been saved but some are not saved."));
+        } 
+        else if(!$saved && $notSaved){
+          $this->Session->setFlash(__("Buyers could not be saved."));
+        }
+      }
+      else{
+        $this->Session->setFlash(__("Buyers could not be saved. Invalid Excel file."));
       }
     }
     
+    $this->set(compact('sellers', 'customers', 'customerId', 'areas'));
   }
 }
