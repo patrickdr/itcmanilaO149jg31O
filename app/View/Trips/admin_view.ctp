@@ -1,0 +1,108 @@
+<div class="trips view">
+<h2><?php echo __('Trip'); ?></h2>
+	<dl>
+		<dt><?php echo __('Id'); ?></dt>
+		<dd>
+			<?php echo h($trip['Trip']['id']); ?>
+			&nbsp;
+		</dd>
+		<dt><?php echo __('Collector'); ?></dt>
+		<dd>
+			<?php echo $this->Html->link($trip['Collector']['name'], array('controller' => 'collectors', 'action' => 'view', $trip['Collector']['id'])); ?>
+			&nbsp;
+		</dd>
+		<dt><?php echo __('Trip Type'); ?></dt>
+		<dd>
+			<?php echo h($trip['Trip']['trip_type']); ?>
+			&nbsp;
+		</dd>
+		<dt><?php echo __('Created'); ?></dt>
+		<dd>
+			<?php echo h($trip['Trip']['created']); ?>
+			&nbsp;
+		</dd>
+		<dt><?php echo __('Modified'); ?></dt>
+		<dd>
+			<?php echo h($trip['Trip']['modified']); ?>
+			&nbsp;
+		</dd>
+	</dl>
+</div>
+<div class="actions">
+	<h3><?php echo __('Actions'); ?></h3>
+	<ul>
+		<li><?php echo $this->Html->link(__('Edit Trip'), array('action' => 'edit', $trip['Trip']['id'])); ?> </li>
+		<li><?php echo $this->Form->postLink(__('Delete Trip'), array('action' => 'delete', $trip['Trip']['id']), null, __('Are you sure you want to delete # %s?', $trip['Trip']['id'])); ?> </li>
+		<li><?php echo $this->Html->link(__('List Trips'), array('action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('New Trip'), array('action' => 'add')); ?> </li>
+		<li><?php echo $this->Html->link(__('List Collectors'), array('controller' => 'collectors', 'action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('New Collector'), array('controller' => 'collectors', 'action' => 'add')); ?> </li>
+		<li><?php echo $this->Html->link(__('List Itineraries'), array('controller' => 'itineraries', 'action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('New Itinerary'), array('controller' => 'itineraries', 'action' => 'add')); ?> </li>
+	</ul>
+</div>
+<div class="related">
+	<h3><?php echo __('Related Itineraries'); ?></h3>
+	<?php if (!empty($trip['Itinerary'])): ?>
+	<table cellpadding = "0" cellspacing = "0">
+	<tr>
+		<th><?php echo __('Id'); ?></th>
+		<th><?php echo __('Buyer Id'); ?></th>
+		<th><?php echo __('Customer Id'); ?></th>
+		<th><?php echo __('Seller Id'); ?></th>
+		<th><?php echo __('Trip Id'); ?></th>
+		<th><?php echo __('Itinerary Type'); ?></th>
+		<th><?php echo __('Trip Type'); ?></th>
+		<th><?php echo __('Name'); ?></th>
+		<th><?php echo __('Trip Number'); ?></th>
+		<th><?php echo __('Address'); ?></th>
+		<th><?php echo __('Mm Provl'); ?></th>
+		<th><?php echo __('Itinerary Number'); ?></th>
+		<th><?php echo __('Remarks'); ?></th>
+		<th><?php echo __('Amount'); ?></th>
+		<th><?php echo __('Requestor'); ?></th>
+		<th><?php echo __('Contact Number'); ?></th>
+		<th><?php echo __('Contact Person'); ?></th>
+		<th><?php echo __('Date Received'); ?></th>
+		<th><?php echo __('Created'); ?></th>
+		<th><?php echo __('Modified'); ?></th>
+		<th class="actions"><?php echo __('Actions'); ?></th>
+	</tr>
+	<?php foreach ($trip['Itinerary'] as $itinerary): ?>
+		<tr>
+			<td><?php echo $itinerary['id']; ?></td>
+			<td><?php echo $itinerary['buyer_id']; ?></td>
+			<td><?php echo $itinerary['customer_id']; ?></td>
+			<td><?php echo $itinerary['seller_id']; ?></td>
+			<td><?php echo $itinerary['trip_id']; ?></td>
+			<td><?php echo $itinerary['itinerary_type']; ?></td>
+			<td><?php echo $itinerary['trip_type']; ?></td>
+			<td><?php echo $itinerary['name']; ?></td>
+			<td><?php echo $itinerary['trip_number']; ?></td>
+			<td><?php echo $itinerary['address']; ?></td>
+			<td><?php echo $itinerary['mm_provl']; ?></td>
+			<td><?php echo $itinerary['itinerary_number']; ?></td>
+			<td><?php echo $itinerary['remarks']; ?></td>
+			<td><?php echo $itinerary['amount']; ?></td>
+			<td><?php echo $itinerary['requestor']; ?></td>
+			<td><?php echo $itinerary['contact_number']; ?></td>
+			<td><?php echo $itinerary['contact_person']; ?></td>
+			<td><?php echo $itinerary['date_received']; ?></td>
+			<td><?php echo $itinerary['created']; ?></td>
+			<td><?php echo $itinerary['modified']; ?></td>
+			<td class="actions">
+				<?php echo $this->Html->link(__('View'), array('controller' => 'itineraries', 'action' => 'view', $itinerary['id'])); ?>
+				<?php echo $this->Html->link(__('Edit'), array('controller' => 'itineraries', 'action' => 'edit', $itinerary['id'])); ?>
+				<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'itineraries', 'action' => 'delete', $itinerary['id']), null, __('Are you sure you want to delete # %s?', $itinerary['id'])); ?>
+			</td>
+		</tr>
+	<?php endforeach; ?>
+	</table>
+<?php endif; ?>
+
+	<div class="actions">
+		<ul>
+			<li><?php echo $this->Html->link(__('New Itinerary'), array('controller' => 'itineraries', 'action' => 'add')); ?> </li>
+		</ul>
+	</div>
+</div>

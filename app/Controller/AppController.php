@@ -121,12 +121,12 @@ class AppController extends Controller {
   /**
   * Validate excel file
   */
-  protected function _validateBuyerExcel($headers = array(), $validHeaders = array()){     
+  protected function _validateBuyerExcel($headers = array(), $validHeaders = array()){   
     if(count($headers) != count($validHeaders)){ 
       return false;
     }    
     foreach($headers as $key => $header){
-      $check = strpos(strtolower($header), $validHeaders[$key-1]);
+      $check = strpos(strtolower($header), $validHeaders[$key]);
       if($check === false){
         return false;
       }

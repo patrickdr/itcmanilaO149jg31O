@@ -86,7 +86,16 @@ class BuyersController extends AppController {
 		}
 		$customers = $this->Buyer->Customer->find('list');
 		$areas = $this->Buyer->Area->find('list');
-		$this->set(compact('customers', 'areas'));
+    $customerId = isset($this->request->query['customer_id']) ? $this->request->query['customer_id'] : "";
+    $sellers = array();
+    if($customerId){
+      $sellers = $this->Buyer->Seller->find('list', array(
+        'conditions' => array(
+          'Seller.customer_id' => $customerId
+        )
+      ));
+    }    
+		$this->set(compact('customers', 'areas', 'sellers'));
 	}
 
 /**

@@ -1,7 +1,7 @@
 <script type="text/javascript">
   var Customer =  {
     init : function(){
-      Customer.customerSelect = $('select[name="data[Buyer][customer_id]"]');
+      Customer.customerSelect = $('select[name="data[Itinerary][customer_id]"]');
     },
     onChange : function(){
       Customer.customerId = Customer.customerSelect.val();
@@ -14,17 +14,14 @@
   });
 </script>
 <div class="buyers form">
-<?php echo $this->Form->create('Buyer'); ?>
+<?php echo $this->Form->create('Itinerary', array('type' => 'file')); ?>
 	<fieldset>
-		<legend><?php echo __('Admin Add Buyer'); ?></legend>
-	<?php
-		echo $this->Form->input('customer_id', array('empty' => '---Buyer---', 'selected' => isset($this->request->query['customer_id']) ? $this->request->query['customer_id'] : 0 ));
-    echo $this->Form->input('seller_id', array('empty' => '---Seller---'));
-		echo $this->Form->input('area_id');
-		echo $this->Form->input('code');
-		echo $this->Form->input('name');
-		echo $this->Form->input('contact_person');
-		echo $this->Form->input('contact_number');
+		<legend><?php echo __('Upload Itinerary'); ?></legend>
+	<?php 
+    echo $this->Form->input('customer_id', array('options' => $customers, 'label' => 'Customer', 'empty' => '---Select one---', 'selected' => $customerId ));
+    echo $this->Form->input('seller_id', array('options' => $sellers, 'label' => 'Seller', 'empty' => '---Select one ---'));
+    echo $this->Form->input('itinerary_number');
+    echo $this->Form->input('file', array('type' => 'file'));
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
@@ -33,12 +30,12 @@
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 
-		<li><?php echo $this->Html->link(__('List Buyers'), array('action' => 'index')); ?></li>
+		<li><?php echo $this->Html->link(__('List Itineraries'), array('action' => 'index')); ?></li>
 		<li><?php echo $this->Html->link(__('List Customers'), array('controller' => 'customers', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Customer'), array('controller' => 'customers', 'action' => 'add')); ?> </li>
 		<li><?php echo $this->Html->link(__('List Areas'), array('controller' => 'areas', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Area'), array('controller' => 'areas', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Itineraries'), array('controller' => 'itineraries', 'action' => 'index')); ?> </li>
+ </li>
 		<li><?php echo $this->Html->link(__('New Itinerary'), array('controller' => 'itineraries', 'action' => 'add')); ?> </li>
 	</ul>
 </div>

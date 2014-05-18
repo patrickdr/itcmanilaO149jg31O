@@ -117,14 +117,14 @@ class Buyer extends AppModel {
 		)
 	);
   public $validHeaders = array(
-    'buyername',
-    'clientbuyercode',
-    'buyercode',
-    'buyeraddress',
-    'ittype',
-    'contactnum',
-    'contactperson',
-    'areacode'
+    1 => 'buyername',
+    2 => 'clientbuyercode',
+    3 => 'buyercode',
+    4 => 'buyeraddress',
+    5 => 'ittype',
+    6 => 'contactnum',
+    7 => 'contactperson',
+    8 => 'areacode'
   );  
   
   public function beforeSave($options = array()){
@@ -139,6 +139,15 @@ class Buyer extends AppModel {
       return true;
     }
     return false;
+  }
+  
+  public function findByBuyerCode($code, $options = array()){
+    return $this->find('first', array(
+      'conditions' => array(
+        'Buyer.code' => $code
+      ),
+      'recursive' => -1
+    ) + $options);
   }
   
 }
