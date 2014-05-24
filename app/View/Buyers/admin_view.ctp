@@ -109,7 +109,7 @@
 			<td><?php echo $itinerary['date_received']; ?></td>
 			<td><?php echo $itinerary['created']; ?></td>
 			<td><?php echo $itinerary['modified']; ?></td>
-			<td><?php echo $itinerary['type']; ?></td>
+			<td><?php echo $itinerary['itinerary_type']; ?></td>
 			<td class="actions">
 				<?php echo $this->Html->link(__('View'), array('controller' => 'itineraries', 'action' => 'view', $itinerary['id'])); ?>
 				<?php echo $this->Html->link(__('Edit'), array('controller' => 'itineraries', 'action' => 'edit', $itinerary['id'])); ?>

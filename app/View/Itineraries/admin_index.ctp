@@ -4,7 +4,7 @@
 	<tr>
 			<th><?php echo $this->Paginator->sort('Buyer.name'); ?></th>
 			<th><?php echo $this->Paginator->sort('trip_type'); ?></th>
-			<th><?php echo $this->Paginator->sort('trip_number'); ?></th>
+			<th><?php echo $this->Paginator->sort('trip_id'); ?></th>
       <th><?php echo $this->Paginator->sort('itinerary_number', 'IT number'); ?></th>
 			<th><?php echo $this->Paginator->sort('remarks'); ?></th>
 			<th><?php echo $this->Paginator->sort('date_received'); ?></th>
@@ -30,7 +30,7 @@
 		<td>
 			<?php echo h($itinerary['Itinerary']['trip_type']); ?>
 		</td>
-		<td><?php echo h($itinerary['Itinerary']['trip_number']); ?>&nbsp;</td>
+		<td><?php echo h($itinerary['Itinerary']['trip_id']); ?>&nbsp;</td>
     <td><?php echo h($itinerary['Itinerary']['itinerary_number']); ?>&nbsp;</td>
 		<td><?php echo h(String::truncate($itinerary['Itinerary']['remarks'], 20, array('ellipsis' => '...'))); ?>&nbsp;</td>
 		<td><?php echo h($itinerary['Itinerary']['date_received']); ?>&nbsp;</td>

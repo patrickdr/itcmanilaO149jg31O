@@ -48,6 +48,7 @@ class TripsController extends AppController {
  */
 	public function admin_add() {
 		if ($this->request->is('post')) {
+      //SBdump($this->request->data); exit;
 			$this->Trip->create();
 			if ($this->Trip->save($this->request->data)) {
 				$this->Session->setFlash(__('The trip has been saved.'));
@@ -58,9 +59,29 @@ class TripsController extends AppController {
 		}
 		$collectors = $this->Trip->Collector->find('list');
     $areas = $this->Trip->TripArea->Area->find('list');
+    $this->set('itineraries', $this->Trip->Itinerary->find('all'));
     //$itineraries = 
 		$this->set(compact('collectors', 'areas'));
 	}
+  
+  public function admin_search_area(){
+    //$this->autoRender = false;
+    $this->layout = false;
+    if($this->request->is('ajax') && ($this->request->is('post') || $this->requeswt->is('put'))){
+      $areas = $this->request->data['area_id'];
+      $this->loadModel('Itinerary');
+      $itineraries = $this->Itinerary->find('all', array(
+        'contain' => array(
+          'Buyer' => array(
+            'conditions' => array(
+              'Buyer.area_id' => $areas
+            )
+          )
+        )
+      ));
+      $this->set(compact('itineraries'));
+    }
+  }
 
 /**
  * admin_edit method

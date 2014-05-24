@@ -59,5 +59,30 @@ class Trip extends AppModel {
 			'counterQuery' => ''    
     )
 	);
+  
+  public function afterSave($created, $options = array()){
+    if(isset($this->data['Itinerary']['select']) && $this->data['Itinerary']['select']){
+      $itineraryIds = array_filter($this->data['Itinerary']['select']);
+      $tripAreas = array();
+      if($itineraryIds){
+        $itineraries = $this->Itinerary->find('all', array(
+          'contain' => array('Buyer'),
+          'conditions' => array(
+            'Itinerary.id' => $itineraryIds
+          )
+        ));
+        foreach($itineraries as &$itinerary){
+          $itinerary['Itinerary']['trip_id'] = $this->data['Trip']['id'];
+          $tripAreas['TripArea'][] = array(
+            'area_id' => $itinerary['Buyer']['area_id'],
+            'trip_id' => $this->data['Trip']['id']
+          );
+          $this->Itinerary->saveAssociated($itinerary, array('validate' => false));
+        }
+        $this->TripArea->saveAll($tripAreas['TripArea'], array('validate' => false));
+      }
+    }
+    parent::afterSave($created, $options);
+  }
 
 }
