@@ -96,6 +96,7 @@
 	</div>
 </div>
 <div class="actions">
+  <?= $this->Element('Others/admin_navigation') ?>
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('New Buyer'), array('action' => 'add')); ?></li>

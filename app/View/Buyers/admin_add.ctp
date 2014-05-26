@@ -30,6 +30,7 @@
 <?php echo $this->Form->end(__('Submit')); ?>
 </div>
 <div class="actions">
+  <?= $this->Element('Others/admin_navigation') ?>
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 
@@ -41,4 +42,5 @@
 		<li><?php echo $this->Html->link(__('List Itineraries'), array('controller' => 'itineraries', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Itinerary'), array('controller' => 'itineraries', 'action' => 'add')); ?> </li>
 	</ul>
+  
 </div>

@@ -12,6 +12,7 @@
 <?php echo $this->Form->end(__('Submit')); ?>
 </div>
 <div class="actions">
+  <?= $this->Element('Others/admin_navigation') ?>
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 

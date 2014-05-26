@@ -72,7 +72,7 @@ class Customer extends AppModel {
 		'Buyer' => array(
 			'className' => 'Buyer',
 			'foreignKey' => 'customer_id',
-			'dependent' => false,
+			'dependent' => true,
 			'conditions' => '',
 			'fields' => '',
 			'order' => '',
@@ -85,7 +85,7 @@ class Customer extends AppModel {
 		'Seller' => array(
 			'className' => 'Seller',
 			'foreignKey' => 'customer_id',
-			'dependent' => false,
+			'dependent' => true,
 			'conditions' => '',
 			'fields' => '',
 			'order' => '',
