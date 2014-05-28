@@ -3,13 +3,10 @@
 	<table cellpadding="0" cellspacing="0">
 	<tr>
 			<th><?php echo $this->Paginator->sort('id'); ?></th>
-			<th><?php echo $this->Paginator->sort('customer_id'); ?></th>
+			<th><?php echo $this->Paginator->sort('customer_id', 'CustomerName'); ?></th>
 			<th><?php echo $this->Paginator->sort('area_id'); ?></th>
-			<th><?php echo $this->Paginator->sort('name'); ?></th>
-			<th><?php echo $this->Paginator->sort('seller_id', 'Base Seller'); ?></th>
+			<th><?php echo $this->Paginator->sort('name', 'SellerName'); ?></th>
 			<th><?php echo $this->Paginator->sort('address'); ?></th>
-			<th><?php echo $this->Paginator->sort('created'); ?></th>
-			<th><?php echo $this->Paginator->sort('modified'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
 	<?php foreach ($sellers as $seller): ?>
@@ -22,12 +19,7 @@
 			<?php echo $this->Html->link($seller['Area']['code'], array('controller' => 'areas', 'action' => 'view', $seller['Area']['id'])); ?>
 		</td>
 		<td><?php echo h($seller['Seller']['name']); ?>&nbsp;</td>
-		<td>
-			<?php echo $this->Html->link($seller['ParentSeller']['name'], array('controller' => 'sellers', 'action' => 'view', $seller['ParentSeller']['id'])); ?>
-		</td>
 		<td><?php echo h($seller['Seller']['address']); ?>&nbsp;</td>
-		<td><?php echo h($seller['Seller']['created']); ?>&nbsp;</td>
-		<td><?php echo h($seller['Seller']['modified']); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $seller['Seller']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $seller['Seller']['id'])); ?>

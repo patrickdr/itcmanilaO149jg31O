@@ -45,26 +45,32 @@
 	<h2><?php echo __('Buyers'); ?></h2>
 	<table cellpadding="0" cellspacing="0">
 	<tr>
-			<th><?php echo $this->Paginator->sort('id'); ?></th>
-			<th><?php echo $this->Paginator->sort('customer_id'); ?></th>
-      <th><?php echo $this->Paginator->sort('seller_id'); ?></th>
-			<th><?php echo $this->Paginator->sort('area_id'); ?></th>
-			<th><?php echo $this->Paginator->sort('code', 'BuyerCode'); ?></th>
-      <th><?php echo $this->Paginator->sort('customer_buyer_code', 'CustomerBuyerCode'); ?></th>
-			<th><?php echo $this->Paginator->sort('name'); ?></th>
-			<th><?php echo $this->Paginator->sort('contact_person'); ?></th>
-			<th><?php echo $this->Paginator->sort('contact_number'); ?></th>
-			<th class="actions"><?php echo __('Actions'); ?></th>
+    <th><?php echo $this->Paginator->sort('customer_id', 'CustomerName'); ?></th>
+    <th><?php echo $this->Paginator->sort('seller_id', 'SellerName'); ?></th>
+    <th><?php echo $this->Paginator->sort('SellerAffiliate.seller_id', 'SellerAffiliate'); ?></th>
+    <th><?php echo $this->Paginator->sort('area_id'); ?></th>
+    <th><?php echo $this->Paginator->sort('code', 'BuyerCode'); ?></th>
+    <th><?php echo $this->Paginator->sort('customer_buyer_code', 'CustomerBuyerCode'); ?></th>
+    <th><?php echo $this->Paginator->sort('name'); ?></th>
+    <th><?php echo $this->Paginator->sort('contact_person'); ?></th>
+    <th><?php echo $this->Paginator->sort('contact_number'); ?></th>
+    <th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
 	<?php foreach ($buyers as $buyer): ?>
 	<tr>
-		<td><?php echo h($buyer['Buyer']['id']); ?>&nbsp;</td>
 		<td>
 			<?php echo $this->Html->link($buyer['Customer']['name'], array('controller' => 'customers', 'action' => 'view', $buyer['Customer']['id'])); ?>
 		</td>
 		<td>
 			<?php echo $this->Html->link($buyer['Seller']['name'], array('controller' => 'sellers', 'action' => 'view', $buyer['Seller']['id'])); ?>
-		</td>    
+		</td> 
+    <td>
+			<?php
+        if($buyer['SellerAffiliate']['name']){
+          echo $this->Html->link($buyer['SellerAffiliate']['name'], array('controller' => 'sellers', 'action' => 'view', $buyer['SellerAffiliate']['id'])); 
+        }
+       ?>
+		</td>     
 		<td>
 			<?php echo h($buyer['Area']['code']); ?>
 		</td>

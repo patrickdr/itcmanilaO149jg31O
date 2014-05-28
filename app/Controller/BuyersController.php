@@ -48,10 +48,19 @@ class BuyersController extends AppController {
     }
     $this->set(compact('customers', 'sellers'));
     $this->paginate = array(
+      'contain' => array(
+        'SellerAffiliate' => array(
+          'ParentSeller'
+        ),
+        'Seller',
+        'Area',
+        'Customer'
+      ),
       'conditions' => $conditions,
       'limit' => 30
     );
-		$this->set('buyers', $this->paginate());
+    $buyers = $this->paginate();
+		$this->set(compact('buyers'));
 	}
 
 /**
@@ -91,7 +100,8 @@ class BuyersController extends AppController {
     if($customerId){
       $sellers = $this->Buyer->Seller->find('list', array(
         'conditions' => array(
-          'Seller.customer_id' => $customerId
+          'Seller.customer_id' => $customerId,
+          'Seller.seller_id' => ""
         )
       ));
     }    

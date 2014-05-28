@@ -23,7 +23,12 @@ class SellersController extends AppController {
  */
 	public function admin_index() {
 		$this->Seller->recursive = 0;
-		$this->set('sellers', $this->Paginator->paginate());
+    $this->paginate = array(          
+      'conditions' => array(
+          'Seller.seller_id' => null
+      )
+    );      
+		$this->set('sellers', $this->paginate('Seller'));
 	}
 
 /**

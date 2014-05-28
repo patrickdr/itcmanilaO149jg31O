@@ -78,10 +78,21 @@ class Buyer extends AppModel {
     'Seller' => array(
 			'className' => 'Seller',
 			'foreignKey' => 'seller_id',
-			'conditions' => '',
+			'conditions' => array(
+        'Seller.seller_id' => null
+      ),
 			'fields' => '',
 			'order' => ''
-		)
+		),
+    'SellerAffiliate' => array(
+			'className' => 'Seller',
+			'foreignKey' => 'seller_id',
+			'conditions' => array(
+        'SellerAffiliate.seller_id !=' => ""
+      ),
+			'fields' => '',
+			'order' => ''
+		)    
 	);
   
   public $hasOne = array(

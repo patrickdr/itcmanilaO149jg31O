@@ -86,7 +86,9 @@ class Customer extends AppModel {
 			'className' => 'Seller',
 			'foreignKey' => 'customer_id',
 			'dependent' => true,
-			'conditions' => '',
+			'conditions' => array(
+        'SellerAffiliate.seller_id' => ""
+      ),
 			'fields' => '',
 			'order' => '',
 			'limit' => '',
@@ -94,7 +96,22 @@ class Customer extends AppModel {
 			'exclusive' => '',
 			'finderQuery' => '',
 			'counterQuery' => ''
-		)
+		),
+		'SellerAffiliate' => array(
+			'className' => 'Seller',
+			'foreignKey' => 'customer_id',
+			'dependent' => true,
+			'conditions' => array(
+        'SellerAffiliate.seller_id !=' => ""
+      ),
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		)    
 	);
 
 }
