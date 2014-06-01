@@ -70,6 +70,15 @@ class Itinerary extends AppModel {
 			'fields' => '',
 			'order' => ''
 		),
+    'SellerAffiliate' => array(
+			'className' => 'Seller',
+			'foreignKey' => 'seller_id',
+			'conditions' => array(
+        'SellerAffiliate.seller_id !=' => ""
+      ),
+			'fields' => '',
+			'order' => ''
+		)     
 	);
   
   public $hasOne = array(

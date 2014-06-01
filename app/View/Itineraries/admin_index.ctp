@@ -3,7 +3,9 @@
 	<table cellpadding="0" cellspacing="0">
 	<tr>
 			<th><?php echo $this->Paginator->sort('Buyer.name'); ?></th>
-			<th><?php echo $this->Paginator->sort('trip_type'); ?></th>
+      <th><?php echo __('SellerName'); ?></th>
+      <th><?php echo __('SellerAffiliate'); ?></th>
+			<th><?php echo $this->Paginator->sort('trip_type'); ?></th>      
 			<th><?php echo $this->Paginator->sort('trip_id'); ?></th>
       <th><?php echo $this->Paginator->sort('itinerary_number', 'IT number'); ?></th>
 			<th><?php echo $this->Paginator->sort('remarks'); ?></th>
@@ -27,6 +29,20 @@
         )
       ); ?>
 		</td>
+    <td>
+      <?php if(isset($itinerary['SellerAffiliate']['ParentSeller'])): ?>
+        <?php echo $this->Html->link($itinerary['SellerAffiliate']['ParentSeller']['name'], array('controller' => 'sellers', 'action' => 'view', $itinerary['SellerAffiliate']['ParentSeller']['id'])); ?>
+      <?php else: ?>
+        <?php echo $this->Html->link($itinerary['Seller']['name'], array('controller' => 'sellers', 'action' => 'view', $itinerary['Seller']['id'])); ?>
+      <?php endif; ?>
+    </td>
+    <td>
+      <?php
+        if($itinerary['SellerAffiliate']['name']){
+          echo $this->Html->link($itinerary['SellerAffiliate']['name'], array('controller' => 'sellers', 'action' => 'view', $itinerary['SellerAffiliate']['id'])); 
+        }
+       ?>
+    </td>
 		<td>
 			<?php echo h($itinerary['Itinerary']['trip_type']); ?>
 		</td>
@@ -67,5 +83,6 @@
 		<li><?php echo $this->Html->link(__('New Buyer'), array('controller' => 'buyers', 'action' => 'add')); ?> </li>
 		<li><?php echo $this->Html->link(__('List Trips'), array('controller' => 'trips', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Trip'), array('controller' => 'trips', 'action' => 'add')); ?> </li>
+    <li><?php echo $this->Html->link(__('Upload ITD'), array('controller' => 'itineraries', 'action' => 'upload')); ?> </li>
 	</ul>
 </div>

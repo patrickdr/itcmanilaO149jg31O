@@ -94,5 +94,10 @@ class Seller extends AppModel {
       )
     )
   );
+  
+  public function findSellers($type, $options = array()){
+    $options['conditions']['seller_id'] = "";
+    return $this->find($type, $options);
+  }
 
 }

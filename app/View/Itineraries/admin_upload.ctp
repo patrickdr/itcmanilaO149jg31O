@@ -8,9 +8,24 @@
       window.location.href = "?customer_id=" + Customer.customerId;
     }
   };
+  var Seller =  {
+    init : function(){
+      Seller.sellerSelect = $('select[name="data[Itinerary][seller_id]"]');
+    },
+    onChange : function(){
+      Seller.sellerId = Seller.sellerSelect.val();
+      var customerQuery = "";
+      <?php if(isset($this->request->query['customer_id'])): ?>
+        customerQuery = "<?php echo "?customer_id=".$this->request->query['customer_id']; ?>";
+      <?php endif; ?>     
+      window.location.href = customerQuery + "&seller_id=" + Seller.sellerId;
+    }
+  };    
   $(document).ready(function(){
     Customer.init();
+    Seller.init();
     Customer.customerSelect.on('change', Customer.onChange);
+    Seller.sellerSelect.on('change', Seller.onChange);
   });
 </script>
 <div class="buyers form">
@@ -19,8 +34,10 @@
 		<legend><?php echo __('Upload Itinerary'); ?></legend>
 	<?php 
     echo $this->Form->input('customer_id', array('options' => $customers, 'label' => 'Customer', 'empty' => '---Select one---', 'selected' => $customerId ));
-    echo $this->Form->input('seller_id', array('options' => $sellers, 'label' => 'Seller', 'empty' => '---Select one ---'));
+    echo $this->Form->input('seller_id', array('options' => $sellers, 'label' => 'Seller', 'empty' => '---Select one ---', 'selected' => isset($this->request->query['seller_id']) ? $this->request->query['seller_id'] : 0));
+    echo $this->Form->input('seller_affiliate', array('empty' => '---Seller Affiliate---', 'options' => $sellerAffiliates));
     echo $this->Form->input('itinerary_number');
+    echo $this->Form->input('date_received', array('type' => 'date'));
     echo $this->Form->input('file', array('type' => 'file'));
 	?>
 	</fieldset>

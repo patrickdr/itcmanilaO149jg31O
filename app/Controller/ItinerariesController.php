@@ -23,7 +23,15 @@ class ItinerariesController extends AppController {
  */
 	public function admin_index() {
 		$this->Itinerary->recursive = 0;
-		$this->set('itineraries', $this->Paginator->paginate());
+    $this->paginate = array(
+      'contain' => array(        
+        'Buyer',
+        'SellerAffiliate' => array(
+          'ParentSeller'
+        )        
+      )
+    );
+		$this->set('itineraries', $this->paginate('Itinerary'));
 	}
 
 /**
@@ -116,13 +124,24 @@ class ItinerariesController extends AppController {
     $customers = $this->Itinerary->Buyer->Customer->find('list');
     $sellers = array();
     $customerId = isset($this->request->query['customer_id']) ? $this->request->query['customer_id'] : "";
+    $sellerId = isset($this->request->query['seller_id']) ? $this->request->query['seller_id'] : "";
     $cells = array();
+    $sellerAffiliates = array();
     if($customerId){
-      $sellers = $this->Itinerary->Buyer->Seller->find('list', array(
+      $sellers = $this->Itinerary->Buyer->Seller->findSellers('list', array(
         'conditions' => array(
-          'Seller.customer_id' => $customerId
+          'Seller.customer_id' => $customerId,
         )
       ));
+      
+      if($sellerId){
+        $sellerAffiliates = $this->Itinerary->Buyer->Seller->find('list', array(
+          'conditions' => array(
+            'Seller.customer_id' => $customerId,
+            'Seller.seller_id' => $sellerId
+          )
+        ));        
+      }
     }      
     if($this->request->is('post')){
       $data->read($this->request->data['Itinerary']['file']['tmp_name']);
@@ -152,11 +171,12 @@ class ItinerariesController extends AppController {
             $data['Address']['address'] = isset($value[10]) ? $value[10] : "";
             $data['Address']['source_name'] = 'itineraries';
             
-            //This will save to Itinerary table
+            // This will save to Itinerary table
             $toPush['requestor'] = isset($value[11]) ? $value[11] : "";
             $toPush['amount'] = isset($value[9]) ? $value[9] : "";
             $toPush['mm_provl'] = isset($value[13]) ? $value[13] : "";
-            $toPush['seller_id'] = $this->request->data['Itinerary']['seller_id'];
+            // If seller affiliate is available, seller will be saved as an affiliate
+            $toPush['seller_id'] = ($this->request->data['Itinerary']['seller_affiliate']) ? $this->request->data['Itinerary']['seller_affiliate'] : $this->request->data['Itinerary']['seller_id'];
             $toPush['customer_id'] = $this->request->data['Itinerary']['customer_id'];
             $toPush['itinerary_number'] = $this->request->data['Itinerary']['itinerary_number'];
             
@@ -185,6 +205,6 @@ class ItinerariesController extends AppController {
         return $this->redirect(array('action' => 'index'));
       }
     }
-    $this->set(compact('customers', 'sellers', 'customerId'));
+    $this->set(compact('customers', 'sellers', 'customerId', 'sellerAffiliates'));
   }
 }

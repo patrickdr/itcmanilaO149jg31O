@@ -75,6 +75,7 @@ class BuyersController extends AppController {
 			throw new NotFoundException(__('Invalid buyer'));
 		}
 		$options = array('conditions' => array('Buyer.' . $this->Buyer->primaryKey => $id));
+    
 		$this->set('buyer', $this->Buyer->find('first', $options));
 	}
 
@@ -86,6 +87,10 @@ class BuyersController extends AppController {
 	public function admin_add() {
 		if ($this->request->is('post')) {
 			$this->Buyer->create();
+      $data = &$this->request->data;
+      if($this->request->data['Buyer']['seller_affiliate']){
+        $data['Buyer']['seller_id'] = $data['Buyer']['seller_affiliate'];
+      }
 			if ($this->Buyer->save($this->request->data)) {
 				$this->Session->setFlash(__('The buyer has been saved.'));
 				return $this->redirect(array('action' => 'index'));
@@ -96,7 +101,9 @@ class BuyersController extends AppController {
 		$customers = $this->Buyer->Customer->find('list');
 		$areas = $this->Buyer->Area->find('list');
     $customerId = isset($this->request->query['customer_id']) ? $this->request->query['customer_id'] : "";
+    $sellerId = isset($this->request->query['seller_id']) ? $this->request->query['seller_id'] : "";
     $sellers = array();
+    $sellerAffiliates = array();
     if($customerId){
       $sellers = $this->Buyer->Seller->find('list', array(
         'conditions' => array(
@@ -104,8 +111,16 @@ class BuyersController extends AppController {
           'Seller.seller_id' => ""
         )
       ));
-    }    
-		$this->set(compact('customers', 'areas', 'sellers'));
+      if($sellerId){
+        $sellerAffiliates = $this->Buyer->Seller->find('list', array(
+          'conditions' => array(
+            'Seller.customer_id' => $customerId,
+            'Seller.seller_id' => $sellerId
+          )
+        ));        
+      }
+    }
+		$this->set(compact('customers', 'areas', 'sellers', 'sellerAffiliates'));
 	}
 
 /**

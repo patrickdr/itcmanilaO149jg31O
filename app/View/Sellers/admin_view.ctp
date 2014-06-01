@@ -32,6 +32,11 @@
 			<?php echo h($seller['Address']['address']); ?>
 			&nbsp;
 		</dd>
+		<dt><?php echo __('Code'); ?></dt>
+		<dd>
+			<?php echo h($seller['Seller']['code']); ?>
+			&nbsp;
+		</dd>
 		<dt><?php echo __('Created'); ?></dt>
 		<dd>
 			<?php echo h($seller['Seller']['created']); ?>

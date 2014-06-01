@@ -8,9 +8,24 @@
       window.location.href = "?customer_id=" + Customer.customerId;
     }
   };
+  var Seller =  {
+    init : function(){
+      Seller.sellerSelect = $('select[name="data[Buyer][seller_id]"]');
+    },
+    onChange : function(){
+      Seller.sellerId = Seller.sellerSelect.val();
+      var customerQuery = "";
+      <?php if(isset($this->request->query['customer_id'])): ?>
+        customerQuery = "<?php echo "?customer_id=".$this->request->query['customer_id']."&"; ?>";
+      <?php endif; ?>     
+      window.location.href = customerQuery + "&seller_id=" + Seller.sellerId;
+    }
+  };  
   $(document).ready(function(){
     Customer.init();
+    Seller.init();
     Customer.customerSelect.on('change', Customer.onChange);
+    Seller.sellerSelect.on('change', Seller.onChange);
   });
 </script>
 <div class="buyers form">
@@ -19,7 +34,8 @@
 		<legend><?php echo __('Admin Add Buyer'); ?></legend>
 	<?php
 		echo $this->Form->input('customer_id', array('empty' => '---Buyer---', 'selected' => isset($this->request->query['customer_id']) ? $this->request->query['customer_id'] : 0 ));
-    echo $this->Form->input('seller_id', array('empty' => '---Seller---'));
+    echo $this->Form->input('seller_id', array('empty' => '---Seller---', 'selected' => isset($this->request->query['seller_id']) ? $this->request->query['seller_id'] : 0));
+    echo $this->Form->input('seller_affiliate', array('empty' => '---Seller Affiliate---', 'options' => $sellerAffiliates));
 		echo $this->Form->input('area_id');
 		echo $this->Form->input('code');
 		echo $this->Form->input('name');

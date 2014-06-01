@@ -5,7 +5,12 @@
 			<th><?php echo $this->Paginator->sort('id'); ?></th>
 			<th><?php echo $this->Paginator->sort('customer_id', 'CustomerName'); ?></th>
 			<th><?php echo $this->Paginator->sort('area_id'); ?></th>
-			<th><?php echo $this->Paginator->sort('name', 'SellerName'); ?></th>
+      <?php if($affiliate):?>
+        <th><?php echo $this->Paginator->sort('ParentSeller.name', 'SellerName'); ?></th>
+        <th><?php echo $this->Paginator->sort('name', 'SellerAffiliate'); ?></th>
+      <?php else: ?>
+        <th><?php echo $this->Paginator->sort('name', 'SellerName'); ?></th>
+      <?php endif; ?>
 			<th><?php echo $this->Paginator->sort('address'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
@@ -18,7 +23,12 @@
 		<td>
 			<?php echo $this->Html->link($seller['Area']['code'], array('controller' => 'areas', 'action' => 'view', $seller['Area']['id'])); ?>
 		</td>
-		<td><?php echo h($seller['Seller']['name']); ?>&nbsp;</td>
+    <?php if($affiliate) : ?>
+      <td><?php echo h($seller['ParentSeller']['name']); ?>&nbsp;</td>
+      <td><?php echo h($seller['Seller']['name']); ?>&nbsp;</td>
+    <?php else: ?>
+      <td><?php echo h($seller['Seller']['name']); ?>&nbsp;</td>
+    <?php endif; ?>
 		<td><?php echo h($seller['Seller']['address']); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $seller['Seller']['id'])); ?>

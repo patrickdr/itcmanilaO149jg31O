@@ -28,6 +28,18 @@ class SellersController extends AppController {
           'Seller.seller_id' => null
       )
     );      
+    $this->set('affiliate', false);
+		$this->set('sellers', $this->paginate('Seller'));
+	}
+	public function admin_affiliates() {
+    $this->view = 'admin_index';
+		$this->Seller->recursive = 0;
+    $this->paginate = array(          
+      'conditions' => array(
+          'Seller.seller_id !=' => null
+      )
+    ); 
+    $this->set('affiliate', true);
 		$this->set('sellers', $this->paginate('Seller'));
 	}
 

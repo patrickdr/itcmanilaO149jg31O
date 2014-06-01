@@ -51,7 +51,7 @@
     <th><?php echo $this->Paginator->sort('area_id'); ?></th>
     <th><?php echo $this->Paginator->sort('code', 'BuyerCode'); ?></th>
     <th><?php echo $this->Paginator->sort('customer_buyer_code', 'CustomerBuyerCode'); ?></th>
-    <th><?php echo $this->Paginator->sort('name'); ?></th>
+    <th><?php echo $this->Paginator->sort('name', 'BuyerName'); ?></th>
     <th><?php echo $this->Paginator->sort('contact_person'); ?></th>
     <th><?php echo $this->Paginator->sort('contact_number'); ?></th>
     <th class="actions"><?php echo __('Actions'); ?></th>
@@ -62,7 +62,11 @@
 			<?php echo $this->Html->link($buyer['Customer']['name'], array('controller' => 'customers', 'action' => 'view', $buyer['Customer']['id'])); ?>
 		</td>
 		<td>
-			<?php echo $this->Html->link($buyer['Seller']['name'], array('controller' => 'sellers', 'action' => 'view', $buyer['Seller']['id'])); ?>
+      <?php if(isset($buyer['SellerAffiliate']['ParentSeller'])): ?>
+        <?php echo $this->Html->link($buyer['SellerAffiliate']['ParentSeller']['name'], array('controller' => 'sellers', 'action' => 'view', $buyer['SellerAffiliate']['ParentSeller']['id'])); ?>
+      <?php else: ?>
+        <?php echo $this->Html->link($buyer['Seller']['name'], array('controller' => 'sellers', 'action' => 'view', $buyer['Seller']['id'])); ?>
+      <?php endif; ?>
 		</td> 
     <td>
 			<?php
@@ -113,5 +117,6 @@
 		<li><?php echo $this->Html->link(__('New Area'), array('controller' => 'areas', 'action' => 'add')); ?> </li>
 		<li><?php echo $this->Html->link(__('List Itineraries'), array('controller' => 'itineraries', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Itinerary'), array('controller' => 'itineraries', 'action' => 'add')); ?> </li>
+    <li><?php echo $this->Html->link(__('Upload ITD'), array('controller' => 'itineraries', 'action' => 'upload')); ?> </li>
 	</ul>
 </div>
