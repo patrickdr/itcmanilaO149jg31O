@@ -118,6 +118,7 @@ class ItinerariesController extends AppController {
 	}
   
   public function admin_upload(){
+    
     $data = new Spreadsheet_Excel_Reader();
     // Set output Encoding.
     $data->setOutputEncoding('CP1251');
@@ -144,6 +145,7 @@ class ItinerariesController extends AppController {
       }
     }      
     if($this->request->is('post')){
+      
       $data->read($this->request->data['Itinerary']['file']['tmp_name']);
       $headers = isset($data->sheets[0]['cells'][2]) ? $data->sheets[0]['cells'][2] : array();
       foreach($headers as &$header){
