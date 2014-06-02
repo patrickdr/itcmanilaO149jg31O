@@ -49,7 +49,7 @@
 		<td><?php echo h($itinerary['Itinerary']['trip_id']); ?>&nbsp;</td>
     <td><?php echo h($itinerary['Itinerary']['itinerary_number']); ?>&nbsp;</td>
 		<td><?php echo h(String::truncate($itinerary['Itinerary']['remarks'], 20, array('ellipsis' => '...'))); ?>&nbsp;</td>
-		<td><?php echo h($itinerary['Itinerary']['date_received']); ?>&nbsp;</td>
+		<td><?php echo h(date('Y-m-d', strtotime($itinerary['Itinerary']['date_received']))); ?>&nbsp;</td>
     <td><?php echo h(String::truncate($itinerary['Itinerary']['contact_number'], 15, array('ellipsis' => '...'))); ?>&nbsp;</td>
 		<td><?php echo h($itinerary['Itinerary']['contact_person']); ?>&nbsp;</td>
 		<td class="actions">

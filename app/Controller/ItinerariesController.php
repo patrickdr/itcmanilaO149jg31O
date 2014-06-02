@@ -145,7 +145,9 @@ class ItinerariesController extends AppController {
       }
     }      
     if($this->request->is('post')){
-      
+      $dr = &$this->request->data['Itinerary']['date_received'];
+      $dateReceived = $dr['year']."-".$dr['month']."-".$dr['day'];
+      $dateReceived = date('Y-m-d H:i:s', strtotime($dateReceived));
       $data->read($this->request->data['Itinerary']['file']['tmp_name']);
       $headers = isset($data->sheets[0]['cells'][2]) ? $data->sheets[0]['cells'][2] : array();
       foreach($headers as &$header){
@@ -169,6 +171,7 @@ class ItinerariesController extends AppController {
             $toPush['remarks'] = isset($value[6]) ? $value[6] : "";
             $toPush['contact_person'] = isset($value[7]) ? $value[7] : "";
             $toPush['contact_number'] = isset($value[8]) ? $value[8] : "";
+            $toPush['date_received'] = $dateReceived;
             //Address Model
             $data['Address']['address'] = isset($value[10]) ? $value[10] : "";
             $data['Address']['source_name'] = 'itineraries';
@@ -193,6 +196,7 @@ class ItinerariesController extends AppController {
             }
           }
         }
+        exit;
         if($saved && !$notSaved){
           $this->Session->setFlash(__("All Itineraries are saved."));
           
@@ -201,6 +205,7 @@ class ItinerariesController extends AppController {
           $this->Session->setFlash(__("Itineraries has been saved but some are not saved."));
         } 
         else if(!$saved && $notSaved){
+          
           $this->Session->setFlash(__("Itineraries could not be saved."));
           return $this->redirect(array('action' => 'upload'));
         }
