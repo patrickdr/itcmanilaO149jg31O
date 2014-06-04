@@ -60,6 +60,18 @@ class Trip extends AppModel {
     )
 	);
   
+  public function beforeSave($options = array()){
+    if($this->id){
+      $trips = $this->findById($this->id);
+      foreach($trips['Itinerary'] as &$itinerary){
+        $itinerary['trip_id'] = "";
+      }
+      $this->Itinerary;
+      $this->Itinerary->saveAll($trips['Itinerary']);    
+    }
+    return true;  
+  }
+  
   public function afterSave($created, $options = array()){
     if(isset($this->data['Itinerary']['select']) && $this->data['Itinerary']['select']){
       $itineraryIds = array_filter($this->data['Itinerary']['select']);
@@ -83,6 +95,16 @@ class Trip extends AppModel {
       }
     }
     parent::afterSave($created, $options);
+  }
+  
+  public function beforeDelete($cascade = true){
+    $trips = $this->findById($this->id);
+    foreach($trips['Itinerary'] as &$itinerary){
+      $itinerary['trip_id'] = "";
+    }
+    $this->Itinerary;
+    $this->Itinerary->saveAll($trips['Itinerary']);
+    return true;
   }
 
 }

@@ -77,6 +77,9 @@ class TripsController extends AppController {
               'Buyer.area_id' => $areas
             )
           )
+        ),
+        'conditions' => array(
+          'Itinerary.trip_id' => ""
         )
       ));
       $this->set(compact('itineraries'));
@@ -95,6 +98,7 @@ class TripsController extends AppController {
 			throw new NotFoundException(__('Invalid trip'));
 		}
 		if ($this->request->is(array('post', 'put'))) {
+      
 			if ($this->Trip->save($this->request->data)) {
 				$this->Session->setFlash(__('The trip has been saved.'));
 				return $this->redirect(array('action' => 'index'));
@@ -106,7 +110,17 @@ class TripsController extends AppController {
 			$this->request->data = $this->Trip->find('first', $options);
 		}
 		$collectors = $this->Trip->Collector->find('list');
-		$this->set(compact('collectors'));
+    $areas = $this->Trip->TripArea->Area->find('list');
+    $this->set('itineraries', $this->Trip->Itinerary->find('all'));
+    //$itineraries = 
+    $trips = $this->Trip->Itinerary->find('all', array(
+      'conditions' => array(
+        'Itinerary.trip_id' => $id
+      )
+    ));
+    
+    $this->set('trips', $trips);
+		$this->set(compact('collectors', 'areas'));    
 	}
 
 /**

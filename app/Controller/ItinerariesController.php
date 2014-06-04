@@ -196,7 +196,6 @@ class ItinerariesController extends AppController {
             }
           }
         }
-        exit;
         if($saved && !$notSaved){
           $this->Session->setFlash(__("All Itineraries are saved."));
           
