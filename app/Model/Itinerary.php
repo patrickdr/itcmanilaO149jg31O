@@ -15,6 +15,10 @@ class Itinerary extends AppModel {
  */
 	public $displayField = 'name';
   public $actsAs = array('Containable');
+  
+  const RESULT_SUCCESSFUL =1,
+        RESULT_UNSUCCESSFUL = 2,
+        RESULT_FAILED = 3;
 /**
  * Validation rules
  *
@@ -76,6 +80,13 @@ class Itinerary extends AppModel {
 			'conditions' => array(
         'SellerAffiliate.seller_id !=' => ""
       ),
+			'fields' => '',
+			'order' => ''
+		),      
+		'Reason' => array(
+			'className' => 'Reason',
+			'foreignKey' => 'reason_id',
+			'conditions' => '',
 			'fields' => '',
 			'order' => ''
 		)     

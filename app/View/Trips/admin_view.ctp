@@ -47,57 +47,64 @@
 	<?php if (!empty($trip['Itinerary'])): ?>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
-		<th><?php echo __('Id'); ?></th>
-		<th><?php echo __('Buyer Id'); ?></th>
-		<th><?php echo __('Customer Id'); ?></th>
-		<th><?php echo __('Seller Id'); ?></th>
-		<th><?php echo __('Trip Id'); ?></th>
-		<th><?php echo __('Itinerary Type'); ?></th>
-		<th><?php echo __('Trip Type'); ?></th>
-		<th><?php echo __('Name'); ?></th>
-		<th><?php echo __('Trip Number'); ?></th>
-		<th><?php echo __('Address'); ?></th>
-		<th><?php echo __('Mm Provl'); ?></th>
-		<th><?php echo __('Itinerary Number'); ?></th>
-		<th><?php echo __('Remarks'); ?></th>
-		<th><?php echo __('Amount'); ?></th>
-		<th><?php echo __('Requestor'); ?></th>
-		<th><?php echo __('Contact Number'); ?></th>
-		<th><?php echo __('Contact Person'); ?></th>
-		<th><?php echo __('Date Received'); ?></th>
-		<th><?php echo __('Created'); ?></th>
-		<th><?php echo __('Modified'); ?></th>
-		<th class="actions"><?php echo __('Actions'); ?></th>
+			<th><?php echo __('Buyer.name'); ?></th>
+      <th><?php echo __('SellerName'); ?></th>
+      <th><?php echo __('SellerAffiliate'); ?></th>
+			<th><?php echo __('Trip Type'); ?></th>      
+			<th><?php echo __('Acknowledged By'); ?></th>
+      <th><?php echo __('Acknowledged Receipt', 'IT number'); ?></th>
+			<th><?php echo __('Acknowledged Date'); ?></th>
+			<th><?php echo __('Date Received'); ?></th>
+			<th><?php echo __('Reason code'); ?></th>
+			<th><?php echo __('Result Status'); ?></th>
+			<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
-	<?php foreach ($trip['Itinerary'] as $itinerary): ?>
-		<tr>
-			<td><?php echo $itinerary['id']; ?></td>
-			<td><?php echo $itinerary['buyer_id']; ?></td>
-			<td><?php echo $itinerary['customer_id']; ?></td>
-			<td><?php echo $itinerary['seller_id']; ?></td>
-			<td><?php echo $itinerary['trip_id']; ?></td>
-			<td><?php echo $itinerary['itinerary_type']; ?></td>
-			<td><?php echo $itinerary['trip_type']; ?></td>
-			<td><?php echo $itinerary['name']; ?></td>
-			<td><?php echo $itinerary['trip_number']; ?></td>
-			<td><?php echo $itinerary['address']; ?></td>
-			<td><?php echo $itinerary['mm_provl']; ?></td>
-			<td><?php echo $itinerary['itinerary_number']; ?></td>
-			<td><?php echo $itinerary['remarks']; ?></td>
-			<td><?php echo $itinerary['amount']; ?></td>
-			<td><?php echo $itinerary['requestor']; ?></td>
-			<td><?php echo $itinerary['contact_number']; ?></td>
-			<td><?php echo $itinerary['contact_person']; ?></td>
-			<td><?php echo $itinerary['date_received']; ?></td>
-			<td><?php echo $itinerary['created']; ?></td>
-			<td><?php echo $itinerary['modified']; ?></td>
-			<td class="actions">
-				<?php echo $this->Html->link(__('View'), array('controller' => 'itineraries', 'action' => 'view', $itinerary['id'])); ?>
-				<?php echo $this->Html->link(__('Edit'), array('controller' => 'itineraries', 'action' => 'edit', $itinerary['id'])); ?>
-				<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'itineraries', 'action' => 'delete', $itinerary['id']), null, __('Are you sure you want to delete # %s?', $itinerary['id'])); ?>
-			</td>
-		</tr>
-	<?php endforeach; ?>
+	<?php foreach ($itineraries as $itinerary): ?>
+	<tr>
+		<td>
+			<?php echo $this->Html->link(
+        String::truncate($itinerary['Buyer']['name'], 15, array('ellipsis' => '...')), 
+        array(
+          'controller' => 'buyers', 
+          'action' => 'view', 
+          $itinerary['Buyer']['id']
+        ),
+        array(
+          'title' => $itinerary['Buyer']['name']
+        )
+      ); ?>
+		</td>
+    <td>
+      <?php if(isset($itinerary['SellerAffiliate']['ParentSeller'])): ?>
+        <?php echo $this->Html->link($itinerary['SellerAffiliate']['ParentSeller']['name'], array('controller' => 'sellers', 'action' => 'view', $itinerary['SellerAffiliate']['ParentSeller']['id'])); ?>
+      <?php else: ?>
+        <?php echo $this->Html->link($itinerary['Seller']['name'], array('controller' => 'sellers', 'action' => 'view', $itinerary['Seller']['id'])); ?>
+      <?php endif; ?>
+    </td>
+    <td>
+      <?php
+        if($itinerary['SellerAffiliate']['name']){
+          echo $this->Html->link($itinerary['SellerAffiliate']['name'], array('controller' => 'sellers', 'action' => 'view', $itinerary['SellerAffiliate']['id'])); 
+        }
+       ?>
+    </td>
+		<td>
+			<?php echo h($itinerary['Itinerary']['trip_type']); ?>
+		</td>
+		<td><?php echo h($itinerary['Itinerary']['acknowledged_by']); ?>&nbsp;</td>
+    <td><?php echo h($itinerary['Itinerary']['acknowledged_receipt']); ?>&nbsp;</td>
+		<td><?php echo h(String::truncate($itinerary['Itinerary']['acknowledged_date'], 20, array('ellipsis' => '...'))); ?>&nbsp;</td>
+		<td><?php echo h(date('Y-m-d', strtotime($itinerary['Itinerary']['date_received']))); ?>&nbsp;</td>
+    <td><?php echo h(String::truncate($itinerary['Itinerary']['reason_id'], 15, array('ellipsis' => '...'))); ?>&nbsp;</td>
+		<td><?php echo h($itinerary['Itinerary']['result_status']); ?>&nbsp;</td>
+		<td class="actions">
+			<?php echo $this->Html->link(__('View'), array('controller' => 'itineraries', 'action' => 'view', $itinerary['Itinerary']['id'])); ?>
+			<?php echo $this->Html->link(__('Edit'), array('controller' => 'itineraries', 'action' => 'edit', $itinerary['Itinerary']['id'])); ?>
+      <?php echo $this->Html->link(__('Update'), array('controller' => 'itineraries', 'action' => 'update', $itinerary['Itinerary']['id'])); ?>
+			<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'itineraries', 'action' => 'delete', $itinerary['Itinerary']['id']), null, __('Are you sure you want to delete # %s?', $itinerary['Itinerary']['id'])); ?>
+		</td>
+	</tr>
+  <?php endforeach; ?>
 	</table>
 <?php endif; ?>
 

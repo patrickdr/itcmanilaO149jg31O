@@ -96,6 +96,33 @@ class ItinerariesController extends AppController {
 		$this->set(compact('buyers', 'trips'));
 	}
 
+  public function admin_update($id = null){
+    if (!$this->Itinerary->exists($id)) {
+			throw new NotFoundException(__('Invalid trip'));
+		}
+     $itinerary = $this->Itinerary->find('first', array(
+      'conditions' => array(
+        'Itinerary.id' => $id
+      )
+    )); 
+		if ($this->request->is(array('post', 'put'))) {
+			if ($this->Itinerary->save($this->request->data)) {
+				$this->Session->setFlash(__('The itinerary has been saved.'));
+				return $this->redirect(array('controller' => 'trips', 'action' => 'view', 'admin' => true, $itinerary['Itinerary']['trip_id']));
+			} else {
+				$this->Session->setFlash(__('The itinerary could not be saved. Please, try again.'));
+			}
+		} 
+    $this->request->data = $itinerary;    
+    $results = array(
+      Itinerary::RESULT_SUCCESSFUL => 'Successful',
+      Itinerary::RESULT_UNSUCCESSFUL => 'Unsuccessful',
+      Itinerary::RESULT_FAILED => 'Failed'
+    );
+    $reasons = $this->Itinerary->Reason->find('list');
+    $this->set(compact('itinerary', 'results', 'reasons'));
+  }  
+
 /**
  * admin_delete method
  *

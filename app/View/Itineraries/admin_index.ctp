@@ -58,7 +58,7 @@
 			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $itinerary['Itinerary']['id']), null, __('Are you sure you want to delete # %s?', $itinerary['Itinerary']['id'])); ?>
 		</td>
 	</tr>
-<?php endforeach; ?>
+  <?php endforeach; ?>
 	</table>
 	<p>
 	<?php

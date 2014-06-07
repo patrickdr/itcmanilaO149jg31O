@@ -38,7 +38,13 @@ class TripsController extends AppController {
 			throw new NotFoundException(__('Invalid trip'));
 		}
 		$options = array('conditions' => array('Trip.' . $this->Trip->primaryKey => $id));
+    $itineraries = $this->Trip->Itinerary->find('all', array(
+      'conditions' => array(
+        'Itinerary.trip_id' => $id
+      )
+    ));
 		$this->set('trip', $this->Trip->find('first', $options));
+    $this->set('itineraries', $itineraries);
 	}
 
 /**
