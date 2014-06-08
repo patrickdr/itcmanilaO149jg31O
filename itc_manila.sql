@@ -30,7 +30,7 @@ CREATE TABLE `addresses` (
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +39,7 @@ CREATE TABLE `addresses` (
 
 LOCK TABLES `addresses` WRITE;
 /*!40000 ALTER TABLE `addresses` DISABLE KEYS */;
-INSERT INTO `addresses` VALUES (21,'AAAABBBBCCCCDDDD','sellers',1,'2014-05-04 11:14:33','2014-05-04 11:25:11'),(23,'U2107 88 CORPORATE CENTER SEDENO ST COR VALERO SALCEDO VILL MAKATI CITY','buyers',94,'2014-05-04 11:51:29','2014-05-04 11:51:29'),(24,'RM 231 DELA ROSA CONDO DELA ROSA ST MAKATI CITY','buyers',95,'2014-05-04 11:51:29','2014-05-04 11:51:29'),(25,'2/F METRO HOUSE 345 SEN GIL PUYAT AVE MAKATI CITY','buyers',96,'2014-05-04 11:51:29','2014-05-04 11:51:29'),(74,' 1012-E Services Atbp. Ground Floor, Festival Mall, Festival Corporate City, Alabang, Muntinlupa City','itineraries',55,'2014-05-18 10:16:58','2014-05-18 10:16:58'),(75,'QFI BLDG                        \nMULTINATIONAL AVENUE MOONWALK   PARANAQUE CITY  1704','itineraries',56,'2014-05-18 10:16:58','2014-05-18 10:16:58'),(76,'M.EUSEBIO AVE. SAN MIGUEL   \nUNIT 14 ARMAL COMPD. 2      \nPASIG 1600','itineraries',57,'2014-05-18 10:16:58','2014-05-18 10:16:58'),(77,'\nAbest Express\nRM. 4 Poblete Building #17 Gil Puyat Ave. Makati City\n\n','itineraries',58,'2014-05-18 10:16:58','2014-05-18 10:16:58');
+INSERT INTO `addresses` VALUES (21,'AAAABBBBCCCCDDDD','sellers',1,'2014-05-04 11:14:33','2014-05-04 11:25:11'),(23,'U2107 88 CORPORATE CENTER SEDENO ST COR VALERO SALCEDO VILL MAKATI CITY','buyers',94,'2014-05-04 11:51:29','2014-05-04 11:51:29'),(24,'RM 231 DELA ROSA CONDO DELA ROSA ST MAKATI CITY','buyers',95,'2014-05-04 11:51:29','2014-05-04 11:51:29'),(25,'2/F METRO HOUSE 345 SEN GIL PUYAT AVE MAKATI CITY','buyers',96,'2014-05-04 11:51:29','2014-05-04 11:51:29'),(82,'','sellers',3,'2014-05-29 15:24:06','2014-05-29 15:24:06'),(83,'','sellers',5,'2014-05-29 15:25:00','2014-05-29 15:25:00'),(92,' 1012-E Services Atbp. Ground Floor, Festival Mall, Festival Corporate City, Alabang, Muntinlupa City','itineraries',71,'2014-06-04 15:30:04','2014-06-04 15:30:04'),(93,'QFI BLDG                        \nMULTINATIONAL AVENUE MOONWALK   PARANAQUE CITY  1704','itineraries',72,'2014-06-04 15:30:04','2014-06-04 15:30:04'),(94,'M.EUSEBIO AVE. SAN MIGUEL   \nUNIT 14 ARMAL COMPD. 2      \nPASIG 1600','itineraries',73,'2014-06-04 15:30:04','2014-06-04 15:30:04'),(95,'\nAbest Express\nRM. 4 Poblete Building #17 Gil Puyat Ave. Makati City\n\n','itineraries',74,'2014-06-04 15:30:04','2014-06-04 15:30:04'),(96,' 1012-E Services Atbp. Ground Floor, Festival Mall, Festival Corporate City, Alabang, Muntinlupa City','itineraries',75,'2014-06-04 15:30:25','2014-06-04 15:30:25'),(97,'QFI BLDG                        \nMULTINATIONAL AVENUE MOONWALK   PARANAQUE CITY  1704','itineraries',76,'2014-06-04 15:30:25','2014-06-04 15:30:25'),(98,'M.EUSEBIO AVE. SAN MIGUEL   \nUNIT 14 ARMAL COMPD. 2      \nPASIG 1600','itineraries',77,'2014-06-04 15:30:25','2014-06-04 15:30:25'),(99,'\nAbest Express\nRM. 4 Poblete Building #17 Gil Puyat Ave. Makati City\n\n','itineraries',78,'2014-06-04 15:30:25','2014-06-04 15:30:25');
 /*!40000 ALTER TABLE `addresses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -96,7 +96,7 @@ CREATE TABLE `buyers` (
   KEY `fk_buyers_areas1_idx` (`area_id`),
   CONSTRAINT `fk_buyers_areas1` FOREIGN KEY (`area_id`) REFERENCES `areas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_buyers_customers1` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=104 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -105,7 +105,7 @@ CREATE TABLE `buyers` (
 
 LOCK TABLES `buyers` WRITE;
 /*!40000 ALTER TABLE `buyers` DISABLE KEYS */;
-INSERT INTO `buyers` VALUES (94,3,23,1,'209985683','209985683','HELLERMANNTYTON ASIA PACIFIC',NULL,NULL,'2014-05-04 11:51:29','2014-05-04 11:51:29'),(95,3,17,1,'210019200','210019200','ELISAN INT\'L CORP',NULL,NULL,'2014-05-04 11:51:29','2014-05-04 11:51:29'),(96,3,17,1,'210088768','210088768','TRICOM SYSTEMS PHILS INC',NULL,NULL,'2014-05-04 11:51:29','2014-05-04 11:51:29'),(97,3,4,4,'189490984',NULL,' SUNPOWER PHILS MFTG LTD -MODCO','Imelda Novela ','2 849 4600 ext. 30718 / 09175978498','2014-05-18 08:36:03','2014-05-18 08:36:03'),(98,3,1,4,'246887845',NULL,'QUICKFLO FORWARDERS INC','Ms Sheena ','6328227151 ext 123  ','2014-05-18 08:37:16','2014-05-18 08:37:16'),(99,3,15,4,'179101750',NULL,'PERROQUET BLEU CORPORATION','Ms Jessa - Releasing ','02 654-3612','2014-05-18 08:42:39','2014-05-18 08:42:39'),(100,3,14,4,'320486483',NULL,'ASTEC INTL LTD PHIL BRANCH','Dennis M. Camaymayan ','| T +632.687.6615 x767 ','2014-05-18 08:44:29','2014-05-18 08:44:29');
+INSERT INTO `buyers` VALUES (94,3,23,1,'209985683','209985683','HELLERMANNTYTON ASIA PACIFIC',NULL,NULL,'2014-05-04 11:51:29','2014-05-04 11:51:29'),(95,3,17,1,'210019200','210019200','ELISAN INT\'L CORP',NULL,NULL,'2014-05-04 11:51:29','2014-05-04 11:51:29'),(96,3,17,1,'210088768','210088768','TRICOM SYSTEMS PHILS INC',NULL,NULL,'2014-05-04 11:51:29','2014-05-04 11:51:29'),(97,3,4,4,'189490984',NULL,' SUNPOWER PHILS MFTG LTD -MODCO','Imelda Novela ','2 849 4600 ext. 30718 / 09175978498','2014-05-18 08:36:03','2014-05-18 08:36:03'),(98,3,1,4,'246887845',NULL,'QUICKFLO FORWARDERS INC','Ms Sheena ','6328227151 ext 123  ','2014-05-18 08:37:16','2014-05-18 08:37:16'),(99,3,15,4,'179101750',NULL,'PERROQUET BLEU CORPORATION','Ms Jessa - Releasing ','02 654-3612','2014-05-18 08:42:39','2014-05-18 08:42:39'),(100,3,14,4,'320486483',NULL,'ASTEC INTL LTD PHIL BRANCH','Dennis M. Camaymayan ','| T +632.687.6615 x767 ','2014-05-18 08:44:29','2014-05-18 08:44:29'),(101,3,1,1,'CAMERA HAUS',NULL,'CAMERA HAUS','','','2014-05-29 15:25:37','2014-05-29 15:25:37'),(102,3,1,1,'CAMERA HAUS 2',NULL,'CAMHAUS','','','2014-05-29 15:43:09','2014-05-29 15:43:09'),(103,3,1,5,'CAMERA HAUS3',NULL,'CAMHAUS3','','','2014-05-29 15:47:14','2014-05-29 15:47:14');
 /*!40000 ALTER TABLE `buyers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -208,6 +208,8 @@ CREATE TABLE `itineraries` (
   `buyer_id` int(11) NOT NULL,
   `customer_id` int(11) NOT NULL,
   `seller_id` int(11) NOT NULL,
+  `reason_id` int(11) NOT NULL,
+  `result_status` int(11) DEFAULT NULL,
   `trip_id` int(11) DEFAULT NULL,
   `itinerary_type` varchar(45) DEFAULT NULL,
   `trip_type` varchar(45) DEFAULT NULL,
@@ -222,15 +224,21 @@ CREATE TABLE `itineraries` (
   `contact_number` varchar(45) DEFAULT NULL,
   `contact_person` varchar(45) DEFAULT NULL,
   `date_received` datetime DEFAULT NULL,
+  `acknowledged_receipt` varchar(45) DEFAULT NULL,
+  `acknowledged_date` date DEFAULT NULL,
+  `acknowledged_by` varchar(45) DEFAULT NULL,
+  `collector_remarks` text,
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_itineraries_customers1_idx` (`customer_id`),
   KEY `fk_itineraries_sellers1_idx` (`seller_id`),
   KEY `fk_itineraries_buyers1_idx` (`buyer_id`),
+  KEY `fk_itineraries_reasons1_idx` (`reason_id`),
   CONSTRAINT `fk_itineraries_customers1` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_itineraries_reasons1` FOREIGN KEY (`reason_id`) REFERENCES `reasons` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_itineraries_sellers1` FOREIGN KEY (`seller_id`) REFERENCES `sellers` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -239,7 +247,7 @@ CREATE TABLE `itineraries` (
 
 LOCK TABLES `itineraries` WRITE;
 /*!40000 ALTER TABLE `itineraries` DISABLE KEYS */;
-INSERT INTO `itineraries` VALUES (55,97,3,4,10,NULL,'PC',NULL,NULL,NULL,'MMLA',123859,'Collection time:10-4pm ',1589303.25,'Mirasol','/ 2 849 4600 ext. 30718 / 09175978498','Imelda Novela ',NULL,'2014-05-18 10:16:58','2014-05-18 10:16:58'),(56,98,3,4,10,NULL,'PC',NULL,NULL,NULL,'MMLA',123859,'',NULL,'CHELE','6328227151 ext 123  ','Ms Sheena ',NULL,'2014-05-18 10:16:58','2014-05-18 10:16:58'),(57,99,3,4,NULL,NULL,'PC',NULL,NULL,NULL,'MMLA',123859,'',48031.45,'CHELE','02 654-3612','Ms Jessa - Releasing ',NULL,'2014-05-18 10:16:58','2014-05-18 10:16:58'),(58,100,3,4,NULL,NULL,'   ',NULL,NULL,NULL,'MMLA',123859,'Please collect for the following companies\n320486483 ASTEC INTL LTD PHIL BRANCH\n320486920 ASTEC INTL LTD PHIL BRANCH\n180939369 ASTEC POWER PHILS INC\n320487463 ASTEC POWER PHILS INC\n320487587 ASTEC POWER PHILS INC\n320487587 ASTEC POWER PHILS INC\n180939369 ASTEC POWER PHILS INC\n386585563 ASTEC POWER PHILS INC-LAGUNA',NULL,'Abigail','| T +632.687.6615 x767 ','Dennis M. Camaymayan ',NULL,'2014-05-18 10:16:58','2014-05-18 10:16:58');
+INSERT INTO `itineraries` VALUES (71,97,3,5,3,2,15,NULL,'PC',NULL,NULL,NULL,'MMLA',123859,'Collection time:10-4pm ',1589303.25,'Mirasol','/ 2 849 4600 ext. 30718 / 09175978498','Imelda Novela ','2014-06-04 00:00:00','sdfsdf','2014-06-03','Patrick','uttewfwe','2014-06-04 15:30:04','2014-06-07 10:30:19'),(72,98,3,5,0,NULL,15,NULL,'PC',NULL,NULL,NULL,'MMLA',123859,'',NULL,'CHELE','6328227151 ext 123  ','Ms Sheena ','2014-06-04 00:00:00',NULL,NULL,NULL,NULL,'2014-06-04 15:30:04','2014-06-04 15:30:04'),(73,99,3,5,0,NULL,NULL,NULL,'PC',NULL,NULL,NULL,'MMLA',123859,'',48031.45,'CHELE','02 654-3612','Ms Jessa - Releasing ','2014-06-04 00:00:00',NULL,NULL,NULL,NULL,'2014-06-04 15:30:04','2014-06-04 15:30:04'),(74,100,3,5,0,NULL,NULL,NULL,'   ',NULL,NULL,NULL,'MMLA',123859,'Please collect for the following companies\n320486483 ASTEC INTL LTD PHIL BRANCH\n320486920 ASTEC INTL LTD PHIL BRANCH\n180939369 ASTEC POWER PHILS INC\n320487463 ASTEC POWER PHILS INC\n320487587 ASTEC POWER PHILS INC\n320487587 ASTEC POWER PHILS INC\n180939369 ASTEC POWER PHILS INC\n386585563 ASTEC POWER PHILS INC-LAGUNA',NULL,'Abigail','| T +632.687.6615 x767 ','Dennis M. Camaymayan ','2014-06-04 00:00:00',NULL,NULL,NULL,NULL,'2014-06-04 15:30:04','2014-06-04 15:30:04'),(75,97,3,5,0,NULL,NULL,NULL,'PC',NULL,NULL,NULL,'MMLA',123859,'Collection time:10-4pm ',1589303.25,'Mirasol','/ 2 849 4600 ext. 30718 / 09175978498','Imelda Novela ','2014-06-04 00:00:00',NULL,NULL,NULL,NULL,'2014-06-04 15:30:25','2014-06-04 15:30:25'),(76,98,3,5,0,NULL,NULL,NULL,'PC',NULL,NULL,NULL,'MMLA',123859,'',NULL,'CHELE','6328227151 ext 123  ','Ms Sheena ','2014-06-04 00:00:00',NULL,NULL,NULL,NULL,'2014-06-04 15:30:25','2014-06-04 15:30:25'),(77,99,3,5,0,NULL,15,NULL,'PC',NULL,NULL,NULL,'MMLA',123859,'',48031.45,'CHELE','02 654-3612','Ms Jessa - Releasing ','2014-06-04 00:00:00',NULL,NULL,NULL,NULL,'2014-06-04 15:30:25','2014-06-04 15:30:25'),(78,100,3,5,0,NULL,NULL,NULL,'   ',NULL,NULL,NULL,'MMLA',123859,'Please collect for the following companies\n320486483 ASTEC INTL LTD PHIL BRANCH\n320486920 ASTEC INTL LTD PHIL BRANCH\n180939369 ASTEC POWER PHILS INC\n320487463 ASTEC POWER PHILS INC\n320487587 ASTEC POWER PHILS INC\n320487587 ASTEC POWER PHILS INC\n180939369 ASTEC POWER PHILS INC\n386585563 ASTEC POWER PHILS INC-LAGUNA',NULL,'Abigail','| T +632.687.6615 x767 ','Dennis M. Camaymayan ','2014-06-04 00:00:00',NULL,NULL,NULL,NULL,'2014-06-04 15:30:25','2014-06-04 15:30:25');
 /*!40000 ALTER TABLE `itineraries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -299,6 +307,69 @@ LOCK TABLES `lookups` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `official_receipts`
+--
+
+DROP TABLE IF EXISTS `official_receipts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `official_receipts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `collector_id` int(11) NOT NULL,
+  `seller_id` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `or_number` varchar(45) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `date_received` date DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  `modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_official_receipts_collectors1_idx` (`collector_id`),
+  KEY `fk_official_receipts_sellers1_idx` (`seller_id`),
+  KEY `fk_official_receipts_customers1_idx` (`customer_id`),
+  CONSTRAINT `fk_official_receipts_collectors1` FOREIGN KEY (`collector_id`) REFERENCES `collectors` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_official_receipts_sellers1` FOREIGN KEY (`seller_id`) REFERENCES `sellers` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_official_receipts_customers1` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `official_receipts`
+--
+
+LOCK TABLES `official_receipts` WRITE;
+/*!40000 ALTER TABLE `official_receipts` DISABLE KEYS */;
+/*!40000 ALTER TABLE `official_receipts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `reasons`
+--
+
+DROP TABLE IF EXISTS `reasons`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `reasons` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) DEFAULT NULL,
+  `code` varchar(45) DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  `modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `reasons`
+--
+
+LOCK TABLES `reasons` WRITE;
+/*!40000 ALTER TABLE `reasons` DISABLE KEYS */;
+INSERT INTO `reasons` VALUES (1,'1','1',NULL,NULL),(2,'2','2',NULL,NULL),(3,'3','3',NULL,NULL),(4,'4','4',NULL,NULL),(5,'5','5',NULL,NULL),(6,'6','6',NULL,NULL),(7,'7','7',NULL,NULL),(8,'8','8',NULL,NULL);
+/*!40000 ALTER TABLE `reasons` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `sellers`
 --
 
@@ -322,7 +393,7 @@ CREATE TABLE `sellers` (
   CONSTRAINT `fk_sellers_areas1` FOREIGN KEY (`area_id`) REFERENCES `areas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_sellers_customers1` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_sellers_sellers1` FOREIGN KEY (`seller_id`) REFERENCES `sellers` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -331,7 +402,7 @@ CREATE TABLE `sellers` (
 
 LOCK TABLES `sellers` WRITE;
 /*!40000 ALTER TABLE `sellers` DISABLE KEYS */;
-INSERT INTO `sellers` VALUES (1,3,15,'','CANON',NULL,'Makati City','2014-05-03 09:31:16','2014-05-04 11:25:11'),(3,2,2,'MOOSE12344','MOOSE GEAR',1,'Makati City','2014-05-04 11:34:24','2014-05-04 11:34:24'),(4,3,4,'FEDEX','FEDEX',NULL,'Paranaque City','2014-05-18 08:33:56','2014-05-18 08:33:56');
+INSERT INTO `sellers` VALUES (1,3,15,'','CANON',NULL,'Makati City','2014-05-03 09:31:16','2014-05-04 11:25:11'),(3,3,2,'MOOSE12344','MOOSE GEAR',1,'Makati City','2014-05-04 11:34:24','2014-05-29 15:24:06'),(4,3,4,'FEDEX','FEDEX',NULL,'Paranaque City','2014-05-18 08:33:56','2014-05-18 08:33:56'),(5,3,1,'NIKON','NIKON',1,'','2014-05-29 14:28:12','2014-05-29 15:25:00');
 /*!40000 ALTER TABLE `sellers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -353,7 +424,7 @@ CREATE TABLE `trip_areas` (
   KEY `fk_trips_has_areas_trips1_idx` (`trip_id`),
   CONSTRAINT `fk_trips_has_areas_areas1` FOREIGN KEY (`area_id`) REFERENCES `areas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_trips_has_areas_trips1` FOREIGN KEY (`trip_id`) REFERENCES `trips` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -362,7 +433,7 @@ CREATE TABLE `trip_areas` (
 
 LOCK TABLES `trip_areas` WRITE;
 /*!40000 ALTER TABLE `trip_areas` DISABLE KEYS */;
-INSERT INTO `trip_areas` VALUES (5,10,4,'2014-05-24 15:05:28','2014-05-24 15:05:28'),(6,10,1,'2014-05-24 15:05:28','2014-05-24 15:05:28');
+INSERT INTO `trip_areas` VALUES (18,15,4,'2014-06-04 15:31:06','2014-06-04 15:31:06'),(19,15,1,'2014-06-04 15:31:06','2014-06-04 15:31:06'),(20,15,4,'2014-06-04 15:31:56','2014-06-04 15:31:56'),(21,15,1,'2014-06-04 15:31:56','2014-06-04 15:31:56'),(22,15,15,'2014-06-04 15:31:56','2014-06-04 15:31:56');
 /*!40000 ALTER TABLE `trip_areas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -381,7 +452,7 @@ CREATE TABLE `trips` (
   `modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_collectors_has_itineraries_collectors1_idx` (`collector_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -390,7 +461,7 @@ CREATE TABLE `trips` (
 
 LOCK TABLES `trips` WRITE;
 /*!40000 ALTER TABLE `trips` DISABLE KEYS */;
-INSERT INTO `trips` VALUES (10,1,'','2014-05-24 15:05:28','2014-05-24 15:05:28');
+INSERT INTO `trips` VALUES (15,1,'PC','2014-06-04 15:31:06','2014-06-04 15:31:56');
 /*!40000 ALTER TABLE `trips` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -462,4 +533,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-05-24 21:19:42
+-- Dump completed on 2014-06-08 10:53:29
