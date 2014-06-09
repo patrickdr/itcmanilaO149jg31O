@@ -48,18 +48,44 @@ class OfficialReceiptsController extends AppController {
  */
 	public function admin_add() {
 		if ($this->request->is('post')) {
-			$this->OfficialReceipt->create();
-			if ($this->OfficialReceipt->save($this->request->data)) {
-				$this->Session->setFlash(__('The official receipt has been saved.'));
-				return $this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash(__('The official receipt could not be saved. Please, try again.'));
-			}
+			
+      $start = $this->request->data['OfficialReceipt']['from'];
+      $end = $this->request->data['OfficialReceipt']['to'];
+      $status = $this->request->data['OfficialReceipt']['status'];
+      $seller = $this->request->data['OfficialReceipt']['seller_id'];
+      $customer = $this->request->data['OfficialReceipt']['customer_id'];
+      $collector = $this->request->data['OfficialReceipt']['collector_id'];
+      $length = strlen($start);
+      $prefix = $this->request->data['OfficialReceipt']['prefix'];
+         
+      for($x = $start; $x <= $end; $x++){
+        $newOrs = array(
+          'status' => $status,
+          'seller_id' => $seller,
+          'collector_id' => $collector,
+          'customer_id' => $customer
+        );
+        $ORs[] = &$newOrs;   
+        if(strlen($x) == $length){
+          $newOrs += array(
+            'or_number' => (($prefix) ? $prefix : "" ). $x,
+          );
+        }
+        else{
+          $or = str_pad((string)$x, $length, "0", STR_PAD_LEFT);
+          $newOrs += array(
+            'or_number' => (($prefix) ? $prefix : "" ). $or,
+          );
+        }
+        
+      }
+      $this->OfficialReceipt->saveAll($ORs);
 		}
 		$collectors = $this->OfficialReceipt->Collector->find('list');
 		$sellers = $this->OfficialReceipt->Seller->find('list');
 		$customers = $this->OfficialReceipt->Customer->find('list');
-		$this->set(compact('collectors', 'sellers', 'customers'));
+    $statuses = $this->OfficialReceipt->getStatuses();
+		$this->set(compact('collectors', 'sellers', 'customers', 'statuses'));
 	}
 
 /**

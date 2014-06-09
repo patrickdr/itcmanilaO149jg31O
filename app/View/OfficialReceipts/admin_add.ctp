@@ -1,16 +1,23 @@
 <div class="officialReceipts form">
 <?php echo $this->Form->create('OfficialReceipt'); ?>
 	<fieldset>
-		<legend><?php echo __('Admin Add Official Receipt'); ?></legend>
+		<legend><?php echo __('Add Official Receipt'); ?></legend>
 	<?php
 		echo $this->Form->input('collector_id');
 		echo $this->Form->input('seller_id');
-		echo $this->Form->input('customer_id');
-		echo $this->Form->input('or_number');
-		echo $this->Form->input('status');
+		echo $this->Form->input('customer_id');		
+		echo $this->Form->input('status', array('options' => $statuses));
 		echo $this->Form->input('date_received');
 	?>
 	</fieldset>
+  <fieldset>
+    <legend><?php echo __('Generate Official Receipt'); ?></legend>
+    <?php
+      echo $this->Form->input('prefix', array('label' => 'Official Receipt Number Prefix'));
+      echo $this->Form->input('from', array('label' => 'OR number from'));
+      echo $this->Form->input('to', array('label' => 'OR number to'));
+    ?>
+  </fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
 </div>
 <div class="actions">

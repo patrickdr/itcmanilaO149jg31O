@@ -9,6 +9,11 @@ App::uses('AppModel', 'Model');
  */
 class OfficialReceipt extends AppModel {
 
+  const RECEIVED = 1,
+        DISPATCHED = 2,
+        REMMITED = 3, 
+        BALANCE = 4,
+        RETURNED = 5;
 /**
  * Display field
  *
@@ -47,4 +52,14 @@ class OfficialReceipt extends AppModel {
 			'order' => ''
 		)
 	);
+  
+  public function getStatuses(){
+    return array(
+      self::RECEIVED => 'OR Received',
+      self::DISPATCHED => 'OR Dispatched',
+      self::REMMITED => 'OR Remmited',
+      self::BALANCE => 'OR Balance',
+      self::RETURNED => 'OR Returned'
+    );
+  }
 }
