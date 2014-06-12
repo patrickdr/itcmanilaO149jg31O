@@ -57,29 +57,34 @@ class OfficialReceiptsController extends AppController {
       $collector = $this->request->data['OfficialReceipt']['collector_id'];
       $length = strlen($start);
       $prefix = $this->request->data['OfficialReceipt']['prefix'];
+      $ORs = array();
          
       for($x = $start; $x <= $end; $x++){
-        $newOrs = array(
+        $newOR = array(
           'status' => $status,
           'seller_id' => $seller,
           'collector_id' => $collector,
           'customer_id' => $customer
         );
-        $ORs[] = &$newOrs;   
+           
         if(strlen($x) == $length){
-          $newOrs += array(
+          $newOR += array(
             'or_number' => (($prefix) ? $prefix : "" ). $x,
           );
         }
         else{
           $or = str_pad((string)$x, $length, "0", STR_PAD_LEFT);
-          $newOrs += array(
+          $newOR += array(
             'or_number' => (($prefix) ? $prefix : "" ). $or,
           );
         }
-        
+        if($this->_validateOR($newOR)){
+          $ORs[] = $newOR;
+        }
       }
-      $this->OfficialReceipt->saveAll($ORs);
+      if($ORs){
+        $this->OfficialReceipt->saveAll($ORs);
+      }
 		}
 		$collectors = $this->OfficialReceipt->Collector->find('list');
 		$sellers = $this->OfficialReceipt->Seller->find('list');
@@ -87,6 +92,21 @@ class OfficialReceiptsController extends AppController {
     $statuses = $this->OfficialReceipt->getStatuses();
 		$this->set(compact('collectors', 'sellers', 'customers', 'statuses'));
 	}
+  
+  private function _validateOR($OR){
+    $ORcount = $this->OfficialReceipt->find('count', array(
+      'condtions' => array(
+        'OfficialReceipt.or_number' => $OR['or_number'],
+        'OfficialReceipt.seller_id' => $OR['seller_id'],
+        'OfficialReceipt.customer_id' => $OR['customer_id']
+      )
+    ));
+    SBdump($ORcount);
+    if($ORcount){
+      return false;
+    }
+    return true;
+  }
 
 /**
  * admin_edit method
