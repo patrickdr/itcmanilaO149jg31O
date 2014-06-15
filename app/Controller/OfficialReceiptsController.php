@@ -15,7 +15,7 @@ class OfficialReceiptsController extends AppController {
  * @var array
  */
 	public $components = array('Paginator', 'Session');
-
+  public $helpers = array('OfficialReceipt');
 /**
  * admin_index method
  *
@@ -47,14 +47,36 @@ class OfficialReceiptsController extends AppController {
  * @return void
  */
 	public function admin_add() {
+    $sellers = array();
+    $customerId = null;
+    $sellerAffiliates = array();
+    $sellerId = null;
+    if(isset($this->request->query['customer_id'])){
+      $customerId = $this->request->query['customer_id'];
+      $sellers = $this->OfficialReceipt->Seller->find('list', array(
+        'conditions' => array(
+          'Seller.customer_id' => $customerId,
+          'Seller.seller_id' => ""
+        )
+      ));
+    }
+    if(isset($this->request->query['seller_id'])){
+      $sellerId = $this->request->query['seller_id'];
+      $sellerAffiliates = $this->OfficialReceipt->Seller->find('list', array(
+        'conditions' => array(
+          'Seller.seller_id' => $sellerId,
+          'Seller.customer_id' => $customerId
+        )
+      ));
+    }
 		if ($this->request->is('post')) {
-			
       $start = $this->request->data['OfficialReceipt']['from'];
       $end = $this->request->data['OfficialReceipt']['to'];
       $status = $this->request->data['OfficialReceipt']['status'];
       $seller = $this->request->data['OfficialReceipt']['seller_id'];
+      $sellerAffiliate = $this->request->data['OfficialReceipt']['seller_affiliate'];
       $customer = $this->request->data['OfficialReceipt']['customer_id'];
-      $collector = $this->request->data['OfficialReceipt']['collector_id'];
+      //$collector = $this->request->data['OfficialReceipt']['collector_id'];
       $length = strlen($start);
       $prefix = $this->request->data['OfficialReceipt']['prefix'];
       $ORs = array();
@@ -63,8 +85,9 @@ class OfficialReceiptsController extends AppController {
         $newOR = array(
           'status' => $status,
           'seller_id' => $seller,
-          'collector_id' => $collector,
-          'customer_id' => $customer
+          'seller_affiliate_id' => $sellerAffiliate,
+          'customer_id' => $customer,
+          'date_received' => $this->request->data['OfficialReceipt']['date_received']
         );
            
         if(strlen($x) == $length){
@@ -84,24 +107,209 @@ class OfficialReceiptsController extends AppController {
       }
       if($ORs){
         $this->OfficialReceipt->saveAll($ORs);
+        $this->Session->setFlash(count($ORs) . " official receipts has been saved.");
+        $this->redirect(array('action' => 'index'));
+      }
+      else{
+        $this->Session->setFlash("No official receipts has been saved.");
       }
 		}
-		$collectors = $this->OfficialReceipt->Collector->find('list');
-		$sellers = $this->OfficialReceipt->Seller->find('list');
+		
 		$customers = $this->OfficialReceipt->Customer->find('list');
     $statuses = $this->OfficialReceipt->getStatuses();
-		$this->set(compact('collectors', 'sellers', 'customers', 'statuses'));
+		$this->set(compact('collectors', 'sellers', 'customers', 'statuses', 'customerId', 'sellerId', 'sellerAffiliates'));
 	}
+  
+  public function admin_dispatch(){
+    $sellers = array();
+    $customerId = null;
+    $sellerAffiliates = array();
+    $sellerId = null;
+    $ORs = array();
+    if(isset($this->request->query['customer_id'])){
+      $customerId = $this->request->query['customer_id'];
+      $sellers = $this->OfficialReceipt->Seller->find('list', array(
+        'conditions' => array(
+          'Seller.customer_id' => $customerId,
+          'Seller.seller_id' => ""
+        )
+      ));
+    }
+    if(isset($this->request->query['seller_id'])){
+      $sellerId = $this->request->query['seller_id'];
+      $sellerAffiliates = $this->OfficialReceipt->Seller->find('list', array(
+        'conditions' => array(
+          'Seller.seller_id' => $sellerId,
+          'Seller.customer_id' => $customerId
+        )
+      ));
+    }
+		if ( $this->request->query) {
+      $data = $this->request->query;
+      $conditions = array();
+      foreach($data as $key => $value){
+        if($key != "prefix" && $key != "from" && $key != "to"){
+          if($value){
+            if($key == 'date_received'){
+              $value = $value['year'] . "-" . $value['month'] . "-" . $value['day'];
+            }
+            $conditions['OfficialReceipt.' . $key] = $value;
+          }
+        }
+      }
+      $ORfind = array();
+      if((isset($data['from']) && $data['from']) || (isset($data['to']) && $data['to'])){
+        $prefix = $data['prefix'];
+        $length = strlen($data['from']);
+        if(intval($data['to'])){
+          for($x = intval($data['from']); $x <= intval($data['to']); $x ++){
+            if(strlen($x) == $length){
+              $ORfind[] = (($prefix) ? $prefix : "" ). $x;
+            }
+            else{
+              $ORfind[] = (($prefix) ? $prefix : "" ) . str_pad((string)$x, $length, "0", STR_PAD_LEFT);
+            }            
+          }
+        }
+        else if(intval($data['from'])){ 
+          $ORfind[] = (($prefix) ? $prefix : "" ). $data['from'];
+        }
+      }
+      if($ORfind){
+        $conditions['OfficialReceipt.or_number'] = $ORfind;
+      }
+      $ORs = $this->OfficialReceipt->find('all',array(
+        'conditions' => array(
+          'OfficialReceipt.status' => OfficialReceipt::RECEIVED
+        ) + $conditions
+      ));
+		}
+    if($this->request->is('post')){
+      $post = $this->request->data['ORDispatch'];
+      $toSave = array(); 
+      foreach($post['id'] as $id){
+        if($id){
+          $toSave[] = array(
+            'id' => $id,
+            'collector_id' => $post['collector_id'],
+            'status' => OfficialReceipt::DISPATCHED
+          );
+        }
+      }
+      if($toSave){
+        $this->OfficialReceipt->saveAll($toSave);
+        $this->Session->setFlash("Selected OR(s) has been dispatched");
+        $this->redirect(array('action' => 'index'));
+      }
+      else{
+        $this->Session->setFlash("No OR(s) to save.");
+      }
+    }
+		$collectors = $this->OfficialReceipt->Collector->find('list');
+		$customers = $this->OfficialReceipt->Customer->find('list');
+    $statuses = $this->OfficialReceipt->getStatuses();
+		$this->set(compact('collectors', 'sellers', 'customers', 'statuses', 'customerId', 'sellerId', 'sellerAffiliates', 'ORs'));  
+  }
+  
+  
+  public function admin_remit(){
+    $sellers = array();
+    $customerId = null;
+    $sellerAffiliates = array();
+    $sellerId = null;
+    $ORs = array();
+    if(isset($this->request->query['customer_id'])){
+      $customerId = $this->request->query['customer_id'];
+      $sellers = $this->OfficialReceipt->Seller->find('list', array(
+        'conditions' => array(
+          'Seller.customer_id' => $customerId,
+          'Seller.seller_id' => ""
+        )
+      ));
+    }
+    if(isset($this->request->query['seller_id'])){
+      $sellerId = $this->request->query['seller_id'];
+      $sellerAffiliates = $this->OfficialReceipt->Seller->find('list', array(
+        'conditions' => array(
+          'Seller.seller_id' => $sellerId,
+          'Seller.customer_id' => $customerId
+        )
+      ));
+    }
+		if ( $this->request->query) {
+      $data = $this->request->query;
+      $conditions = array();
+      foreach($data as $key => $value){
+        if($key != "prefix" && $key != "from" && $key != "to"){
+          if($value){
+            if($key == 'date_received'){
+              $value = $value['year'] . "-" . $value['month'] . "-" . $value['day'];
+            }
+            $conditions['OfficialReceipt.' . $key] = $value;
+          }
+        }
+      }
+      $ORfind = array();
+      if((isset($data['from']) && $data['from']) || (isset($data['to']) && $data['to'])){
+        $prefix = $data['prefix'];
+        $length = strlen($data['from']);
+        if(intval($data['to'])){
+          for($x = intval($data['from']); $x <= intval($data['to']); $x ++){
+            if(strlen($x) == $length){
+              $ORfind[] = (($prefix) ? $prefix : "" ). $x;
+            }
+            else{
+              $ORfind[] = (($prefix) ? $prefix : "" ) . str_pad((string)$x, $length, "0", STR_PAD_LEFT);
+            }            
+          }
+        }
+        else if(intval($data['from'])){ 
+          $ORfind[] = (($prefix) ? $prefix : "" ). $data['from'];
+        }
+      }
+      if($ORfind){
+        $conditions['OfficialReceipt.or_number'] = $ORfind;
+      }      
+      $ORs = $this->OfficialReceipt->find('all',array(
+        'conditions' => array(
+          'OfficialReceipt.status' => OfficialReceipt::DISPATCHED
+        ) + $conditions
+      ));
+		}
+    if($this->request->is('post')){
+      $post = $this->request->data['ORDispatch'];
+      $toSave = array(); 
+      foreach($post['id'] as $id){
+        if($id){
+          $toSave[] = array(
+            'id' => $id,
+            'status' => OfficialReceipt::REMMITED
+          );
+        }
+      }
+      if($toSave){
+        $this->OfficialReceipt->saveAll($toSave);
+        $this->Session->setFlash("Selected OR(s) has been remitted");
+        $this->redirect(array('action' => 'index'));
+      }
+      else{
+        $this->Session->setFlash("No OR(s) to remit.");
+      }
+    }
+		$collectors = $this->OfficialReceipt->Collector->find('list');
+		$customers = $this->OfficialReceipt->Customer->find('list');
+    $statuses = $this->OfficialReceipt->getStatuses();
+		$this->set(compact('collectors', 'sellers', 'customers', 'statuses', 'customerId', 'sellerId', 'sellerAffiliates', 'ORs'));  
+  }
   
   private function _validateOR($OR){
     $ORcount = $this->OfficialReceipt->find('count', array(
-      'condtions' => array(
+      'conditions' => array(
         'OfficialReceipt.or_number' => $OR['or_number'],
         'OfficialReceipt.seller_id' => $OR['seller_id'],
         'OfficialReceipt.customer_id' => $OR['customer_id']
       )
     ));
-    SBdump($ORcount);
     if($ORcount){
       return false;
     }

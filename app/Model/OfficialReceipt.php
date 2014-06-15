@@ -44,6 +44,13 @@ class OfficialReceipt extends AppModel {
 			'fields' => '',
 			'order' => ''
 		),
+		'SellerAffiliate' => array(
+			'className' => 'Seller',
+			'foreignKey' => 'seller_affiliate_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		),    
 		'Customer' => array(
 			'className' => 'Customer',
 			'foreignKey' => 'customer_id',
