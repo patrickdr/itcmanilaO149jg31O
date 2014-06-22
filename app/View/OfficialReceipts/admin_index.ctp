@@ -1,4 +1,15 @@
 <div class="officialReceipts index">
+
+  <h2><?php echo __('Search Official Receipts'); ?></h2>
+  <?php echo $this->Form->create('Search', array('type' => 'get')); ?>
+  <table cellpadding="0" cellspacing="0">
+    <td><?= $this->Form->input('seller_id', array('empty' => '---Select---', 'selected' => isset($this->request->query['seller_id']) ? $this->request->query['seller_id'] : "")) ?></td>
+    <td><?= $this->Form->input('seller_affiliate_id', array('empty' => '---Select---', 'selected' => isset($this->request->query['seller_affiliate_id']) ? $this->request->query['seller_affiliate_id'] : ""))  ?></td>
+    <td><?= $this->Form->input('status', array('empty' => '---Select---', 'selected' => isset($this->request->query['status']) ? $this->request->query['status'] : "", 'options' => $this->OfficialReceipt->getStatuses()))  ?></td>
+    <td><?= $this->Form->submit('Search')  ?></td>
+  </table>
+  <?php echo $this->Form->end(); ?>
+  
 	<h2><?php echo __('Official Receipts'); ?></h2>
 	<table cellpadding="0" cellspacing="0">
 	<tr>
@@ -52,9 +63,11 @@
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
-		<li><?php echo $this->Html->link(__('New Official Receipt'), array('action' => 'add')); ?></li>
+		<li><?php echo $this->Html->link(__('Receive OR'), array('action' => 'add')); ?></li>
     <li><?php echo $this->Html->link(__('Dispatch OR'), array('action' => 'dispatch')); ?></li>
-		<li><?php echo $this->Html->link(__('List Collectors'), array('controller' => 'collectors', 'action' => 'index')); ?> </li>
+    <li><?php echo $this->Html->link(__('Return OR'), array('action' => 'dispatch')); ?></li>
+    <li><?php echo $this->Html->link(__('OR Balance'), array('action' => 'dispatch')); ?></li>
+    <li><?php echo $this->Html->link(__('Remit OR'), array('action' => 'dispatch')); ?></li></li>
 		<li><?php echo $this->Html->link(__('New Collector'), array('controller' => 'collectors', 'action' => 'add')); ?> </li>
 		<li><?php echo $this->Html->link(__('List Sellers'), array('controller' => 'sellers', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Seller'), array('controller' => 'sellers', 'action' => 'add')); ?> </li>
