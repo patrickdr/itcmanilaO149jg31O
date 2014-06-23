@@ -29,7 +29,14 @@ class ReportsController extends AppController {
         $this->uses = array();
         // $this->ExcelWriter();
         $report = new GenerateExcelReport();
-        $report->generate_report();
+
+        $data = array (
+                'headers'  => array ('hello', 'world', 'hey'),
+                'data'     => array ( 0 => array ('1', '3', '5'),
+                                      1 => array ('4', '3', '6') )
+            );
+
+        $report->generate_report($data);
     }
     
 }

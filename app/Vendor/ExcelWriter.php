@@ -3,7 +3,7 @@
 App::import('Vendor', 'ExcelWriter/PHPExcel');
 
 class GenerateExcelReport {
-	public function generate_report() {
+	public function generate_report($data) {
         $excel_writer = new PHPExcel();
         $title = "PHPExcel Test Document";
         $description = "Test document for PHPExcel, generated using PHP classes.";
@@ -11,12 +11,6 @@ class GenerateExcelReport {
         $active_sheet_idx = 0;
 
         $headers = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-        $data = array (
-                'headers'  => array ('hello', 'world', 'hey'),
-                'data'     => array ( 0 => array ('1', '3', '5'),
-                                      1 => array ('4', '3', '6') )
-            );
 
         define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
 
