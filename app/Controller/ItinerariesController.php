@@ -29,10 +29,30 @@ class ItinerariesController extends AppController {
         'SellerAffiliate' => array(
           'ParentSeller'
         )        
+      ),
+      'conditions' => array(
+        'Itinerary.trip_id' => null
       )
     );
 		$this->set('itineraries', $this->paginate('Itinerary'));
 	}
+  
+	public function admin_assigned() {
+    $this->view = "admin_index";
+		$this->Itinerary->recursive = 0;
+    $this->paginate = array(
+      'contain' => array(        
+        'Buyer',
+        'SellerAffiliate' => array(
+          'ParentSeller'
+        )        
+      ),
+      'conditions' => array(
+        'Itinerary.trip_id !=' => null
+      )
+    );
+		$this->set('itineraries', $this->paginate('Itinerary'));
+	}  
 
 /**
  * admin_view method

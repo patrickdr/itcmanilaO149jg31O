@@ -23,12 +23,26 @@ class SellersController extends AppController {
  */
 	public function admin_index() {
 		$this->Seller->recursive = 0;
+    $conditions = array();
+    if($this->request->query){
+      foreach($this->request->query as $column => $value){
+        if($value){
+          if($column == 'name'){
+            $value = "%".$value."%";
+            $column = $column . " LIKE";
+          }
+          $conditions['Seller.' . $column ] = $value ;
+        }
+      }
+    }
     $this->paginate = array(          
       'conditions' => array(
           'Seller.seller_id' => null
-      )
+      ) + $conditions
     );      
     $this->set('affiliate', false);
+    $customers = $this->Seller->Customer->find('list');
+    $this->set('customers', $customers);
 		$this->set('sellers', $this->paginate('Seller'));
 	}
 	public function admin_affiliates() {

@@ -6,7 +6,7 @@
       <th><?php echo __('SellerName'); ?></th>
       <th><?php echo __('SellerAffiliate'); ?></th>
 			<th><?php echo $this->Paginator->sort('trip_type'); ?></th>      
-			<th><?php echo $this->Paginator->sort('trip_id'); ?></th>
+			<th><?php echo $this->Paginator->sort('trip_id', 'Trip Number'); ?></th>
       <th><?php echo $this->Paginator->sort('itinerary_number', 'IT number'); ?></th>
 			<th><?php echo $this->Paginator->sort('remarks'); ?></th>
 			<th><?php echo $this->Paginator->sort('date_received'); ?></th>
@@ -54,8 +54,8 @@
 		<td><?php echo h($itinerary['Itinerary']['contact_person']); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $itinerary['Itinerary']['id'])); ?>
-			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $itinerary['Itinerary']['id'])); ?>
-			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $itinerary['Itinerary']['id']), null, __('Are you sure you want to delete # %s?', $itinerary['Itinerary']['id'])); ?>
+			<!--<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $itinerary['Itinerary']['id'])); ?>-->
+			<!--<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $itinerary['Itinerary']['id']), null, __('Are you sure you want to delete # %s?', $itinerary['Itinerary']['id'])); ?>--->
 		</td>
 	</tr>
   <?php endforeach; ?>

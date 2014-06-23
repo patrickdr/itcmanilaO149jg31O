@@ -1,35 +1,42 @@
+<?php
+  $colspan = ($affiliate) ? 7 : 6;
+?>
 <div class="sellers index">
+  <h2><?php echo __('Search Buyers'); ?></h2>
+  <?php echo $this->Form->create('Search', array('type' => 'get')); ?>
+  <table cellpadding="0" cellspacing="0">
+    <td><?= $this->Form->input('customer_id', array('empty' => "--- Customer ---", 'value' => isset($this->request->query['customer_id']) ? $this->request->query['customer_id'] : "")) ?></td>
+    <td>
+      <?= $this->Form->input('name', array('label' => 'SellerName', 'value' => isset($this->request->query['name']) ? $this->request->query['name'] : ""))  ?>
+    </td>    
+    <td><?= $this->Form->submit('Search')  ?></td>
+  </table>
+  <?php echo $this->Form->end(); ?>
 	<h2><?php echo __('Sellers'); ?></h2>
 	<table cellpadding="0" cellspacing="0">
 	<tr>
-			<th><?php echo $this->Paginator->sort('id'); ?></th>
-			<th><?php echo $this->Paginator->sort('customer_id', 'CustomerName'); ?></th>
-			<th><?php echo $this->Paginator->sort('area_id'); ?></th>
+			
       <?php if($affiliate):?>
         <th><?php echo $this->Paginator->sort('ParentSeller.name', 'SellerName'); ?></th>
         <th><?php echo $this->Paginator->sort('name', 'SellerAffiliate'); ?></th>
       <?php else: ?>
         <th><?php echo $this->Paginator->sort('name', 'SellerName'); ?></th>
       <?php endif; ?>
-			<th><?php echo $this->Paginator->sort('address'); ?></th>
+      <th><?php echo $this->Paginator->sort('customer_id', 'CustomerName'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
 	<?php foreach ($sellers as $seller): ?>
 	<tr>
-		<td><?php echo h($seller['Seller']['id']); ?>&nbsp;</td>
-		<td>
-			<?php echo $this->Html->link($seller['Customer']['name'], array('controller' => 'customers', 'action' => 'view', $seller['Customer']['id'])); ?>
-		</td>
-		<td>
-			<?php echo $this->Html->link($seller['Area']['code'], array('controller' => 'areas', 'action' => 'view', $seller['Area']['id'])); ?>
-		</td>
+		
     <?php if($affiliate) : ?>
       <td><?php echo h($seller['ParentSeller']['name']); ?>&nbsp;</td>
       <td><?php echo h($seller['Seller']['name']); ?>&nbsp;</td>
     <?php else: ?>
       <td><?php echo h($seller['Seller']['name']); ?>&nbsp;</td>
     <?php endif; ?>
-		<td><?php echo h($seller['Seller']['address']); ?>&nbsp;</td>
+    <td>
+			<?php echo $this->Html->link($seller['Customer']['name'], array('controller' => 'customers', 'action' => 'view', $seller['Customer']['id'])); ?>
+		</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $seller['Seller']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $seller['Seller']['id'])); ?>

@@ -119,4 +119,12 @@ class Itinerary extends AppModel {
     13 => 'mm_provl'
   );    
   
+  public function getResultStatuses(){
+    return array(
+      self::RESULT_FAILED => 'Failed',
+      self::RESULT_SUCCESSFUL => 'Successful',
+      self::RESULT_UNSUCCESSFUL => 'Unsuccessful'
+    );
+  }
+  
 }

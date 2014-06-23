@@ -96,7 +96,7 @@
 		<td><?php echo h(String::truncate($itinerary['Itinerary']['acknowledged_date'], 20, array('ellipsis' => '...'))); ?>&nbsp;</td>
 		<td><?php echo h(date('Y-m-d', strtotime($itinerary['Itinerary']['date_received']))); ?>&nbsp;</td>
     <td><?php echo h(String::truncate($itinerary['Itinerary']['reason_id'], 15, array('ellipsis' => '...'))); ?>&nbsp;</td>
-		<td><?php echo h($itinerary['Itinerary']['result_status']); ?>&nbsp;</td>
+		<td><?php echo h($this->Itinerary->stringify('results', $itinerary['Itinerary']['result_status'])); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('controller' => 'itineraries', 'action' => 'view', $itinerary['Itinerary']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('controller' => 'itineraries', 'action' => 'edit', $itinerary['Itinerary']['id'])); ?>
