@@ -10,9 +10,9 @@ class GenerateExcelReport {
         $author = "Admin";
         $active_sheet_idx = 0;
 
+        $header_start = 'A';
         $headers = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-        define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
+        $col = 1;
 
         $excel_writer->getProperties()->setCreator($author)
                              ->setTitle($title)
@@ -21,20 +21,13 @@ class GenerateExcelReport {
 
         // Add some data
         // Set header
-        echo date('H:i:s') , " Add some data" , EOL;
-
-        $excel_writer->getActiveSheet();
         for ($i = 0; $i < sizeof($data['headers']); $i++) {
-            $col = $i;
-            $column = $headers[$i] . ($col + 1);
+            $column = $header_start . $col;
             $cell_value = $data['headers'][$i];
-            $excel_writer->getActiveSheet()->setCellValue($column, $cell_value);
+            $excel_writer->getActiveSheet()
+                         ->setCellValue($column, $cell_value);
+            $header_start++;
         }
-
-        // $excel_writer->getActiveSheet()
-        //                  ->setCellValue('A1', 'fsdfas')
-        //                  ->setCellValue('B1', 'gdgdf')
-        //                  ->setCellValue('C1', 'grtjyjdse');
 
         // Set cell values
         $start_row = 2; // A2, B2, ... Z2
@@ -43,9 +36,9 @@ class GenerateExcelReport {
 
             for ($j = 0; $j < sizeof($data['data'][$i]); $j++) {
                 $excel_writer->getActiveSheet()
-                             ->setCellValue($headers[$j] . $start_row, $data['data'][$i][$j]);    
+                             ->setCellValue($headers[$j] . $start_row, $data['data'][$i][$j]);
             }
-            
+
             // next row
             $start_row++;
         }
