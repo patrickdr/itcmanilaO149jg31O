@@ -3,52 +3,72 @@
 App::import('Vendor', 'ExcelWriter/PHPExcel');
 
 class GenerateExcelReport {
-	public function generate_report($data) {
-        $excel_writer = new PHPExcel();
-        $title = "PHPExcel Test Document";
-        $description = "Test document for PHPExcel, generated using PHP classes.";
-        $author = "Admin";
-        $active_sheet_idx = 0;
+  private $author = 'Admin';
+  public $active_sheet_idx = 0;
+  public $header_start = 'A';
+  public $header_startnum = '1';
+  public $headers = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  public $column_startnum = 2;
 
-        $header_start = 'A';
-        $headers = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        $col = 1;
+  public $cell_vals = array();
+  public $header_vals = array();
+  public $title = '';
+  public $description = '';
 
-        $excel_writer->getProperties()->setCreator($author)
-                             ->setTitle($title)
-                             ->setDescription($description);
-        $excel_writer->setActiveSheetIndex($active_sheet_idx);
+  public function __construct($data, $title, $description) {
+    $this->header_vals = $data['headers'];
+    $this->cell_vals = $data['data'];
+    $this->title = $title;
+    $this->description = $description;
 
-        // Add some data
-        // Set header
-        for ($i = 0; $i < sizeof($data['headers']); $i++) {
-            $column = $header_start . $col;
-            $cell_value = $data['headers'][$i];
-            $excel_writer->getActiveSheet()
-                         ->setCellValue($column, $cell_value);
-            $header_start++;
-        }
+    // Must be from config
+    $this->author = "Admin";
 
-        // Set cell values
-        $start_row = 2; // A2, B2, ... Z2
+    //  TODO get excel file path from config
+  }
 
-        for ($i = 0; $i < sizeof($data['data']); $i++) {
+  // public function generate_filename() {
+  //   // based on date, type of report
+  //   return;
+  // }
 
-            for ($j = 0; $j < sizeof($data['data'][$i]); $j++) {
-                $excel_writer->getActiveSheet()
-                             ->setCellValue($headers[$j] . $start_row, $data['data'][$i][$j]);
-            }
+  public function generate_report() {
+    $excel_writer = new PHPExcel();
 
-            // next row
-            $start_row++;
-        }
+    $excel_writer->getProperties()->setCreator($this->author)
+                                  ->setTitle($this->title)
+                                  ->setDescription($this->description);
 
-        $_writer = PHPExcel_IOFactory::createWriter($excel_writer, 'Excel2007');
-        // set new folder path here TODO
-        $_writer->save(dirname(__FILE__) . $title . '.xlsx');
+    $excel_writer->setActiveSheetIndex($this->active_sheet_idx);
 
-        echo "successful!";
+    // set header values
+    for ($i = 0; $i < sizeof($this->header_vals); $i++) {
+      $column = $this->header_start . $this->header_startnum;
+      $cell_value = $this->header_vals[$i];
+      $excel_writer->getActiveSheet()
+                   ->setCellValue($column, $cell_value);
+      $this->header_start++;
     }
+
+    // Set cell values
+    $start_row = 2; // A2, B2, ... Z2
+
+    for ($i = 0; $i < sizeof($this->cell_vals); $i++) {
+      for ($j = 0; $j < sizeof($this->cell_vals[$i]); $j++) {
+          $excel_writer->getActiveSheet()
+                       ->setCellValue($this->headers[$j] . $start_row, $this->cell_vals[$i][$j]);
+      }
+
+      // next row
+      $start_row++;
+    }
+
+    $_writer = PHPExcel_IOFactory::createWriter($excel_writer, 'Excel2007');
+    // set new folder path here TODO
+    $_writer->save(dirname(__FILE__) . $title . '.xlsx');
+    echo "successful!";
+
+  }
 }
 
 ?>

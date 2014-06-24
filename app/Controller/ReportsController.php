@@ -23,20 +23,18 @@ class ReportsController extends AppController {
      * @return void
      */
 
-    
+
 
     public function admin_index() {
         $this->uses = array();
         // $this->ExcelWriter();
-        $report = new GenerateExcelReport();
-
         $data = array (
-                'headers'  => array ('hello', 'world', 'hey'),
-                'data'     => array ( 0 => array ('1', '3', '5'),
-                                      1 => array ('4', '3', '6') )
-            );
-
-        $report->generate_report($data);
+            'headers'  => array ('hello', 'world', 'hey'),
+            'data'     => array ( 0 => array ('1', '3', '5'),
+                                  1 => array ('4', '3', '6') )
+        );
+        $report = new GenerateExcelReport($data, "test", "wala lang");
+        $report->generate_report();
     }
-    
+
 }
