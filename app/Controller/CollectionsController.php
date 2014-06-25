@@ -104,7 +104,8 @@ class CollectionsController extends AppController {
         )
       ),
       'conditions' => array(
-        'Itinerary.trip_id !=' => null 
+        'Itinerary.trip_id !=' => null,
+        'Itinerary.id' => $id
       )      
     ));
 		if ($this->request->is(array('post', 'put'))) {

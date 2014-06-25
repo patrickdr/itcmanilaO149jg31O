@@ -1,6 +1,6 @@
 <style>
   table.collections {
-    width : 2160px !important;
+    width : 2677px !important;
   }
 </style>
 <div class="collections index">
@@ -37,7 +37,7 @@
 		<td><?php echo $this->Html->link($collection['Buyer']['name'], array('controller' => 'buyers', 'action' => 'view', $collection['Buyer']['id'])); ?>&nbsp;</td>
 		<td><?php echo h($collection['Seller']['code']); ?>&nbsp;</td>
 		<td><?php echo h($collection['Trip']['Collector']['name']); ?>&nbsp;</td>
-		<td width="120px" ><?php echo h($collection['Trip']['date']); ?>&nbsp;</td>
+		<td><?php echo h($collection['Trip']['date']); ?>&nbsp;</td>
 		<td>
       <?php if(isset($collection['Collection']['OfficialReceipt']['or_number'])): ?>
 			<?php echo $this->Html->link($collection['Collection']['OfficialReceipt']['or_number'], array('controller' => 'official_receipts', 'action' => 'view', $collection['Collection']['OfficialReceipt']['id'])); ?>

@@ -24,8 +24,9 @@ class ItinerariesController extends AppController {
 	public function admin_index() {
 		$this->Itinerary->recursive = 0;
     $this->paginate = array(
-      'contain' => array(        
-        'Buyer',
+      'contain' => array(    
+        'Address',
+        'Buyer' => array('Area'),
         'SellerAffiliate' => array(
           'ParentSeller'
         )        
@@ -41,8 +42,9 @@ class ItinerariesController extends AppController {
     $this->view = "admin_index";
 		$this->Itinerary->recursive = 0;
     $this->paginate = array(
-      'contain' => array(        
-        'Buyer',
+      'contain' => array(
+        'Address',
+        'Buyer' => array('Area'),
         'SellerAffiliate' => array(
           'ParentSeller'
         )        
