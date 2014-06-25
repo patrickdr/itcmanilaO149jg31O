@@ -1,12 +1,25 @@
+<script>
+var ors = [];
+var json_ors = <?= json_encode($officialReceipts) ?>;
+$.each(json_ors, function(index){ 
+  ors.push(json_ors[index]);
+});
+$(document).ready(function(){
+  $( "#or_number" ).autocomplete({
+        source: ors
+  });
+});
+
+</script>
 <div class="collections form">
 <?php echo $this->Form->create('Collection'); ?>
 	<fieldset>
 		<legend><?php echo __('Admin Edit Collection'); ?></legend>
 	<?php
-		echo $this->Form->input('id');
+    echo $this->Form->input('id', array('type' => 'hidden', 'value' => isset($collection['Collection']['id']) ? $collection['Collection']['id'] : null));
+		echo $this->Form->input('itinerary_id', array('type' => 'hidden', 'value' => $collection['Itinerary']['id']));
 		echo $this->Form->input('collection_type');
-		echo $this->Form->input('name');
-		echo $this->Form->input('official_receipt_id');
+		echo $this->Form->input('or', array('label' => 'OR number', 'id' => 'or_number'));
 		echo $this->Form->input('collector_id');
 		echo $this->Form->input('invoice_number');
 		echo $this->Form->input('ded1');
@@ -14,7 +27,7 @@
 		echo $this->Form->input('check_amount');
 		echo $this->Form->input('check_number');
 		echo $this->Form->input('bank');
-		echo $this->Form->input('check_dat e');
+		echo $this->Form->input('check_date');
 		echo $this->Form->input('check_type');
 		echo $this->Form->input('currency');
 		echo $this->Form->input('deposit_date');

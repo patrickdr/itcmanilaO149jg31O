@@ -84,6 +84,7 @@
       echo $this->Form->input('id');
       echo $this->Form->input('collector_id');
       echo $this->Form->input('trip_type');
+      echo $this->Form->input('date');
     ?>
     </fieldset>
     <h3><?php echo __('Assigned Trips'); ?></h3>

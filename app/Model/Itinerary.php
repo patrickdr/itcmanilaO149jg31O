@@ -100,7 +100,13 @@ class Itinerary extends AppModel {
       'conditions' => array(
         'Address.source_name' => 'itineraries'
       )
-    )
+    ),
+    'Collection' => array(
+      'className' => 'Collection',
+      'foreignKey' => 'itinerary_id',
+      'dependent' => true,
+      'conditions' => array()
+    )    
   );
   
   public $validHeaders = array(
