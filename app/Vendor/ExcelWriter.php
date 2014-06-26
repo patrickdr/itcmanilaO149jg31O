@@ -36,6 +36,8 @@ class GenerateExcelReport {
         mkdir($temp_rpath);
         $this->report_path = $temp_rpath;
       }
+    } else if (!is_dir($this->report_path)) {
+      mkdir($this->report_path);
     }
 
     // Must be from config
