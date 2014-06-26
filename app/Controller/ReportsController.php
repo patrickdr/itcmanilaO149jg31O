@@ -34,7 +34,7 @@ class ReportsController extends AppController {
             'data'     => array ( 0 => array ('1', '3', '5'),
                                   1 => array ('4', '3', '6') )
         );
-        $report = new GenerateExcelReport($data, "test", "wala lang");
+        $report = new GenerateExcelReport($data, "test", "testing");
         $report->generate_report();
 
     }

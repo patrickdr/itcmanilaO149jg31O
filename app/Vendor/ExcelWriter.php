@@ -13,24 +13,35 @@ class GenerateExcelReport {
   public $cell_vals = array();
   public $header_vals = array();
   public $title = '';
-  public $description = '';
+  public $description = 'Report';
+  // public $report_path = Configure::load('Report.path');
+  public $base_path = 'files/';
+  public $report_path = 'reports/';
 
-  public function __construct($data, $title, $description) {
+  public function __construct($data, $title, $report_path='', $description='') {
     $this->header_vals = $data['headers'];
     $this->cell_vals = $data['data'];
     $this->title = $title;
-    $this->description = $description;
+
+    if ($description) {
+      $this->description = $description;
+    }
+
+    // create report directory
+    $this->report_path = $this->base_path . $this->report_path;
+    $temp_rpath = $this->base_path . $report_path . '/';
+
+    if ($report_path) {
+      if (!is_dir($temp_rpath)) {
+        mkdir($temp_rpath);
+        $this->report_path = $temp_rpath;
+      }
+    }
 
     // Must be from config
     $this->author = "Admin";
-
-    //  TODO get excel file path from config
   }
 
-  // public function generate_filename() {
-  //   // based on date, type of report
-  //   return;
-  // }
 
   public function generate_report() {
     $excel_writer = new PHPExcel();
@@ -65,9 +76,7 @@ class GenerateExcelReport {
 
     $_writer = PHPExcel_IOFactory::createWriter($excel_writer, 'Excel2007');
     // set new folder path here TODO
-    $_writer->save(dirname(__FILE__) . $title . '.xlsx');
-    echo "successful!";
-
+    $_writer->save($this->report_path . $this->title . '.xlsx');
   }
 }
 
