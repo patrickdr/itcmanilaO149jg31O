@@ -161,7 +161,6 @@ class CollectionsController extends AppController {
         'Itinerary.customer_id' => $customerId
       )      
     ));    
-    //SBdump($collections); exit;
     $depositChannels = $this->Collection->getDepositChannels();
     $currencies = $this->Collection->getCurrencies();
     $clearingTypeCodes = $this->Collection->getClearingTypes();

@@ -26,17 +26,27 @@ class ReportsController extends AppController {
 
 
     public function admin_index() {
-        $this->uses = array();
-        // $this->ExcelWriter();
-        $report = new GenerateExcelReport();
+      $this->uses = array();
+      // $this->ExcelWriter();
+      $report = new GenerateExcelReport();
 
-        $data = array (
-                'headers'  => array ('hello', 'world', 'hey'),
-                'data'     => array ( 0 => array ('1', '3', '5'),
-                                      1 => array ('4', '3', '6') )
-            );
-        echo "Hi Pat!";
-        $report->generate_report($data);
+      $data = array (
+          'headers'  => array ('hello', 'world', 'hey'),
+          'data'     => array ( 0 => array ('1', '3', '5'),
+                                1 => array ('4', '3', '6') )
+      );
+      echo "Hi Pat!";
+      $report->generate_report($data);
+    }
+    
+    public function admin_ppm(){
+      $sellerAffiliates = array();
+      if($data = $this->request->query){
+        
+      }
+      $this->loadModel('Customer');
+      $customers = $this->Customer->find('list');
+      $this->set(compact('customers', 'sellerAffiliates'));
     }
 
 }
