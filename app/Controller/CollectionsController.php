@@ -1,5 +1,8 @@
 <?php
 App::uses('AppController', 'Controller');
+
+App::uses('File', 'Utility');
+
 /**
  * Collections Controller
  *
@@ -132,6 +135,62 @@ class CollectionsController extends AppController {
     $currencies = $this->Collection->getCurrencies();
 		$this->set(compact('officialReceipts', 'collectors', 'collection', 'collectionTypes', 'clearingTypeCodes', 'checkTypes', 'depositChannels', 'currencies'));
 	}
+  
+  public function admin_ppm($customerId = null){
+    $this->loadModel('Customer');
+    $this->autoRender = false;
+    if (!$this->Customer->exists($customerId)) {
+			throw new NotFoundException(__('Invalid collection'));
+		}
+    $collections = $this->Collection->Itinerary->find('all', array(
+      'contain' => array(
+        'Customer',
+        'Seller',
+        'SellerAffiliate' => array(
+          'ParentSeller'
+        ) ,
+        'Buyer',
+        'Trip' => array(
+          'Collector'
+        ),
+        'Collection' => array(
+          'OfficialReceipt'
+        )
+      ),
+      'conditions' => array(
+        'Itinerary.customer_id' => $customerId
+      )      
+    ));    
+    //SBdump($collections); exit;
+    $depositChannels = $this->Collection->getDepositChannels();
+    $currencies = $this->Collection->getCurrencies();
+    $clearingTypeCodes = $this->Collection->getClearingTypes();
+    $file = new File( REPORTS_DIR . DS .'ppm' . DS . time().'.txt', true);
+    $string = "";
+    foreach($collections as $collection){
+      if(isset($collection['Collection']['id']) && $collection['Collection']['id']){
+        $seller = ($collection['SellerAffiliate']['ParentSeller']['code']) ? $collection['SellerAffiliate']['ParentSeller']['code'] : $collection['Seller']['code'];
+        $string .= str_pad("1", 10, " ", STR_PAD_RIGHT);
+        $string .= str_pad($collection['Collection']['check_number'], 20, " ", STR_PAD_LEFT); 
+        $string .= str_pad("CHK", 10, " ", STR_PAD_LEFT); 
+        $string .= str_pad($collection['Collection']['check_amount'], 20, "0", STR_PAD_LEFT); 
+        $string .= date('dmY', strtotime($collection['Collection']['check_date']));
+        $string .= date('dmY', strtotime($collection['Collection']['deposit_date']));
+        $string .= str_pad($seller , 30, " ", STR_PAD_LEFT); 
+        $string .= date('dmY', strtotime($collection['Collection']['check_pickup_date']));
+        $string .= str_pad($depositChannels[$collection['Collection']['deposit_channel']], 30, " ", STR_PAD_RIGHT);
+        $string .= str_pad(" ", 30, " ", STR_PAD_RIGHT);
+        $string .= str_pad($currencies[$collection['Collection']['currency']], 30, " ", STR_PAD_LEFT);
+        $string .= str_pad($clearingTypeCodes[$collection['Collection']['clearing_type_code']], 30, " ", STR_PAD_LEFT);
+        $string .= str_pad($collection['Collection']['drawee_bank_code'], 30, " ", STR_PAD_LEFT);
+        $string .= str_pad($collection['Collection']['drawee_bank_branch_code'], 30, " ", STR_PAD_LEFT);
+        $string .= "\n";
+        
+      }
+    }
+    $file->write($string);
+    $file->close();
+  }
 
 /**
  * admin_delete method

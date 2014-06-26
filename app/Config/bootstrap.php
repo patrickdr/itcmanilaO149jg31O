@@ -107,3 +107,4 @@ CakeLog::config('error', array(
 ));
 
 require(implode(DS, array(APP, 'Config', 'functions.php')));
+require(implode(DS, array(APP, 'Config', 'constants.php')));

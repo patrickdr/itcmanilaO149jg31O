@@ -127,7 +127,7 @@ CREATE TABLE `collections` (
   `invoice_number` varchar(100) DEFAULT NULL,
   `ded1` varchar(45) DEFAULT NULL,
   `ded2` varchar(45) DEFAULT NULL,
-  `check_amount` decimal(20,2) DEFAULT NULL,
+  `check_amount` decimal(13,6) DEFAULT NULL,
   `check_number` varchar(45) DEFAULT NULL,
   `bank` varchar(100) DEFAULT NULL,
   `check_date` date DEFAULT NULL,
@@ -158,7 +158,7 @@ CREATE TABLE `collections` (
 
 LOCK TABLES `collections` WRITE;
 /*!40000 ALTER TABLE `collections` DISABLE KEYS */;
-INSERT INTO `collections` VALUES (1,1,NULL,'2014-06-25 10:05:44','2014-06-25 10:29:54',75,1,'12557798','abc','abc',15000.25,'458895548','Metrobank','2014-06-25',1,2,'2014-06-25',2,4,'441d5d9s','d447e8e','2014-06-25','Hello',71);
+INSERT INTO `collections` VALUES (1,1,NULL,'2014-06-25 10:05:44','2014-06-25 10:29:54',75,1,'12557798','abc','abc',15000.250000,'458895548','Metrobank','2014-06-25',1,2,'2014-06-25',2,4,'441d5d9s','d447e8e','2014-06-25','Hello',71);
 /*!40000 ALTER TABLE `collections` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -560,4 +560,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-06-25 17:30:30
+-- Dump completed on 2014-06-26 15:52:58
