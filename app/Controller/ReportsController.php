@@ -35,7 +35,8 @@ class ReportsController extends AppController {
                                   1 => array ('4', '3', '6') )
         );
         $report = new GenerateExcelReport($data, "test", "testing");
-        $report->generate_report();
+        $filename = $report->generate_report();
+        $report->download();
 
     }
 

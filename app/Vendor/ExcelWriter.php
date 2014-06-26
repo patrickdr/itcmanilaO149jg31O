@@ -17,6 +17,7 @@ class GenerateExcelReport {
   // public $report_path = Configure::load('Report.path');
   public $base_path = 'files/';
   public $report_path = 'reports/';
+  public $report_filename = '';
 
   public function __construct($data, $title, $report_path='', $description='') {
     $this->header_vals = $data['headers'];
@@ -77,9 +78,23 @@ class GenerateExcelReport {
     }
 
     $_writer = PHPExcel_IOFactory::createWriter($excel_writer, 'Excel2007');
-    // set new folder path here TODO
-    $_writer->save($this->report_path . $this->title . '.xlsx');
+    // TO DO : replace file if it already exists [?] OR
+    // throw exception message
+    $this->report_filename = $this->report_path . $this->title . '.xlsx';
+    $_writer->save($this->report_filename);
+
+    return array (
+      'filename'  => $this->report_filename
+    );
   }
+
+  public function download() {
+    $filename = $this->title . '.xlsx';
+    header("Content-disposition: attachment; filename={$filename}");
+    header('Content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    readfile($this->report_filename);
+  }
+
 }
 
 ?>
