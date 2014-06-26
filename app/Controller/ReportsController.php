@@ -23,7 +23,7 @@ class ReportsController extends AppController {
      * @return void
      */
 
-    
+
 
     public function admin_index() {
         $this->uses = array();
@@ -35,8 +35,8 @@ class ReportsController extends AppController {
                 'data'     => array ( 0 => array ('1', '3', '5'),
                                       1 => array ('4', '3', '6') )
             );
-
+        echo "Hi Pat!";
         $report->generate_report($data);
     }
-    
+
 }
