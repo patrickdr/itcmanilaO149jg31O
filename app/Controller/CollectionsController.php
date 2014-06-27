@@ -135,8 +135,16 @@ class CollectionsController extends AppController {
     $currencies = $this->Collection->getCurrencies();
 		$this->set(compact('officialReceipts', 'collectors', 'collection', 'collectionTypes', 'clearingTypeCodes', 'checkTypes', 'depositChannels', 'currencies'));
 	}
-  
-  public function admin_ppm($customerId = null){
+  public function admin_ppm(){
+    $sellerAffiliates = array();
+    if($data = $this->request->query){
+      
+    }
+    $this->loadModel('Customer');
+    $customers = $this->Customer->find('list');
+    $this->set(compact('customers', 'sellerAffiliates'));
+  }  
+  protected function generatePPM($customerId = null){
     $this->loadModel('Customer');
     $this->autoRender = false;
     if (!$this->Customer->exists($customerId)) {
