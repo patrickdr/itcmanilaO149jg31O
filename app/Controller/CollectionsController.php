@@ -2,6 +2,8 @@
 App::uses('AppController', 'Controller');
 
 App::uses('File', 'Utility');
+App::uses('Sanitize', 'Utility');
+
 
 /**
  * Collections Controller
@@ -135,21 +137,61 @@ class CollectionsController extends AppController {
     $currencies = $this->Collection->getCurrencies();
 		$this->set(compact('officialReceipts', 'collectors', 'collection', 'collectionTypes', 'clearingTypeCodes', 'checkTypes', 'depositChannels', 'currencies'));
 	}
+  
   public function admin_ppm(){
     $sellerAffiliates = array();
+    $conditions = array();
+    $sellers = array();
     if($data = $this->request->query){
-      
+      if(isset($data['seller_id'])){
+        $sellerAffiliates = $this->Collection->Itinerary->Seller->find('list', array('conditions' => array('Seller.seller_id' => $data['seller_id'])));
+      }
+      if(isset($data['customer_id'])){
+        $sellers = $this->Collection->Itinerary->Seller->find('list', array(
+          'conditions' => array(
+            'Seller.customer_id' => $data['customer_id'],
+            'Seller.seller_id' => null
+          )
+        ));
+      }
+    }
+    if($this->request->is('post') && $postData = $this->request->data['Collection']){
+      foreach($postData as $key => $value){
+        if($value){
+          if($key == "seller_affiliate"){
+            $conditions['Itinerary.seller_id'] = $value;
+          }
+          else if($key == 'deposit_channel' || $key == 'check_type'){
+            $conditions['Collection.'.$key] = $value;
+          }
+          else {
+            $conditions['Itinerary.'.$key] = $value;
+          }
+        }
+      }      
+      if($conditions){
+        $filename = $this->generatePPM($conditions);
+        if($filename){
+          $this->response->file(
+              REPORTS_DIR . DS .'ppm' . DS . $filename,
+              array('download' => true, 'name' => $filename)
+          );
+          return;
+        }
+      }
+      $this->Session->setFlash("No Collections found.");
+      return $this->redirect(array('action' => 'ppm'));
     }
     $this->loadModel('Customer');
     $customers = $this->Customer->find('list');
-    $this->set(compact('customers', 'sellerAffiliates'));
+    $checkTypes = $this->Collection->getCheckTypes();
+    $depositChannels = $this->Collection->getDepositChannels();
+    $this->set(compact('customers', 'sellerAffiliates', 'sellers', 'checkTypes', 'depositChannels'));
   }  
-  protected function generatePPM($customerId = null){
+  
+  protected function generatePPM($conditions = array()){
     $this->loadModel('Customer');
     $this->autoRender = false;
-    if (!$this->Customer->exists($customerId)) {
-			throw new NotFoundException(__('Invalid collection'));
-		}
     $collections = $this->Collection->Itinerary->find('all', array(
       'contain' => array(
         'Customer',
@@ -165,15 +207,14 @@ class CollectionsController extends AppController {
           'OfficialReceipt'
         )
       ),
-      'conditions' => array(
-        'Itinerary.customer_id' => $customerId
-      )      
+      'conditions' => $conditions      
     ));    
     $depositChannels = $this->Collection->getDepositChannels();
     $currencies = $this->Collection->getCurrencies();
     $clearingTypeCodes = $this->Collection->getClearingTypes();
-    $file = new File( REPORTS_DIR . DS .'ppm' . DS . time().'.txt', true);
+    
     $string = "";
+    $seller = "";
     foreach($collections as $collection){
       if(isset($collection['Collection']['id']) && $collection['Collection']['id']){
         $seller = ($collection['SellerAffiliate']['ParentSeller']['code']) ? $collection['SellerAffiliate']['ParentSeller']['code'] : $collection['Seller']['code'];
@@ -191,12 +232,21 @@ class CollectionsController extends AppController {
         $string .= str_pad($clearingTypeCodes[$collection['Collection']['clearing_type_code']], 30, " ", STR_PAD_LEFT);
         $string .= str_pad($collection['Collection']['drawee_bank_code'], 30, " ", STR_PAD_LEFT);
         $string .= str_pad($collection['Collection']['drawee_bank_branch_code'], 30, " ", STR_PAD_LEFT);
-        $string .= "\n";
+        $string .= "\r\n";
         
       }
     }
-    $file->write($string);
-    $file->close();
+    if($string){
+      $file = new File( REPORTS_DIR . DS .'ppm' . DS . "HDR" . date('dmY') . $seller . date('dmY') . '.txt', true);
+      $string = "HDR" . $file->name . "   010070062" . "\r\n" . $string;
+      $string .= "TRL" . date("dmY") . count($collections);
+
+      $file->write($string);
+      $filename = $file->name;
+      $file->close();
+      return $filename;
+    }
+    return false;
   }
 
 /**

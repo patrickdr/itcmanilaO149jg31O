@@ -130,4 +130,8 @@
 		<li><?php echo $this->Html->link(__('List Collectors'), array('controller' => 'collectors', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Collector'), array('controller' => 'collectors', 'action' => 'add')); ?> </li>
 	</ul>
+  <h3><?php echo __('Reports'); ?></h3>
+  <ul>
+    <li><?php echo $this->Html->link(__('Generate PPM'), array('action' => 'ppm')); ?></li>
+  </ul>  
 </div>
