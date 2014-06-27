@@ -26,17 +26,30 @@ class ReportsController extends AppController {
 
 
     public function admin_index() {
-        $this->uses = array();
-        // $this->ExcelWriter();
-        $data = array (
+      $this->uses = array();
+      // $this->ExcelWriter();
+      $data = array (
 
-            'headers'  => array ('hello', 'world', 'hey'),
-            'data'     => array ( 0 => array ('1', '3', '5'),
-                                  1 => array ('4', '3', '6') )
-        );
-        $report = new GenerateExcelReport($data, "test", "testing");
-        $filename = $report->generate_report();
-        $report->download();
+          'headers'  => array ('hello', 'world', 'hey'),
+          'data'     => array ( 0 => array ('1', '3', '5'),
+                                1 => array ('4', '3', '6') )
+      );
+      $report = new GenerateExcelReport($data, "test", "testing");
+      $filename = $report->generate_report();
+      $report->download();
+    }
+
+    public function admin_receipts() {
+      $this->loadModel('OfficialReceipt');
+      $ors = $this->OfficialReceipt->find('list');
+      $data = array (
+
+          'headers'  => array ('Receipt Numbers'),
+          'data'     => array ($ors)
+      );
+      $report = new GenerateExcelReport($data, "OR", "official_receipts");
+      $filename = $report->generate_report();
+      $report->download();
 
     }
 
