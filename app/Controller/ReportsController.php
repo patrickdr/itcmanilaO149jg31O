@@ -38,20 +38,37 @@ class ReportsController extends AppController {
       $report->download();
     }
 
-    public function admin_receipts() {
+    public function admin_or_inventory() {
       $this->loadModel('OfficialReceipt');
-      $ors = $this->OfficialReceipt->find('list');
-      $data = array (
+      // $ors = $this->OfficialReceipt->find('list');
+      // $data = array (
 
-          'headers'  => array ('Receipt Numbers'),
-          'data'     => $ors
-      );
-      // echo $data['data'][1]; exit;
-      // var_dump($data); exit;
-      $report = new GenerateExcelReport($data, "OR", "official_receipts");
-      $filename = $report->generate_report();
+      //     'headers'  => array ('Receipt Numbers'),
+      //     'data'     => $ors
+      // );
+      // // echo $data['data'][1]; exit;
+      // // var_dump($data); exit;
+      // $report = new GenerateExcelReport($data, "OR", "official_receipts");
+      // $filename = $report->generate_report();
       // $report->download();
+      $sellerAffiliates = array();
+      if($data = $this->request->query) {
+        $seller_id = $data['seller_id'];
+        $customer_id = $data['customer_id'];
 
+        $ors = $this->OfficialReceipt->find('list', array(
+          'fields' => array('id', 'OfficialReceipt.or_number', 'OfficialReceipt.created', 'OfficialReceipt.modified'),
+          'conditions' => array(
+            'OfficialReceipt.seller_id' => $seller_id,
+            'OfficialReceipt.customer_id' => $customer_id
+          )
+        ));
+        var_dump($ors); exit;
+      }
+
+      $this->loadModel('Customer');
+      $customers = $this->Customer->find('list');
+      $this->set(compact('customers', 'sellerAffiliates'));
     }
 
     public function admin_ppm(){
