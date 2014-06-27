@@ -1,6 +1,11 @@
+<style>
+  table.itineraries {
+    width : 2160px !important;
+  }
+</style>
 <div class="itineraries index">
 	<h2><?php echo __('Itineraries'); ?></h2>
-	<table cellpadding="0" cellspacing="0">
+	<table cellpadding="0" cellspacing="0" class="itineraries">
 	<tr>
 			<th><?php echo $this->Paginator->sort('Buyer.name'); ?></th>
       <th><?php echo __('SellerName'); ?></th>
@@ -8,6 +13,9 @@
 			<th><?php echo $this->Paginator->sort('trip_type'); ?></th>      
 			<th><?php echo $this->Paginator->sort('trip_id', 'Trip Number'); ?></th>
       <th><?php echo $this->Paginator->sort('itinerary_number', 'IT number'); ?></th>
+      <th><?php echo $this->Paginator->sort('mm_provl', 'MM / PROVL'); ?></th>
+      <th><?php echo $this->Paginator->sort('Address.address', 'Address'); ?></th>
+      <th><?php echo $this->Paginator->sort('Buyer.Area.code', 'Area Code'); ?></th>
 			<th><?php echo $this->Paginator->sort('remarks'); ?></th>
 			<th><?php echo $this->Paginator->sort('date_received'); ?></th>
 			<th><?php echo $this->Paginator->sort('contact_number'); ?></th>
@@ -18,7 +26,7 @@
 	<tr>
 		<td>
 			<?php echo $this->Html->link(
-        String::truncate($itinerary['Buyer']['name'], 15, array('ellipsis' => '...')), 
+        $itinerary['Buyer']['name'], 
         array(
           'controller' => 'buyers', 
           'action' => 'view', 
@@ -48,9 +56,12 @@
 		</td>
 		<td><?php echo h($itinerary['Itinerary']['trip_id']); ?>&nbsp;</td>
     <td><?php echo h($itinerary['Itinerary']['itinerary_number']); ?>&nbsp;</td>
-		<td><?php echo h(String::truncate($itinerary['Itinerary']['remarks'], 20, array('ellipsis' => '...'))); ?>&nbsp;</td>
+    <td><?php echo h($itinerary['Itinerary']['mm_provl']); ?>&nbsp;</td>
+    <td><?php echo h(String::truncate($itinerary['Address']['address'], 35, array('ellipsis' => '...'))); ?>&nbsp;</td>
+    <td><?php echo h($itinerary['Buyer']['Area']['code']); ?>&nbsp;</td>
+		<td><?php echo h(String::truncate($itinerary['Itinerary']['remarks'], 25, array('ellipsis' => '...'))); ?>&nbsp;</td>
 		<td><?php echo h(date('Y-m-d', strtotime($itinerary['Itinerary']['date_received']))); ?>&nbsp;</td>
-    <td><?php echo h(String::truncate($itinerary['Itinerary']['contact_number'], 15, array('ellipsis' => '...'))); ?>&nbsp;</td>
+    <td><?php echo h($itinerary['Itinerary']['contact_number']); ?>&nbsp;</td>
 		<td><?php echo h($itinerary['Itinerary']['contact_person']); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $itinerary['Itinerary']['id'])); ?>

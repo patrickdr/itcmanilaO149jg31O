@@ -30,6 +30,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 		echo $this->Html->meta('icon');
 
 		echo $this->Html->css('cake.generic');
+    echo $this->Html->css('ui-lightness/jquery-ui-1.10.4.custom');
     echo $this->Element('admin_head');
 
 		echo $this->fetch('meta');

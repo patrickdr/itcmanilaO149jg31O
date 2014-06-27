@@ -1,5 +1,6 @@
 <?php
 App::uses('AppController', 'Controller');
+App::import('Vendor', 'ExcelWriter');
 /**
  * Trips Controller
  *
@@ -128,6 +129,23 @@ class TripsController extends AppController {
     $this->set('trips', $trips);
 		$this->set(compact('collectors', 'areas'));    
 	}
+  
+  public function admin_print($id = null){
+    $this->autoRender = false;
+    if (!$this->Trip->exists($id)) {
+			throw new NotFoundException(__('Invalid trip'));
+		}
+    $trip = $this->Trip->findById($id);
+    if($trip){
+      $report = new GenerateExcelReport();
+      $data = array (
+        'headers' => array(),
+        'data' => array ()
+      );
+      //$report->generate_report($data);
+    }
+    
+  }
 
 /**
  * admin_delete method

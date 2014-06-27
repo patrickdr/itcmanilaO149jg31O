@@ -27,7 +27,6 @@ class ReportsController extends AppController {
 
     public function admin_index() {
       $this->uses = array();
-      // $this->ExcelWriter();
       $data = array (
 
           'headers'  => array ('hello', 'world', 'hey'),
@@ -53,6 +52,16 @@ class ReportsController extends AppController {
       $filename = $report->generate_report();
       // $report->download();
 
+    }
+
+    public function admin_ppm(){
+      $sellerAffiliates = array();
+      if($data = $this->request->query){
+
+      }
+      $this->loadModel('Customer');
+      $customers = $this->Customer->find('list');
+      $this->set(compact('customers', 'sellerAffiliates'));
     }
 
 }

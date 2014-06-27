@@ -59,7 +59,14 @@ class OfficialReceipt extends AppModel {
 			'order' => ''
 		)
 	);
-  
+  public $hasOne = array(
+    'Collection' => array(
+      'className' => 'Collection',
+      'foreignKey' => 'official_receipt_id',
+      'dependent' => true,
+      'conditions' => array()
+    )
+  );  
   public function getStatuses(){
     return array(
       self::RECEIVED => 'OR Received',
