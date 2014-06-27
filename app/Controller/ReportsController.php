@@ -45,11 +45,13 @@ class ReportsController extends AppController {
       $data = array (
 
           'headers'  => array ('Receipt Numbers'),
-          'data'     => array ($ors)
+          'data'     => $ors
       );
+      // echo $data['data'][1]; exit;
+      // var_dump($data); exit;
       $report = new GenerateExcelReport($data, "OR", "official_receipts");
       $filename = $report->generate_report();
-      $report->download();
+      // $report->download();
 
     }
 

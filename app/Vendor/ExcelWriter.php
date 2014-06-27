@@ -30,11 +30,13 @@ class GenerateExcelReport {
 
     // create report directory
     $this->report_path = $this->base_path . $this->report_path;
-    $temp_rpath = $this->base_path . $report_path . '/';
 
     if ($report_path) {
+      $temp_rpath = $this->base_path . $report_path . '/';
       if (!is_dir($temp_rpath)) {
         mkdir($temp_rpath);
+        $this->report_path = $temp_rpath;
+      } else {
         $this->report_path = $temp_rpath;
       }
     } else if (!is_dir($this->report_path)) {
@@ -66,11 +68,18 @@ class GenerateExcelReport {
 
     // Set cell values
     $start_row = 2; // A2, B2, ... Z2
-
-    for ($i = 0; $i < sizeof($this->cell_vals); $i++) {
-      for ($j = 0; $j < sizeof($this->cell_vals[$i]); $j++) {
-          $excel_writer->getActiveSheet()
-                       ->setCellValue($this->headers[$j] . $start_row, $this->cell_vals[$i][$j]);
+    // var_dump($this->cell_vals);
+    for ($i = 0; $i < count($this->cell_vals); $i++) {
+      if (is_array($this->cell_vals[$i])) {
+        for ($j = 0; $j < count($this->cell_vals[$i]); $j++) {
+            $excel_writer->getActiveSheet()
+                         ->setCellValue($this->headers[$j] . $start_row, $this->cell_vals[$i][$j]);
+        }
+      } else {
+        for ($j = 0; $j < count($this->cell_vals[$i]); $j++) {
+            $excel_writer->getActiveSheet()
+                         ->setCellValue($this->headers[$j] . $start_row, $this->cell_vals[$i]);
+        }
       }
 
       // next row
