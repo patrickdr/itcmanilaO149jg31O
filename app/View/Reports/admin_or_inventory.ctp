@@ -3,7 +3,7 @@
     init : function(){
       Customer.customerSelect = $('select[name="customer_id"]');
     },
-    onChange : function(){
+    onChange : function(){ console.log('heart');
       Customer.customerId = Customer.customerSelect.val();
       window.location.href = "?customer_id=" + Customer.customerId;
     }
@@ -24,25 +24,34 @@
   $(document).ready(function(){
     Customer.init();
     Seller.init();
+    console.log('test');
     Customer.customerSelect.on('change', Customer.onChange);
     Seller.sellerSelect.on('change', Seller.onChange);
+  //   $("input[name='data[ORDispatch][select_all]']").on('click', function(){
+  //     $('input[name="data[ORDispatch][id][]"]').prop('checked', $(this).is(":checked"));
+  //   });
   });
 </script>
-<div class="ppm form">
-  <?php echo $this->Form->create('Collection', array('type' => 'get')); ?>
-  <fieldset>
-    <legend><?php echo __('Generate OR Inventory Report'); ?></legend>
-    <?= $this->Form->input('customer_id') ?>
-    <?= $this->Form->input('seller_id') ?>
-    <?= $this->Form->input('or_from', array('type' => 'text', 'label' => 'From OR Number')) ?>
-    <?= $this->Form->input('or_to', array('type' => 'text', 'label' => 'To OR Number')) ?>
-  </fieldset>
-  <?php echo $this->Form->end('Generate') ?>
-</div>
-<div class="actions">
-  <?= $this->Element('Others/admin_navigation') ?>
-  <h3><?php echo __('Actions'); ?></h3>
-  <ul>
 
-  </ul>
+<div class="officialReceipts form">
+<?php echo $this->Form->create('ORSearch', array('type' => 'get')); ?>
+	<fieldset>
+		<legend><?php echo __('Search Official Receipt'); ?></legend>
+	<?php
+    echo $this->Form->input('customer_id', array('empty' => '--- Customer ---', 'selected' => $customerId));
+		echo $this->Form->input('seller_id', array('empty' => '--- Seller ---', 'selected' => $sellerId));
+    // echo $this->Form->input('seller_affiliate_id', array('empty' => '--- Seller Affiliates---', 'options' => $sellerAffiliates, 'selected' => (isset($this->request->query['seller_affiliate_id'])) ? $this->request->query['seller_affiliate_id'] : ""));
+		echo $this->Form->input('date_received', array('type' => 'date'));
+	?>
+	</fieldset>
+  <fieldset>
+    <legend><?php echo __('Official Receipt Numbers'); ?></legend>
+    <?php
+      echo $this->Form->input('prefix', array('label' => 'Official Receipt Number Prefix'));
+      echo $this->Form->input('from', array('label' => 'OR number from'));
+      echo $this->Form->input('to', array('label' => 'OR number to'));
+    ?>
+
+  </fieldset>
+<?php echo $this->Form->end(__('Generate')); ?>
 </div>
