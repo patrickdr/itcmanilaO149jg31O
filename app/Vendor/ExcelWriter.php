@@ -19,10 +19,27 @@ class GenerateExcelReport {
   public $report_path = 'reports/';
   public $report_filename = '';
 
+
+  private function format_cell_data($data) {
+    $cell_data = array();
+    $data = Set::flatten($data);
+
+    foreach ($data as $k => $v) {
+      $temp_key = explode('.', $k);
+      $key_id = $temp_key[0];
+      $key_value = $temp_key[1] . '.' .  $temp_key[2];
+      $val = $v;
+
+      $cell_data[$key_id][] = $val;
+    }
+
+    return $cell_data;
+  }
+
   public function __construct($data, $title, $report_path='', $description='') {
     $this->header_vals = $data['headers'];
-    $this->cell_vals = $data['data'];
-    $this->title = $title;
+    $this->cell_vals = $this->format_cell_data($data['data']);
+    $this->title = $title . '_' . date('Y-m-d_H.i.s');
 
     if ($description) {
       $this->description = $description;

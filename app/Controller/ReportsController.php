@@ -54,7 +54,7 @@ class ReportsController extends AppController {
             'Seller.seller_id' => ""
           )
         ));
-        var_dump($sellers); exit;
+        // var_dump($sellers); exit;
       }
       if(isset($this->request->query['seller_id'])){
         $sellerId = $this->request->query['seller_id'];
@@ -100,94 +100,28 @@ class ReportsController extends AppController {
           $conditions['OfficialReceipt.or_number'] = $ORfind;
         }
         $ORs = $this->OfficialReceipt->find('all',array(
+          'fields' => array(
+            'OfficialReceipt.or_number',
+            'Customer.name',
+            'Collection.check_pickup_date',
+            'Seller.name',
+            'OfficialReceipt.status'
+          ),
           'conditions' => array(
             'OfficialReceipt.status' => OfficialReceipt::RECEIVED
           ) + $conditions
         ));
-      }
-      if($this->request->is('post')){
-        $post = $this->request->data['ORDispatch'];
-        $toSave = array();
-        foreach($post['id'] as $id){
-          if($id){
-            $toSave[] = array(
-              'id' => $id,
-              'collector_id' => $post['collector_id'],
-              'status' => OfficialReceipt::DISPATCHED
-            );
-          }
-        }
-        if($toSave){
-          $this->OfficialReceipt->saveAll($toSave);
-          $this->Session->setFlash("Selected OR(s) has been dispatched");
-          $this->redirect(array('action' => 'index'));
-        }
-        else{
-          $this->Session->setFlash("No OR(s) to save.");
-        }
-      }
-      $collectors = $this->OfficialReceipt->Collector->find('list');
-      $customers = $this->OfficialReceipt->Customer->find('list');
-      $statuses = $this->OfficialReceipt->getStatuses();
-      $this->set(compact('collectors', 'sellers', 'customers', 'statuses', 'customerId', 'sellerId', 'sellerAffiliates', 'ORs'));
-    }
-
-    public function admin_or_inventory_() {
-      $this->loadModel('OfficialReceipt');
-      // $ors = $this->OfficialReceipt->find('list');
-      // $data = array (
-
-      //     'headers'  => array ('Receipt Numbers'),
-      //     'data'     => $ors
-      // );
-      // // echo $data['data'][1]; exit;
-      // // var_dump($data); exit;
-      // $report = new GenerateExcelReport($data, "OR", "official_receipts");
-      // $filename = $report->generate_report();
-      // $report->download();
-      $ors = array();
-
-      if($data = $this->request->query) {
-        $seller_id = $data['seller_id'];
-        $customer_id = $data['customer_id'];
-
-        $or_from = $data['or_from'];
-        $or_to = $data['or_to'];
-        $or_range = array();
-
-        if ($or_from) {
-          $or_range = array_merge($or_range, array ('OfficialReceipt.or_number >=' => $or_from));
-        }
-
-        if ($or_to) {
-          $or_range = array_merge($or_range, array ('OfficialReceipt.or_number >=' => $or_to));
-        }
-
-        $conditions = array(
-          'OfficialReceipt.seller_id' => $seller_id,
-          'OfficialReceipt.customer_id' => $customer_id,
+        // var_dump($ORs);
+        $data = array(
+            'headers' => array ('OR Number', 'Customer Name', 'Pickup Date', 'Seller Name', 'OR Status'),
+            'data'    => $ORs
         );
-
-        if (count($or_range) > 0) {
-          $conditions = array_merge($conditions, $or_range);
-        }
-
-        $ors = $this->OfficialReceipt->find('all', array(
-          'fields' => array('OfficialReceipt.or_number',
-                            'OfficialReceipt.created',
-                            'OfficialReceipt.modified'),
-          'conditions' => $conditions
-        ));
-
-        // TODO :
-        // Pat, pakicheck to. Haha kaloka. Walang laman! Naglagay ako sample get params sa URL
-        // pero walang result ?
-        // var_dump($ors); exit;
+        $report = new GenerateExcelReport($data, "OR_Inventory", "OR-Inventory");
+        $report->generate_report();
       }
 
-      $this->loadModel('Customer');
-      $customers = $this->Customer->find('list');
-      $this->set(compact('customers', 'sellerAffiliates'));
+      $customers = $this->OfficialReceipt->Customer->find('list');
+      $this->set(compact('sellers', 'customers', 'customerId', 'sellerId'));
     }
 
     public function admin_ppm(){
