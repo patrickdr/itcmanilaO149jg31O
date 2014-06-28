@@ -34,15 +34,15 @@
     <legend><?php echo __('Generate OR Inventory Report'); ?></legend>
     <?= $this->Form->input('customer_id') ?>
     <?= $this->Form->input('seller_id') ?>
-    <?= $this->Form->input('or_from', array('type' => 'text')) ?>
-    <?= $this->Form->input('or_to', array('type' => 'text')) ?>
+    <?= $this->Form->input('or_from', array('type' => 'text', 'label' => 'From OR Number')) ?>
+    <?= $this->Form->input('or_to', array('type' => 'text', 'label' => 'To OR Number')) ?>
   </fieldset>
   <?php echo $this->Form->end('Generate') ?>
 </div>
 <div class="actions">
   <?= $this->Element('Others/admin_navigation') ?>
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
+  <h3><?php echo __('Actions'); ?></h3>
+  <ul>
 
-	</ul>
+  </ul>
 </div>

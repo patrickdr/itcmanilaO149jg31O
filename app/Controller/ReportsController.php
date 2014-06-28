@@ -51,19 +51,44 @@ class ReportsController extends AppController {
       // $report = new GenerateExcelReport($data, "OR", "official_receipts");
       // $filename = $report->generate_report();
       // $report->download();
-      $sellerAffiliates = array();
+      $ors = array();
+
       if($data = $this->request->query) {
         $seller_id = $data['seller_id'];
         $customer_id = $data['customer_id'];
 
+        $or_from = $data['or_from'];
+        $or_to = $data['or_to'];
+        $or_range = array();
+
+        if ($or_from) {
+          $or_range = array_merge($or_range, array ('OfficialReceipt.or_number >=' => $or_from));
+        }
+
+        if ($or_to) {
+          $or_range = array_merge($or_range, array ('OfficialReceipt.or_number >=' => $or_to));
+        }
+
+        $conditions = array(
+          'OfficialReceipt.seller_id' => $seller_id,
+          'OfficialReceipt.customer_id' => $customer_id,
+        );
+
+        if (count($or_range) > 0) {
+          $conditions = array_merge($conditions, $or_range);
+        }
+
         $ors = $this->OfficialReceipt->find('list', array(
-          'fields' => array('id', 'OfficialReceipt.or_number', 'OfficialReceipt.created', 'OfficialReceipt.modified'),
-          'conditions' => array(
-            'OfficialReceipt.seller_id' => $seller_id,
-            'OfficialReceipt.customer_id' => $customer_id
-          )
+          'fields' => array('OfficialReceipt.or_number',
+                            'OfficialReceipt.created',
+                            'OfficialReceipt.modified'),
+          'conditions' => $conditions
         ));
-        var_dump($ors); exit;
+
+        // TODO :
+        // Pat, pakicheck to. Haha kaloka. Walang laman! Naglagay ako sample get params sa URL
+        // pero walang result ?
+        // var_dump($ors); exit;
       }
 
       $this->loadModel('Customer');
