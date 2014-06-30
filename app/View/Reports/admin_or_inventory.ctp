@@ -35,12 +35,12 @@
 
 <div class="officialReceipts form">
 <?php echo $this->Form->create('ORSearch', array('type' => 'get')); ?>
+<?php //echo $this->error_msg; ?>
 	<fieldset>
-		<legend><?php echo __('Search Official Receipt'); ?></legend>
+		<legend><?php echo __('Official Receipt Inventory'); ?></legend>
 	<?php
     echo $this->Form->input('customer_id', array('empty' => '--- Customer ---', 'selected' => $customerId));
 		echo $this->Form->input('seller_id', array('empty' => '--- Seller ---', 'selected' => $sellerId));
-    // echo $this->Form->input('seller_affiliate_id', array('empty' => '--- Seller Affiliates---', 'options' => $sellerAffiliates, 'selected' => (isset($this->request->query['seller_affiliate_id'])) ? $this->request->query['seller_affiliate_id'] : ""));
 		echo $this->Form->input('date_received', array('type' => 'date'));
 	?>
 	</fieldset>
@@ -53,5 +53,5 @@
     ?>
 
   </fieldset>
-<?php echo $this->Form->end(__('Generate')); ?>
+<?php echo $this->Form->end(__('Generate and Download')); ?>
 </div>

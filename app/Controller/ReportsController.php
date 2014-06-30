@@ -38,6 +38,111 @@ class ReportsController extends AppController {
       $report->download();
     }
 
+    public function admin_collection_report() {
+      $sellers = array();
+      $customerId = null;
+      $sellerAffiliates = array();
+      $sellerId = null;
+      $ORs = array();
+      $this->loadModel('OfficialReceipt');
+
+      if(isset($this->request->query['customer_id'])){
+        $customerId = $this->request->query['customer_id'];
+        $sellers = $this->OfficialReceipt->Seller->find('list', array(
+          'conditions' => array(
+            'Seller.customer_id' => $customerId,
+            'Seller.seller_id' => ""
+          )
+        ));
+        // var_dump($sellers); exit;
+      }
+      if(isset($this->request->query['seller_id'])){
+        $sellerId = $this->request->query['seller_id'];
+        $sellerAffiliates = $this->OfficialReceipt->Seller->find('list', array(
+          'conditions' => array(
+            'Seller.seller_id' => $sellerId,
+            'Seller.customer_id' => $customerId
+          )
+        ));
+      }
+      if ( $this->request->query) {
+        $data = $this->request->query;
+        $conditions = array();
+        foreach($data as $key => $value){
+          if($key != "prefix" && $key != "from" && $key != "to"){
+            if($value){
+              if($key == 'date_received'){
+                $value = $value['year'] . "-" . $value['month'] . "-" . $value['day'];
+              }
+              $conditions['OfficialReceipt.' . $key] = $value;
+            }
+          }
+        }
+/*        $ORfind = array();
+        if((isset($data['from']) && $data['from']) || (isset($data['to']) && $data['to'])){
+          $prefix = $data['prefix'];
+          $length = strlen($data['from']);
+          if(intval($data['to'])){
+            for($x = intval($data['from']); $x <= intval($data['to']); $x ++){
+              if(strlen($x) == $length){
+                $ORfind[] = (($prefix) ? $prefix : "" ). $x;
+              }
+              else{
+                $ORfind[] = (($prefix) ? $prefix : "" ) . str_pad((string)$x, $length, "0", STR_PAD_LEFT);
+              }
+            }
+          }
+          else if(intval($data['from'])){
+            $ORfind[] = (($prefix) ? $prefix : "" ). $data['from'];
+          }
+        }
+        if($ORfind){
+          $conditions['OfficialReceipt.or_number'] = $ORfind;
+        }*/
+
+        $ORs = $this->OfficialReceipt->find('all',array(
+          'fields' => array(
+            'Customer.name',
+            'OfficialReceipt.or_number',
+            'Collection.collection_type',
+            // 'Collection.bank',
+            // 'Collection.check_number',
+            // 'Collection.check_date',
+            // 'Collection.check_amount',
+            // 'Collection.invoice_number'
+          ),
+          'conditions' => array(
+            // 'OfficialReceipt.status' => OfficialReceipt::RECEIVED
+          ) + $conditions
+        ));
+        var_dump($ORs);
+        $error_msg = '';
+
+        if ($ORs && $data['collection_date'] && $data['collection_type'] && $data['report_date']) {
+          $data = array(
+              'headers' => array ('Customer name', 'OR Number', 'Collection Type',
+                                  'Collection Bank', 'Collection Check Number',
+                                  'Collection Check Date', 'Collection Check Amount',
+                                  'Invoice Number'),
+              'data'    => $ORs
+          );
+
+          $report = new GenerateExcelReport($data, "OR_Inventory", "OR-Inventory");
+          $report->generate_report();
+          $report->download();
+        } else {
+          // show no results found message
+          $error_msg = 'No results found.';
+
+        }
+        // $this->set('error_msg', $error_msg);
+      }
+
+      $customers = $this->OfficialReceipt->Customer->find('list');
+      $this->set(compact('sellers', 'customers', 'customerId', 'sellerId'));
+      // $this->set(compact('collectors', 'sellers', 'customers', 'statuses', 'customerId', 'sellerId', 'sellerAffiliates', 'ORs'));
+    }
+
     public function admin_or_inventory() {
       $sellers = array();
       $customerId = null;
@@ -99,6 +204,7 @@ class ReportsController extends AppController {
         if($ORfind){
           $conditions['OfficialReceipt.or_number'] = $ORfind;
         }
+
         $ORs = $this->OfficialReceipt->find('all',array(
           'fields' => array(
             'OfficialReceipt.or_number',
@@ -108,20 +214,33 @@ class ReportsController extends AppController {
             'OfficialReceipt.status'
           ),
           'conditions' => array(
-            'OfficialReceipt.status' => OfficialReceipt::RECEIVED
+            // 'OfficialReceipt.status' => OfficialReceipt::RECEIVED
           ) + $conditions
         ));
+
         // var_dump($ORs);
-        $data = array(
-            'headers' => array ('OR Number', 'Customer Name', 'Pickup Date', 'Seller Name', 'OR Status'),
-            'data'    => $ORs
-        );
-        $report = new GenerateExcelReport($data, "OR_Inventory", "OR-Inventory");
-        $report->generate_report();
+        $error_msg = '';
+
+        if ($ORs && $data['from'] && $data['to']) {
+          $data = array(
+              'headers' => array ('OR Number', 'OR Status', 'Customer Name', 'Pickup Date', 'Seller Name'),
+              'data'    => $ORs
+          );
+
+          $report = new GenerateExcelReport($data, "OR_Inventory", "OR-Inventory");
+          $report->generate_report();
+          $report->download();
+        } else {
+          // show no results found message
+          $error_msg = 'No results found.';
+
+        }
+        // $this->set('error_msg', $error_msg);
       }
 
       $customers = $this->OfficialReceipt->Customer->find('list');
       $this->set(compact('sellers', 'customers', 'customerId', 'sellerId'));
+      // $this->set(compact('collectors', 'sellers', 'customers', 'statuses', 'customerId', 'sellerId', 'sellerAffiliates', 'ORs'));
     }
 
     public function admin_ppm(){
