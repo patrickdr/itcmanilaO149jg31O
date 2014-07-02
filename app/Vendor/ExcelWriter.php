@@ -19,6 +19,8 @@ class GenerateExcelReport {
   public $report_path = 'reports/';
   public $report_filename = '';
 
+  private $_writer;
+  private $excel_writer;
 
   private function format_cell_data($data) {
     $cell_data = array();
@@ -103,22 +105,38 @@ class GenerateExcelReport {
       $start_row++;
     }
 
-    $_writer = PHPExcel_IOFactory::createWriter($excel_writer, 'Excel2007');
+    // $_writer = PHPExcel_IOFactory::createWriter($excel_writer, 'Excel2007');
+    // $this->_writer = $_writer;
+    $this->excel_writer = $excel_writer;
     // TO DO : replace file if it already exists [?] OR
     // throw exception message
     $this->report_filename = $this->report_path . $this->title . '.xlsx';
-    $_writer->save($this->report_filename);
+    // $_writer->save($this->report_filename);
 
     return array (
       'filename'  => $this->report_filename
     );
   }
 
+
+
   public function download() {
     $filename = $this->title . '.xlsx';
-    header("Content-disposition: attachment; filename={$filename}");
-    header('Content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    readfile($this->report_filename);
+    // Redirect output to a client’s web browser (Excel2007)
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Disposition: attachment;filename="' . $filename . '"');
+    header('Cache-Control: max-age=0');
+    // If you're serving to IE 9, then the following may be needed
+    header('Cache-Control: max-age=1');
+
+    // If you're serving to IE over SSL, then the following may be needed
+    header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+    header ('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT'); // always modified
+    header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+    header ('Pragma: public'); // HTTP/1.0
+
+    $this->_writer = PHPExcel_IOFactory::createWriter($this->excel_writer, 'Excel2007');
+    $this->_writer->save('php://output');
   }
 
 }
