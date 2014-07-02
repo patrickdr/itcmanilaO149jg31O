@@ -23,8 +23,6 @@ class ReportsController extends AppController {
      * @return void
      */
 
-
-
     public function admin_index() {
       // $this->uses = array();
       // $data = array (
@@ -351,7 +349,6 @@ class ReportsController extends AppController {
 
       $customers = $this->OfficialReceipt->Customer->find('list');
       $this->set(compact('sellers', 'customers', 'customerId', 'sellerId'));
-      // $this->set(compact('collectors', 'sellers', 'customers', 'statuses', 'customerId', 'sellerId', 'sellerAffiliates', 'ORs'));
     }
 
     public function admin_ppm(){
