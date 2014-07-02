@@ -65,7 +65,7 @@ class ReportsController extends AppController {
         $conditions = array();
 
         $conditions = array (
-          'Itinerary.itinerary_number' => $requests['dispatch_number'],
+          'Itinerary.trip_id' => $requests['dispatch_number'],
           'Trip.collector_id' => $requests['collector_id']
         );
 
@@ -76,7 +76,7 @@ class ReportsController extends AppController {
               // Collection.created or OfficialReceipt.date_receipt
               if ($key == 'created') { // $key == 'report_date'
                 $value = $value['year'] . "-" . $value['month'] . "-" . $value['day'];
-                $conditions['Trip.' . $key . ' LIKE '] = $value;
+                $conditions['Trip.' . $key . ' LIKE '] = '%' . $value . '%';
                 break;
               }
           }
@@ -100,7 +100,8 @@ class ReportsController extends AppController {
               'Itinerary.mm_provl',
               'Collection.collector_remarks',
               'Collection.check_amount',
-              'Trip.collector_id' // TODO Should be collector's name
+              'Trip.collector_id', // TODO Should be collector's name
+              'Trip.created'
             ),
             'conditions' => $conditions
           ));
@@ -112,7 +113,7 @@ class ReportsController extends AppController {
                 'headers'  => array ('Customer', 'Seller', 'Buyer Code', 'Area',
                                      'Contact Person', 'Contact Number', 'Address',
                                      'Trip Type', 'MM PROVL', 'Collector Remarks',
-                                     'Check Amount', 'Collector Name'),
+                                     'Check Amount', 'Collector Name', 'Trip Date'),
                 'data'     => $itineraries
             );
 
@@ -134,7 +135,7 @@ class ReportsController extends AppController {
       }
 
       // var_dump($collections);
-
+      // var_dump($this->Itinerary->find('all'));
       $collector_names = $this->Collection->Collector->find('list');
       $this->set(compact('collector_names', 'error_msg', 'collector_id'));
 
@@ -153,7 +154,7 @@ class ReportsController extends AppController {
       // if customer_id is set, get sellers
       if (isset($this->request->query['customer_id'])) {
         $customer_id = $this->request->query['customer_id'];
-        $sellers = $this->OfficialReceipt->Seller->find('list', array(
+        $sellers = $this->Collection->Itinerary->Seller->find('list', array(
           'conditions' => array(
             'Seller.customer_id' => $customer_id
           )
@@ -174,8 +175,8 @@ class ReportsController extends AppController {
         $conditions = array();
 
         $conditions = array (
-            'OfficialReceipt.customer_id' => $requests['customer_id'],
-            'OfficialReceipt.seller_id' => $requests['seller_id'],
+            'Itinerary.customer_id' => $requests['customer_id'],
+            'Itinerary.seller_id' => $requests['seller_id'],
             'Collection.collection_type' => $requests['collection_type']
           );
 
@@ -187,7 +188,7 @@ class ReportsController extends AppController {
               // Collection.created or OfficialReceipt.date_receipt
               if ($key == 'date_received') { // $key == 'report_date'
                 $value = $value['year'] . "-" . $value['month'] . "-" . $value['day'];
-                $conditions['OfficialReceipt.' . $key] = $value;
+                $conditions['Itinerary.' . $key] = $value;
                 break;
               }
             }
@@ -203,8 +204,8 @@ class ReportsController extends AppController {
             'fields' => array(
               // 'Buyer.code',
               'OfficialReceipt.or_number',
-              'OfficialReceipt.seller_id',
-              // 'Collection.mm_provl',
+              'Itinerary.seller_id',
+              'Itinerary.mm_provl',
               'Collection.check_type',
               'Collection.bank',
               'Collection.check_number',
@@ -317,13 +318,12 @@ class ReportsController extends AppController {
         $ORs = $this->OfficialReceipt->find('all',array(
           'fields' => array(
             'OfficialReceipt.or_number',
+            'OfficialReceipt.status',
             'Customer.name',
             'Collection.check_pickup_date',
-            'Seller.name',
-            'OfficialReceipt.status'
+            'Seller.name'
           ),
           'conditions' => array(
-            // 'OfficialReceipt.status' => OfficialReceipt::RECEIVED
           ) + $conditions
         ));
 
@@ -344,11 +344,136 @@ class ReportsController extends AppController {
           $error_msg = 'No results found.';
 
         }
-        // $this->set('error_msg', $error_msg);
       }
 
       $customers = $this->OfficialReceipt->Customer->find('list');
       $this->set(compact('sellers', 'customers', 'customerId', 'sellerId'));
+    }
+
+    public function admin_check_transmittal() {
+      /*
+        Customer
+        Seller
+        Seller Affiliate
+
+        - Re [?]
+        - Deposit Date
+        - Collection Date
+
+          Collections.check_type
+          Collections.clearing_type_code
+          Collections.bank
+          Collections.check_number
+          Collections.check_date
+          Collections.check_amount
+
+      */
+
+      $this->loadModel('Collection');
+      $this->loadModel('Customer');
+
+      $sellers = array();
+      $customers = array();
+      $seller_affiliates = array();
+
+      $customer_id = null;
+      $seller_id = null;
+      $error_msg = '';
+
+      // if customer_id is set, get sellers
+      if (isset($this->request->query['customer_id'])) {
+        $customer_id = $this->request->query['customer_id'];
+        $sellers = $this->Collection->Itinerary->Seller->find('list', array(
+          'conditions' => array(
+            'Seller.customer_id' => $customer_id
+          )
+        ));
+      }
+      // if seller id is present, get all seller affiliates
+      if (isset($this->request->query['seller_id'])) {
+        $seller_id = $this->request->query['seller_id'];
+        $seller_affiliates = $this->Collection->Itinerary->Seller->find('list', array(
+          'conditions' => array(
+            'Seller.seller_id' => $seller_id
+          )
+        ));
+      }
+
+      // get the rest of the filter values
+      if ($this->request->query) {
+        $requests = $this->request->query;
+        $conditions = array();
+
+        $conditions = array (
+            'Itinerary.customer_id' => $requests['customer_id'],
+            'Itinerary.seller_id' => $requests['seller_id'],
+            'OfficialReceipt.seller_affiliate_id' => $requests['seller_affiliate_id'],
+            'Collection.deposit_channel' => $requests['deposit_channel_id']
+          );
+
+        foreach ($requests as $key => $value) {
+          if ($value) {
+              // format date as db-friendly
+              //  TODO double check what columns this should really be
+              // Collection.created or OfficialReceipt.date_receipt
+              if ($key == 'deposit_date') { // $key == 'report_date'
+                $value = $value['year'] . "-" . $value['month'] . "-" . $value['day'];
+                $conditions['Collection.' . $key] = $value;
+              }
+              if ($key == 'collection_date') { // $key == 'report_date'
+                $value = $value['year'] . "-" . $value['month'] . "-" . $value['day'];
+                $conditions['Collection.created LIKE'] = '%' . $value . '%';
+              }
+          }
+        }
+
+        // var_dump($this->request->query);
+        // var_dump($conditions);
+
+        try {
+          $ctransmittal = $this->Collection->find('all', array(
+            'fields' => array(
+              'Collection.check_type',
+              'Collection.clearing_type_code',
+              'Collection.bank',
+              'Collection.check_number',
+              'Collection.check_date',
+              'Collection.check_amount'
+            ),
+            'conditions' => $conditions
+          ));
+
+          // var_dump($collections);
+          if ($ctransmittal) {
+            // generate report
+            $data = array (
+                'headers'  => array ('Check Type', 'Clearing Type Code', 'Bank',
+                                     'Check Number', 'Check Date', 'Check Amount'),
+                'data'     => $ctransmittal
+            );
+
+            // set date, title prefix, dir name
+            $report = new GenerateExcelReport($data, "CheckTransmittalReport", "CheckTransmittal-Reports");
+            $report->generate_report();
+            $report->download();
+          } else {
+            // show empty record message
+            if (sizeof($requests)  == 6) {
+              $error_msg = 'No records found.';
+            }
+          }
+
+        } catch (Exception $e) {
+          $error_msg = $e->errorInfo[2];
+        }
+      }
+
+      // var_dump($this->Collection->find('all'));
+      $customers = $this->Collection->Itinerary->Customer->find('list');
+      $deposit_channels = $this->Collection->getDepositChannels();
+
+      $this->set(compact('sellers', 'customers', 'customer_id', 'seller_id',
+                         'seller_affiliates', 'deposit_channels', 'error_msg'));
     }
 
     public function admin_ppm(){

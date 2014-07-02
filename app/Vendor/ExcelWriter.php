@@ -36,6 +36,7 @@ class GenerateExcelReport {
     }
 
     return $cell_data;
+    // var_dump($cell_data); exit;
   }
 
   public function __construct($data, $title, $report_path='', $description='') {
@@ -127,7 +128,7 @@ class GenerateExcelReport {
     header('Content-Disposition: attachment;filename="' . $filename . '"');
     header('Cache-Control: max-age=0');
     // If you're serving to IE 9, then the following may be needed
-    header('Cache-Control: max-age=1');
+    // header('Cache-Control: max-age=1');
 
     // If you're serving to IE over SSL, then the following may be needed
     header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
