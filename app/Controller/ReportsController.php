@@ -38,14 +38,111 @@ class ReportsController extends AppController {
       // $report->download();
     }
 
+    public function admin_itd_report() {
+      /*- Trip Date
+      - Collector Name
+      - Dispatch Number*/
+
+      /*Customer.name
+      Seller.code (Itinerary.seller_id)
+      Buyer.name(Itinerary.buyer_id)
+      Collection.collector_remarks
+      Itinerary.contact_person
+      Itinerary.contact_number
+      Collection.check_amount
+      Itinerary.address
+      Itinerary.trip_type
+      Itinerary.mm_provl
+      Area.code ( From Buyer.area_id)
+      Collector.name (From Itinerary.trip_id from Trip.collector_id)*/
+
+      $this->loadModel('Collection');
+      $this->loadModel('Itinerary');
+      $error_msg = '';
+
+      // get the rest of the filter values
+      if ($this->request->query) {
+        $requests = $this->request->query;
+        $collector_id = $requests['collector_id'];
+        $conditions = array();
+
+        $conditions = array (
+          'Itinerary.itinerary_number' => $requests['dispatch_number'],
+          'Trip.collector_id' => $requests['collector_id']
+        );
+
+        foreach ($requests as $key => $value) {
+          if ($value) {
+              // format date as db-friendly
+              //  TODO double check what columns this should really be
+              // Collection.created or OfficialReceipt.date_receipt
+              if ($key == 'created') { // $key == 'report_date'
+                $value = $value['year'] . "-" . $value['month'] . "-" . $value['day'];
+                $conditions['Trip.' . $key . ' LIKE '] = $value;
+                break;
+              }
+          }
+        }
+
+        // var_dump($this->request->query);
+        // var_dump($conditions); exit;
+
+        // Columns that are commented are not yet on the return data
+        try {
+          $itineraries = $this->Itinerary->find('all', array(
+            'fields' => array(
+              'Customer.name',
+              'Seller.name',
+              'Buyer.code',
+              'Buyer.area_id', // TODO area code
+              'Itinerary.contact_person',
+              'Itinerary.contact_number',
+              'Itinerary.address',
+              'Itinerary.trip_type',
+              'Itinerary.mm_provl',
+              'Collection.collector_remarks',
+              'Collection.check_amount',
+              'Trip.collector_id' // TODO Should be collector's name
+            ),
+            'conditions' => $conditions
+          ));
+
+          // var_dump($itineraries);
+          if ($itineraries) {
+            // generate report
+            $data = array (
+                'headers'  => array ('Customer', 'Seller', 'Buyer Code', 'Area',
+                                     'Contact Person', 'Contact Number', 'Address',
+                                     'Trip Type', 'MM PROVL', 'Collector Remarks',
+                                     'Check Amount', 'Collector Name'),
+                'data'     => $itineraries
+            );
+
+            // set date, title prefix, dir name
+            $report = new GenerateExcelReport($data, "ITD-Report", "ITD-Reports");
+            $report->generate_report();
+            $report->download();
+          } else {
+            // show empty record message
+            if (sizeof($requests)  == 3) {
+              $error_msg = 'No records found.';
+            }
+          }
+
+        } catch (Exception $e) {
+          $error_msg = $e->errorInfo[2];
+          // echo $e->queryString;
+        }
+      }
+
+      // var_dump($collections);
+
+      $collector_names = $this->Collection->Collector->find('list');
+      $this->set(compact('collector_names', 'error_msg', 'collector_id'));
+
+    }
+
     public function admin_collection_report() {
-      /*
-        - Customer
-        - Seller
-        - Date of Collection
-        - Type of Collection
-        - Report Date
-      */
       $this->loadModel('OfficialReceipt');
       $this->loadModel('Collection');
 
