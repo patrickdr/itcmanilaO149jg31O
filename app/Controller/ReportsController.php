@@ -74,7 +74,7 @@ class ReportsController extends AppController {
               // format date as db-friendly
               //  TODO double check what columns this should really be
               // Collection.created or OfficialReceipt.date_receipt
-              if ($key == 'created') { // $key == 'report_date'
+              if ($key == 'date') { // $key == 'report_date'
                 $value = $value['year'] . "-" . $value['month'] . "-" . $value['day'];
                 $conditions['Trip.' . $key . ' LIKE '] = '%' . $value . '%';
                 break;
@@ -101,7 +101,7 @@ class ReportsController extends AppController {
               'Collection.collector_remarks',
               'Collection.check_amount',
               'Trip.collector_id', // TODO Should be collector's name
-              'Trip.created'
+              'Trip.date'
             ),
             'conditions' => $conditions
           ));
@@ -120,7 +120,7 @@ class ReportsController extends AppController {
             // set date, title prefix, dir name
             $report = new GenerateExcelReport($data, "ITD-Report", "ITD-Reports");
             $report->generate_report();
-            $report->download();
+            // $report->download();
           } else {
             // show empty record message
             if (sizeof($requests)  == 3) {
@@ -230,7 +230,7 @@ class ReportsController extends AppController {
             // set date, title prefix, dir name
             $report = new GenerateExcelReport($data, "CollectionReport", "Collection-Reports");
             $report->generate_report();
-            $report->download();
+            // $report->download();
           } else {
             // show empty record message
             if (sizeof($requests)  == 4) {
@@ -338,7 +338,7 @@ class ReportsController extends AppController {
 
           $report = new GenerateExcelReport($data, "OR_Inventory", "OR-Inventory");
           $report->generate_report();
-          $report->download();
+          // $report->download();
         } else {
           // show no results found message
           $error_msg = 'No results found.';
@@ -455,7 +455,7 @@ class ReportsController extends AppController {
             // set date, title prefix, dir name
             $report = new GenerateExcelReport($data, "CheckTransmittalReport", "CheckTransmittal-Reports");
             $report->generate_report();
-            $report->download();
+            // $report->download();
           } else {
             // show empty record message
             if (sizeof($requests)  == 6) {

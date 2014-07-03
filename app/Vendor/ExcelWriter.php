@@ -112,7 +112,7 @@ class GenerateExcelReport {
     // TO DO : replace file if it already exists [?] OR
     // throw exception message
     $this->report_filename = $this->report_path . $this->title . '.xlsx';
-    // $_writer->save($this->report_filename);
+    $_writer->save($this->report_filename);
 
     return array (
       'filename'  => $this->report_filename
