@@ -11,7 +11,7 @@ class OfficialReceipt extends AppModel {
 
   const RECEIVED = 1,
         DISPATCHED = 2,
-        REMMITED = 3, 
+        REMMITED = 3,
         BALANCE = 4,
         RETURNED = 5;
 /**
@@ -20,7 +20,7 @@ class OfficialReceipt extends AppModel {
  * @var string
  */
 	public $displayField = 'or_number';
-
+    public $actsAs = array('Containable');
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
@@ -50,7 +50,7 @@ class OfficialReceipt extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
-		),    
+		),
 		'Customer' => array(
 			'className' => 'Customer',
 			'foreignKey' => 'customer_id',
@@ -66,7 +66,7 @@ class OfficialReceipt extends AppModel {
       'dependent' => true,
       'conditions' => array()
     )
-  );  
+  );
   public function getStatuses(){
     return array(
       self::RECEIVED => 'OR Received',
