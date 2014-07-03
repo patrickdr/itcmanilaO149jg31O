@@ -57,6 +57,7 @@ class ReportsController extends AppController {
       $this->loadModel('Collection');
       $this->loadModel('Itinerary');
       $error_msg = '';
+      $success_msg = '';
 
       // get the rest of the filter values
       if ($this->request->query) {
@@ -119,7 +120,10 @@ class ReportsController extends AppController {
 
             // set date, title prefix, dir name
             $report = new GenerateExcelReport($data, "ITD-Report", "ITD-Reports");
-            $report->generate_report();
+            $report_data = $report->generate_report();
+            if ($report_data['filename']) {
+              $success_msg = 'Report ' . $report_data['filename'] . ' saved to ' . $report_data['filepath'];
+            }
             // $report->download();
           } else {
             // show empty record message
@@ -137,7 +141,7 @@ class ReportsController extends AppController {
       // var_dump($collections);
       // var_dump($this->Itinerary->find('all'));
       $collector_names = $this->Collection->Collector->find('list');
-      $this->set(compact('collector_names', 'error_msg', 'collector_id'));
+      $this->set(compact('collector_names', 'error_msg', 'success_msg', 'collector_id'));
 
     }
 
@@ -146,27 +150,41 @@ class ReportsController extends AppController {
       $this->loadModel('Collection');
 
       $sellers = array();
+      $customers = array();
+      $seller_affiliates = array();
       $customer_id = null;
       $seller_id = null;
+      $seller_affiliate_id = null;
       $collection_type = null;
       $error_msg = '';
+      $success_msg = '';
 
       // if customer_id is set, get sellers
       if (isset($this->request->query['customer_id'])) {
         $customer_id = $this->request->query['customer_id'];
         $sellers = $this->Collection->Itinerary->Seller->find('list', array(
           'conditions' => array(
-            'Seller.customer_id' => $customer_id
+            'Seller.customer_id' => $customer_id,
+            'Seller.seller_id' => null
           )
         ));
       }
 
       if (isset($this->request->query['seller_id'])) {
         $seller_id = $this->request->query['seller_id'];
+        $seller_affiliates = $this->Collection->Itinerary->Seller->find('list', array(
+          'conditions' => array(
+            'Seller.seller_id' => $seller_id
+          )
+        ));
       }
 
       if (isset($this->request->query['collection_type'])) {
         $collection_type = $this->request->query['collection_type'];
+      }
+
+      if (isset($this->request->query['seller_affiliate_id'])) {
+        $seller_affiliate_id = $this->request->query['seller_affiliate_id'];
       }
 
       // get the rest of the filter values
@@ -175,23 +193,23 @@ class ReportsController extends AppController {
         $conditions = array();
 
         $conditions = array (
-            'Itinerary.customer_id' => $requests['customer_id'],
-            'Itinerary.seller_id' => $requests['seller_id'],
-            'Collection.collection_type' => $requests['collection_type']
+            'Itinerary.customer_id' => $customer_id,
+            'Itinerary.seller_id' => $seller_affiliate_id,
+            'Collection.collection_type' => $collection_type
           );
 
         foreach ($requests as $key => $value) {
           if ($value) {
-            if ($requests['customer_id'] && $requests['seller_id']) {
+            // if ($requests['customer_id'] && $requests['seller_id']) {
               // format date as db-friendly
               //  TODO double check what columns this should really be
               // Collection.created or OfficialReceipt.date_receipt
               if ($key == 'date_received') { // $key == 'report_date'
                 $value = $value['year'] . "-" . $value['month'] . "-" . $value['day'];
-                $conditions['Itinerary.' . $key] = $value;
+                $conditions['Itinerary.' . $key . ' LIKE'] = $value;
                 break;
               }
-            }
+            // }
           }
         }
 
@@ -229,11 +247,14 @@ class ReportsController extends AppController {
 
             // set date, title prefix, dir name
             $report = new GenerateExcelReport($data, "CollectionReport", "Collection-Reports");
-            $report->generate_report();
+            $report_data = $report->generate_report();
             // $report->download();
+            if ($report_data['filename']) {
+              $success_msg = 'Report ' . $report_data['filename'] . ' saved to ' . $report_data['filepath'];
+            }
           } else {
             // show empty record message
-            if (sizeof($requests)  == 4) {
+            if (sizeof($requests)  == 5) {
               $error_msg = 'No records found.';
             }
           }
@@ -250,7 +271,16 @@ class ReportsController extends AppController {
       $collection_types = $this->Collection->getCollectionTypes();
 
       $this->set(compact('sellers', 'customers', 'customer_id', 'seller_id',
-                         'collection_types', 'collection_type', 'error_msg'));
+                         'seller_affiliates', 'seller_affiliate_id',
+                         'collection_types', 'collection_type', 'error_msg',
+                         'success_msg'));
+    }
+
+    public function getStatusName($or_status_id) {
+      $this->loadModel('OfficialReceipt');
+      $or_statuses = $this->OfficialReceipt->getStatuses();
+
+      return $or_statuses[$or_status_id];
     }
 
     public function admin_or_inventory() {
@@ -259,6 +289,7 @@ class ReportsController extends AppController {
       $sellerAffiliates = array();
       $sellerId = null;
       $ORs = array();
+      $success_msg = '';
       $this->loadModel('OfficialReceipt');
 
       if(isset($this->request->query['customer_id'])){
@@ -280,6 +311,10 @@ class ReportsController extends AppController {
           )
         ));
       }
+      if(isset($this->request->query['seller_affiliate_id'])){
+        $sellerAffiliateId = $this->request->query['seller_affiliate_id'];
+      }
+
       if ( $this->request->query) {
         $data = $this->request->query;
         $conditions = array();
@@ -330,15 +365,21 @@ class ReportsController extends AppController {
         // var_dump($ORs);
         $error_msg = '';
 
-        if ($ORs && $data['from'] && $data['to']) {
+        if ($ORs) {
+          // convert status id to string
+          // $new_ORs = Set::insert($ORs, 'OfficialReceipt', array('status_name' => ));
+
           $data = array(
               'headers' => array ('OR Number', 'OR Status', 'Customer Name', 'Pickup Date', 'Seller Name'),
               'data'    => $ORs
           );
 
           $report = new GenerateExcelReport($data, "OR_Inventory", "OR-Inventory");
-          $report->generate_report();
+          $report_data = $report->generate_report();
           // $report->download();
+          if ($report_data['filename']) {
+            $success_msg = 'Report ' . $report_data['filename'] . ' saved to ' . $report_data['filepath'];
+          }
         } else {
           // show no results found message
           $error_msg = 'No results found.';
@@ -347,7 +388,9 @@ class ReportsController extends AppController {
       }
 
       $customers = $this->OfficialReceipt->Customer->find('list');
-      $this->set(compact('sellers', 'customers', 'customerId', 'sellerId'));
+      $this->set(compact('sellers', 'customers', 'customerId', 'sellerId',
+                         'sellerAffiliateId', 'sellerAffiliates', 'success_msg',
+                         'error_msg'));
     }
 
     public function admin_check_transmittal() {

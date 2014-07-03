@@ -111,11 +111,13 @@ class GenerateExcelReport {
     $this->excel_writer = $excel_writer;
     // TO DO : replace file if it already exists [?] OR
     // throw exception message
+    $this->_writer = PHPExcel_IOFactory::createWriter($this->excel_writer, 'Excel2007');
     $this->report_filename = $this->report_path . $this->title . '.xlsx';
-    $_writer->save($this->report_filename);
+    $this->_writer->save($this->report_filename);
 
     return array (
-      'filename'  => $this->report_filename
+      'filename'  => $this->title . '.xlsx',
+      'filepath'  => $this->report_path
     );
   }
 
@@ -136,7 +138,6 @@ class GenerateExcelReport {
     header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
     header ('Pragma: public'); // HTTP/1.0
 
-    $this->_writer = PHPExcel_IOFactory::createWriter($this->excel_writer, 'Excel2007');
     $this->_writer->save('php://output');
   }
 

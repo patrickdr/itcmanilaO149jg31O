@@ -49,6 +49,9 @@
     <?php if ($error_msg) { ?>
       <p class="error"><?php echo $error_msg; ?></p>
     <?php } ?>
+    <?php if ($success_msg) { ?>
+      <p class="success"><?php echo $success_msg; ?></p>
+    <?php } ?>
 	<?php
     echo $this->Form->input('date', array('type' => 'date', 'label' => 'Trip Date'));
     echo $this->Form->input('collector_id', array('empty' => '--- Collector Names ---',
