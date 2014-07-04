@@ -38,9 +38,16 @@
 <?php //echo $this->error_msg; ?>
 	<fieldset>
 		<legend><?php echo __('Official Receipt Inventory'); ?></legend>
+    <?php if ($error_msg) { ?>
+      <p class="error"><?php echo $error_msg; ?></p>
+    <?php } ?>
+    <?php if ($success_msg) { ?>
+      <p class="success"><?php echo $success_msg; ?></p>
+    <?php } ?>
 	<?php
     echo $this->Form->input('customer_id', array('empty' => '--- Customer ---', 'selected' => $customerId));
 		echo $this->Form->input('seller_id', array('empty' => '--- Seller ---', 'selected' => $sellerId));
+    echo $this->Form->input('seller_affiliate_id', array('empty' => '--- Seller Affiliates---', 'options' => $sellerAffiliates, 'selected' => (isset($this->request->query['seller_affiliate_id'])) ? $this->request->query['seller_affiliate_id'] : ""));
 		echo $this->Form->input('date_received', array('type' => 'date'));
 	?>
 	</fieldset>
