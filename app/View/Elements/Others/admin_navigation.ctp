@@ -23,3 +23,9 @@
   endif;
 ?>
 </ul>
+<h3><?php echo __('Reports'); ?></h3>
+<ul>
+  <li><?php echo $this->Html->link(__('Excel to PPM'), array('controller' => 'reports', 'action' => 'xls_ppm', 'admin' => true)); ?></li>
+  <li><?php echo $this->Html->link(__('Generate PPM'), array('controller' => 'collections', 'action' => 'ppm', 'admin' => true)); ?></li>
+
+</ul>
