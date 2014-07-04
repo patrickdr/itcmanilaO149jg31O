@@ -528,5 +528,55 @@ class ReportsController extends AppController {
       $customers = $this->Customer->find('list');
       $this->set(compact('customers', 'sellerAffiliates'));
     }
+    
+    public function admin_xls_ppm(){
+      if($this->request->is('post')){
+        // Inititialize Excel Reader
+        $data = new Spreadsheet_Excel_Reader();
+        // Set output Encoding.
+        $data->setOutputEncoding('CP1251');
+        $data->read($this->request->data['PPM']['file']['tmp_name']);
+        
+        $cells = (isset($data->sheets[0]['cells']) && $data->sheets[0]['cells']) ? $data->sheets[0]['cells'] : array();
+        $string = "";
+        $seller = "";
+        foreach($cells as $key => $cell){
+          if($cell && count($cell) >= 9 && $key > 2){
+            $seller = $cell[5];
+            $string .= str_pad("1", 10, " ", STR_PAD_RIGHT);
+            $string .= str_pad($cell[1], 20, " ", STR_PAD_LEFT); 
+            $string .= str_pad("CHK", 10, " ", STR_PAD_LEFT); 
+            $string .= str_pad($cell[2], 20, "0", STR_PAD_LEFT); 
+            $string .= $cell[3];
+            $string .= $cell[4];
+            $string .= str_pad($cell[5] , 30, " ", STR_PAD_LEFT); 
+            $string .= $cell[6];
+            $string .= str_pad($cell[7], 30, " ", STR_PAD_RIGHT);
+            $string .= str_pad(" ", 30, " ", STR_PAD_RIGHT);
+            $string .= str_pad(" ", 30, " ", STR_PAD_LEFT);
+            $string .= str_pad(" ", 30, " ", STR_PAD_LEFT);
+            $string .= str_pad($cell[8], 30, " ", STR_PAD_LEFT);
+            $string .= str_pad($cell[9], 30, " ", STR_PAD_LEFT);
+            $string .= "\r\n";
+          }
+        }
+        if($string){
+          $file = new File( REPORTS_DIR . DS .'ppm' . DS . "HDR" . date('dmY') . $seller . date('dmY') . '.txt', true);
+          $string = "HDR" . $file->name . "   010070062" . "\r\n" . $string;
+          $string .= "TRL" . date("dmY") . count($cells);
+
+          $file->write($string);
+          $filename = $file->name;
+          $file->close();
+          if($filename){
+            $this->response->file(
+                REPORTS_DIR . DS .'ppm' . DS . $filename,
+                array('download' => true, 'name' => $filename)
+            );
+            return;
+          }
+        }
+      }
+    }
 
 }

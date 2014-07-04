@@ -62,3 +62,6 @@
   </fieldset>
 <?php echo $this->Form->end(__('Generate and Download')); ?>
 </div>
+<div class="actions">
+  <?= $this->Element('Others/admin_navigation') ?>
+</div>
