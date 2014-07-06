@@ -1,3 +1,8 @@
+<style>
+  table.itineraries {
+    width : 2160px !important;
+  }
+</style>
 <div class="trips view">
 <h2><?php echo __('Trip'); ?></h2>
 	<dl>
@@ -45,12 +50,17 @@
 <div class="related">
 	<h3><?php echo __('Related Itineraries'); ?></h3>
 	<?php if (!empty($trip['Itinerary'])): ?>
-	<table cellpadding = "0" cellspacing = "0">
+	<table cellpadding = "0" cellspacing = "0" class="itineraries">
 	<tr>
 			<th><?php echo __('Buyer.name'); ?></th>
       <th><?php echo __('SellerName'); ?></th>
       <th><?php echo __('SellerAffiliate'); ?></th>
-			<th><?php echo __('Trip Type'); ?></th>      
+			<th><?php echo __('Trip Type'); ?></th>     
+      <th><?php echo __('Trip Number'); ?></th>
+      <th><?php echo __('Itinerary Number'); ?></th> 
+      <th><?php echo __('MM / PROVL'); ?></th>
+      <th><?php echo __('Address'); ?></th>
+      <th><?php echo __('Area Code'); ?></th>
 			<th><?php echo __('Acknowledged By'); ?></th>
       <th><?php echo __('Acknowledged Receipt', 'IT number'); ?></th>
 			<th><?php echo __('Acknowledged Date'); ?></th>
@@ -63,7 +73,7 @@
 	<tr>
 		<td>
 			<?php echo $this->Html->link(
-        String::truncate($itinerary['Buyer']['name'], 15, array('ellipsis' => '...')), 
+        $itinerary['Buyer']['name'], 15, array('ellipsis' => '...'), 
         array(
           'controller' => 'buyers', 
           'action' => 'view', 
@@ -91,6 +101,17 @@
 		<td>
 			<?php echo h($itinerary['Itinerary']['trip_type']); ?>
 		</td>
+    <td>
+			<?php echo h($itinerary['Itinerary']['trip_id']); ?>
+		</td>
+    <td>
+			<?php echo h($itinerary['Itinerary']['itinerary_number']); ?>
+		</td>
+    <td>
+			<?php echo h($itinerary['Itinerary']['mm_provl']); ?>
+		</td>
+    <td><?php echo h(String::truncate($itinerary['Address']['address'], 35, array('ellipsis' => '...'))); ?>&nbsp;</td>
+    <td><?php echo h($itinerary['Buyer']['Area']['code']); ?>&nbsp;</td>
 		<td><?php echo h($itinerary['Itinerary']['acknowledged_by']); ?>&nbsp;</td>
     <td><?php echo h($itinerary['Itinerary']['acknowledged_receipt']); ?>&nbsp;</td>
 		<td><?php echo h(String::truncate($itinerary['Itinerary']['acknowledged_date'], 20, array('ellipsis' => '...'))); ?>&nbsp;</td>
@@ -98,19 +119,10 @@
     <td><?php echo h(String::truncate($itinerary['Itinerary']['reason_id'], 15, array('ellipsis' => '...'))); ?>&nbsp;</td>
 		<td><?php echo h($this->Itinerary->stringify('results', $itinerary['Itinerary']['result_status'])); ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('controller' => 'itineraries', 'action' => 'view', $itinerary['Itinerary']['id'])); ?>
-			<?php echo $this->Html->link(__('Edit'), array('controller' => 'itineraries', 'action' => 'edit', $itinerary['Itinerary']['id'])); ?>
-      <?php echo $this->Html->link(__('Update'), array('controller' => 'itineraries', 'action' => 'update', $itinerary['Itinerary']['id'])); ?>
-			<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'itineraries', 'action' => 'delete', $itinerary['Itinerary']['id']), null, __('Are you sure you want to delete # %s?', $itinerary['Itinerary']['id'])); ?>
+      <?php echo $this->Html->link(__('Update'), array('controller' => 'itineraries', 'action' => 'update', $itinerary['Itinerary']['id']), array('target' => '_blank')); ?>
 		</td>
 	</tr>
   <?php endforeach; ?>
 	</table>
-<?php endif; ?>
-
-	<div class="actions">
-		<ul>
-			<li><?php echo $this->Html->link(__('New Itinerary'), array('controller' => 'itineraries', 'action' => 'add')); ?> </li>
-		</ul>
-	</div>
+  <?php endif; ?>
 </div>

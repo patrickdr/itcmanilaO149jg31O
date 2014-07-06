@@ -15,10 +15,11 @@
 <?php echo $this->Form->end(__('Submit')); ?>
 </div>
 <div class="actions">
+  <?= $this->Element('Others/admin_navigation') ?>
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 
-		<li><?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $this->Form->value('OfficialReceipt.id')), null, __('Are you sure you want to delete # %s?', $this->Form->value('OfficialReceipt.id'))); ?></li>
+		<?= $this->Element('Others/admin_or') ?> 
 		<li><?php echo $this->Html->link(__('List Official Receipts'), array('action' => 'index')); ?></li>
 		<li><?php echo $this->Html->link(__('List Collectors'), array('controller' => 'collectors', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Collector'), array('controller' => 'collectors', 'action' => 'add')); ?> </li>

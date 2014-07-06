@@ -40,6 +40,13 @@ class TripsController extends AppController {
 		}
 		$options = array('conditions' => array('Trip.' . $this->Trip->primaryKey => $id));
     $itineraries = $this->Trip->Itinerary->find('all', array(
+      'contain' => array(    
+        'Address',
+        'Buyer' => array('Area'),
+        'SellerAffiliate' => array(
+          'ParentSeller'
+        )        
+      ),    
       'conditions' => array(
         'Itinerary.trip_id' => $id
       )

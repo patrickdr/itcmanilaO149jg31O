@@ -55,7 +55,7 @@
 <?php echo $this->Form->end(__('Search')); ?>
 <?php echo $this->Form->create('ORDispatch'); ?>
   
-  <h3><?php echo __('Select OR to dispatch'); ?></h3>
+  <h3><?php echo __('Select OR to Remit'); ?></h3>
   <div class="current">
     <table cellpadding="0" cellspacing="0">
       <tr>
@@ -95,9 +95,10 @@
 <?php echo $this->Form->end(__('Remit')); ?>
 </div>
 <div class="actions">
+  <?= $this->Element('Others/admin_navigation') ?>
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
-
+    <?= $this->Element('Others/admin_or') ?> 
 		<li><?php echo $this->Html->link(__('List Official Receipts'), array('action' => 'index')); ?></li>
 		<li><?php echo $this->Html->link(__('List Collectors'), array('controller' => 'collectors', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Collector'), array('controller' => 'collectors', 'action' => 'add')); ?> </li>

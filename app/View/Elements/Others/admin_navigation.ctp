@@ -11,6 +11,7 @@
   <li><?php echo $this->Html->link(__('Collectors'), array('controller' => 'collectors', 'action' => 'index', 'admin' => true)); ?></li>
   <li><?php echo $this->Html->link(__('Areas'), array('controller' => 'areas', 'action' => 'index', 'admin' => true)); ?></li>
   <li><?php echo $this->Html->link(__('Official Receipts'), array('controller' => 'official_receipts', 'action' => 'index', 'admin' => true)); ?></li>
+  <li><?php echo $this->Html->link(__('Collections'), array('controller' => 'collections', 'action' => 'index', 'admin' => true)); ?></li>
 <?php 
   // Add any additional links
   if (isset($additionalLinks)) :

@@ -49,8 +49,10 @@
 	</dl>
 </div>
 <div class="actions">
+  <?= $this->Element('Others/admin_navigation') ?>
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
+		<?= $this->Element('Others/admin_or') ?> 
 		<li><?php echo $this->Html->link(__('Edit Official Receipt'), array('action' => 'edit', $officialReceipt['OfficialReceipt']['id'])); ?> </li>
 		<li><?php echo $this->Form->postLink(__('Delete Official Receipt'), array('action' => 'delete', $officialReceipt['OfficialReceipt']['id']), null, __('Are you sure you want to delete # %s?', $officialReceipt['OfficialReceipt']['id'])); ?> </li>
 		<li><?php echo $this->Html->link(__('List Official Receipts'), array('action' => 'index')); ?> </li>

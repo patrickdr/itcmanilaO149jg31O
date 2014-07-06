@@ -60,8 +60,8 @@
 		<td><?php echo h($collection['Collection']['check_pickup_date']); ?>&nbsp;</td>
 		<td><?php echo h($collection['Collection']['collector_remarks']); ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $collection['Itinerary']['id'])); ?>
-			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $collection['Itinerary']['id'])); ?>
+			<?php echo $this->Html->link(__('View'), array('action' => 'view', $collection['Itinerary']['id']), array('target' => '_blank')); ?>
+			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $collection['Itinerary']['id']), array('target' => '_blank')); ?>
 			<!--<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $collection['Collection']['id']), null, __('Are you sure you want to delete # %s?', $collection['Collection']['id'])); ?>-->
 		</td>
 	</tr>
@@ -82,6 +82,7 @@
 	</div>
 </div>
 <div class="actions">
+  <?= $this->Element('Others/admin_navigation') ?>
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('New Collection'), array('action' => 'add')); ?></li>
@@ -90,8 +91,4 @@
 		<li><?php echo $this->Html->link(__('List Collectors'), array('controller' => 'collectors', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Collector'), array('controller' => 'collectors', 'action' => 'add')); ?> </li>
 	</ul>
-  <h3><?php echo __('Reports'); ?></h3>
-  <ul>
-    <li><?php echo $this->Html->link(__('Generate PPM'), array('action' => 'ppm')); ?></li>
-  </ul>
 </div>

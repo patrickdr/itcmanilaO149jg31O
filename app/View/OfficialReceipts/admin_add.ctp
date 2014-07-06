@@ -53,16 +53,13 @@
 <?php echo $this->Form->end(__('Submit')); ?>
 </div>
 <div class="actions">
+  <?= $this->Element('Others/admin_navigation') ?>
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 
 		<li><?php echo $this->Html->link(__('List Official Receipts'), array('action' => 'index')); ?></li>
 		<li><?php echo $this->Html->link(__('List Collectors'), array('controller' => 'collectors', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('Receive OR'), array('action' => 'add')); ?></li>
-    <li><?php echo $this->Html->link(__('Dispatch OR'), array('action' => 'dispatch')); ?></li>
-    <li><?php echo $this->Html->link(__('Return OR'), array('action' => 'dispatch')); ?></li>
-    <li><?php echo $this->Html->link(__('OR Balance'), array('action' => 'dispatch')); ?></li>
-    <li><?php echo $this->Html->link(__('Remit OR'), array('action' => 'dispatch')); ?></li></li>
+		<?= $this->Element('Others/admin_or') ?> 
 		<li><?php echo $this->Html->link(__('New Collector'), array('controller' => 'collectors', 'action' => 'add')); ?> </li>
 		<li><?php echo $this->Html->link(__('List Sellers'), array('controller' => 'sellers', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Seller'), array('controller' => 'sellers', 'action' => 'add')); ?> </li>
