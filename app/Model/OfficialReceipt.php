@@ -76,4 +76,21 @@ class OfficialReceipt extends AppModel {
       self::RETURNED => 'OR Returned'
     );
   }
+
+  public function afterFind($results, $primary = false) {
+    foreach ($results as $key => $val) {
+        if (isset($val['OfficialReceipt']['status'])) {
+            $results[$key]['OfficialReceipt']['status'] = $this->getStatusName(
+                $val['OfficialReceipt']['status']
+            );
+        }
+    }
+    return $results;
+  }
+
+  public function getStatusName($status_id) {
+    $or_statuses = $this->getStatuses();
+    return $or_statuses[$status_id];
+  }
+
 }

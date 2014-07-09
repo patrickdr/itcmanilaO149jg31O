@@ -12,14 +12,14 @@
   <li><?php echo $this->Html->link(__('Areas'), array('controller' => 'areas', 'action' => 'index', 'admin' => true)); ?></li>
   <li><?php echo $this->Html->link(__('Official Receipts'), array('controller' => 'official_receipts', 'action' => 'index', 'admin' => true)); ?></li>
   <li><?php echo $this->Html->link(__('Collections'), array('controller' => 'collections', 'action' => 'index', 'admin' => true)); ?></li>
-<?php 
+<?php
   // Add any additional links
   if (isset($additionalLinks)) :
     $additionalLinks = (array) $additionalLinks;
     foreach ($additionalLinks as $linkParams) :
 ?>
   <li><?php echo call_user_func_array(array($this->Html, 'link'), $linkParams); ?></li>
-<?php 
+<?php
     endforeach;
   endif;
 ?>
@@ -28,5 +28,9 @@
 <ul>
   <li><?php echo $this->Html->link(__('Excel to PPM'), array('controller' => 'reports', 'action' => 'xls_ppm', 'admin' => true)); ?></li>
   <li><?php echo $this->Html->link(__('Generate PPM'), array('controller' => 'collections', 'action' => 'ppm', 'admin' => true)); ?></li>
+  <li><?php echo $this->Html->link(__('Or Inventory'), array('action' => 'or_inventory')); ?></li>
+  <li><?php echo $this->Html->link(__('Collection Report'), array('action' => 'collection_report')); ?> </li>
+  <li><?php echo $this->Html->link(__('ITD Report'), array('action' => 'itd_report')); ?> </li>
+  <li><?php echo $this->Html->link(__('Check Transmittal'), array('action' => 'check_transmittal')); ?> </li>
 
 </ul>

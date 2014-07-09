@@ -289,7 +289,9 @@ class ReportsController extends AppController {
       $sellerAffiliates = array();
       $sellerId = null;
       $ORs = array();
+      $report_data = array();
       $success_msg = '';
+      $error_msg = '';
       $this->loadModel('OfficialReceipt');
 
       if(isset($this->request->query['customer_id'])){
@@ -365,25 +367,28 @@ class ReportsController extends AppController {
         // var_dump($ORs);
         $error_msg = '';
 
-        if ($ORs) {
-          // convert status id to string
-          // $new_ORs = Set::insert($ORs, 'OfficialReceipt', array('status_name' => ));
+        if (sizeof($data) >= 4) {
+          if ($ORs) {
+            // convert status id to string
+            // $new_ORs = Set::insert($ORs, 'OfficialReceipt', array('status_name' => ));
 
-          $data = array(
-              'headers' => array ('OR Number', 'OR Status', 'Customer Name', 'Pickup Date', 'Seller Name'),
-              'data'    => $ORs
-          );
+            $data = array(
+                'headers' => array ('OR Number', 'OR Status', 'Customer Name', 'Pickup Date', 'Seller Name'),
+                'data'    => $ORs
+            );
 
-          $report = new GenerateExcelReport($data, "OR_Inventory", "OR-Inventory");
-          $report_data = $report->generate_report();
-          // $report->download();
-          if ($report_data['filename']) {
-            $success_msg = 'Report ' . $report_data['filename'] . ' saved to ' . $report_data['filepath'];
+            $report = new GenerateExcelReport($data, "OR_Inventory", "OR-Inventory");
+            $report_data = $report->generate_report();
+            // $report->download();
+
+            if ($report_data['filename']) {
+              $success_msg = 'Report ' . $report_data['filename'] . ' saved to ' . $report_data['filepath'];
+            }
+          } else {
+            // show no results found message
+            $error_msg = 'No results found.';
+
           }
-        } else {
-          // show no results found message
-          $error_msg = 'No results found.';
-
         }
       }
 
@@ -528,7 +533,7 @@ class ReportsController extends AppController {
       $customers = $this->Customer->find('list');
       $this->set(compact('customers', 'sellerAffiliates'));
     }
-    
+
     public function admin_xls_ppm(){
       if($this->request->is('post')){
         // Inititialize Excel Reader
@@ -536,7 +541,7 @@ class ReportsController extends AppController {
         // Set output Encoding.
         $data->setOutputEncoding('CP1251');
         $data->read($this->request->data['PPM']['file']['tmp_name']);
-        
+
         $cells = (isset($data->sheets[0]['cells']) && $data->sheets[0]['cells']) ? $data->sheets[0]['cells'] : array();
         $string = "";
         $seller = "";
@@ -544,12 +549,12 @@ class ReportsController extends AppController {
           if($cell && count($cell) >= 9 && $key > 2){
             $seller = $cell[5];
             $string .= str_pad("1", 10, " ", STR_PAD_RIGHT);
-            $string .= str_pad($cell[1], 20, " ", STR_PAD_LEFT); 
-            $string .= str_pad("CHK", 10, " ", STR_PAD_LEFT); 
-            $string .= str_pad($cell[2], 20, "0", STR_PAD_LEFT); 
+            $string .= str_pad($cell[1], 20, " ", STR_PAD_LEFT);
+            $string .= str_pad("CHK", 10, " ", STR_PAD_LEFT);
+            $string .= str_pad($cell[2], 20, "0", STR_PAD_LEFT);
             $string .= $cell[3];
             $string .= $cell[4];
-            $string .= str_pad($cell[5] , 30, " ", STR_PAD_LEFT); 
+            $string .= str_pad($cell[5] , 30, " ", STR_PAD_LEFT);
             $string .= $cell[6];
             $string .= str_pad($cell[7], 30, " ", STR_PAD_RIGHT);
             $string .= str_pad(" ", 30, " ", STR_PAD_RIGHT);

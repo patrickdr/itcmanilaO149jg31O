@@ -40,11 +40,11 @@
   });
 </script>
 
-<div class="Collections form">
-<?php echo $this->Form->create('CollectionSearch', array('type' => 'get')); ?>
+<div class="CheckTransmittal form">
+<?php echo $this->Form->create('CheckTransmittal', array('type' => 'get')); ?>
 
 	<fieldset>
-		<legend><?php echo __('Collection Report'); ?></legend>
+		<legend><?php echo __('Check Transmittal Report'); ?></legend>
     <?php if ($error_msg) { ?>
       <p class="error"><?php echo $error_msg; ?></p>
     <?php } ?>
