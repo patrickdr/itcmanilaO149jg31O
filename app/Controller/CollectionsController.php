@@ -232,16 +232,23 @@ class CollectionsController extends AppController {
         $string .= str_pad($clearingTypeCodes[$collection['Collection']['clearing_type_code']], 30, " ", STR_PAD_LEFT);
         $string .= str_pad($collection['Collection']['drawee_bank_code'], 30, " ", STR_PAD_LEFT);
         $string .= str_pad($collection['Collection']['drawee_bank_branch_code'], 30, " ", STR_PAD_LEFT);
+        $string .= str_pad(str_pad(substr($collection['Collection']['drawee_bank_branch_code'] ,0, 2), 9, "0", STR_PAD_LEFT), 30, " ", STR_PAD_LEFT);
         $string .= "\r\n";
       }
     }
     if($string){
-      $file = new File( REPORTS_DIR . DS .'ppm' . DS . "HDR" . date('dmY') . $seller . date('dmY') . '.txt', true);
+      $this->loadModel('FileCount');
+      $fileCounts = $this->FileCount->find('list');
+      $fileCount = end($fileCounts);
+      $file = new File( REPORTS_DIR . DS .'ppm' . DS . "HDR" . date('dmY') . $seller . date('dmY') . $fileCount . '.txt', true);
       $string = "HDR" . $file->name . "   010070062" . "\r\n" . $string;
       $string .= "TRL" . date("dmY") . count($collections);
-
       $file->write($string);
       $filename = $file->name;
+      if($filename){
+        $this->FileCount->create();
+        $this->FileCount->save();
+      }
       $file->close();
       return $filename;
     }

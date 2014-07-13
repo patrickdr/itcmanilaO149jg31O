@@ -566,16 +566,17 @@ class ReportsController extends AppController {
             $string .= str_pad(str_pad($cell[10], 3, "0", STR_PAD_LEFT), 30, " ", STR_PAD_LEFT);
             $string .= str_pad($cell[11], 30, " ", STR_PAD_LEFT); // Drawee bank branch code
             $string .= str_pad(str_pad($cell[12], 9, "0", STR_PAD_LEFT), 30, " ", STR_PAD_LEFT); // Clearing location code
-            $string .= "\r\n";
-            
+            $string .= "\r\n";            
           }
         }
         
         if($string){
-          $file = new File( REPORTS_DIR . DS .'ppm' . DS . "HDR" . date('dmY') . $seller . date('dmY') . '.txt', true);
+          $this->loadModel('FileCount');
+          $fileCounts = $this->FileCount->find('list');
+          $fileCount = end($fileCounts);
+          $file = new File( REPORTS_DIR . DS .'ppm' . DS . "HDR" . date('dmY') . $seller . date('dmY') . $fileCount . '.txt', true);
           $string = "HDR" . $file->name . "   010070062" . "\r\n" . $string;
           $string .= "TRL" . date("dmY") . count($cells);
-
           $file->write($string);
           $filename = $file->name;
           $file->close();
@@ -584,6 +585,8 @@ class ReportsController extends AppController {
                 REPORTS_DIR . DS .'ppm' . DS . $filename,
                 array('download' => true, 'name' => $filename)
             );
+            $this->FileCount->create();
+            $this->FileCount->save();
             return;
           }
         }
