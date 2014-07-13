@@ -223,6 +223,31 @@ INSERT INTO `customers` VALUES (2,NULL,'ABS CBN','ABS','',8417709,'2014-04-26 15
 UNLOCK TABLES;
 
 --
+-- Table structure for table `file_counts`
+--
+
+DROP TABLE IF EXISTS `file_counts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `file_counts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `created` datetime DEFAULT NULL,
+  `modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=105 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `file_counts`
+--
+
+LOCK TABLES `file_counts` WRITE;
+/*!40000 ALTER TABLE `file_counts` DISABLE KEYS */;
+INSERT INTO `file_counts` VALUES (1,'2014-07-13 09:19:33','2014-07-13 09:19:33'),(2,'2014-07-13 09:20:59','2014-07-13 09:20:59'),(100,'2014-07-13 09:26:51','2014-07-13 09:26:51'),(101,'2014-07-13 09:27:12','2014-07-13 09:27:12'),(102,'2014-07-13 09:29:30','2014-07-13 09:29:30'),(103,'2014-07-13 09:39:58','2014-07-13 09:39:58'),(104,'2014-07-13 09:40:07','2014-07-13 09:40:07');
+/*!40000 ALTER TABLE `file_counts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `itineraries`
 --
 
@@ -560,4 +585,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-06-28 18:59:20
+-- Dump completed on 2014-07-13 15:51:58
