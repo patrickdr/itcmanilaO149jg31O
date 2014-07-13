@@ -221,7 +221,7 @@ class CollectionsController extends AppController {
         $string .= str_pad("1", 10, " ", STR_PAD_RIGHT);
         $string .= str_pad($collection['Collection']['check_number'], 20, " ", STR_PAD_LEFT); 
         $string .= str_pad("CHK", 10, " ", STR_PAD_LEFT); 
-        $string .= str_pad($collection['Collection']['check_amount'], 20, "0", STR_PAD_LEFT); 
+        $string .= str_pad(number_format($collection['Collection']['check_amount'], 2, '.', ''), 20, "0", STR_PAD_LEFT); 
         $string .= date('dmY', strtotime($collection['Collection']['check_date']));
         $string .= date('dmY', strtotime($collection['Collection']['deposit_date']));
         $string .= str_pad($seller , 30, " ", STR_PAD_LEFT); 
@@ -233,7 +233,6 @@ class CollectionsController extends AppController {
         $string .= str_pad($collection['Collection']['drawee_bank_code'], 30, " ", STR_PAD_LEFT);
         $string .= str_pad($collection['Collection']['drawee_bank_branch_code'], 30, " ", STR_PAD_LEFT);
         $string .= "\r\n";
-        
       }
     }
     if($string){

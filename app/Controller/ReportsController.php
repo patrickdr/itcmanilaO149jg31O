@@ -541,30 +541,36 @@ class ReportsController extends AppController {
         // Set output Encoding.
         $data->setOutputEncoding('CP1251');
         $data->read($this->request->data['PPM']['file']['tmp_name']);
-
+        
         $cells = (isset($data->sheets[0]['cells']) && $data->sheets[0]['cells']) ? $data->sheets[0]['cells'] : array();
         $string = "";
         $seller = "";
         foreach($cells as $key => $cell){
-          if($cell && count($cell) >= 9 && $key > 2){
+          foreach($cell as &$value){
+            $value = preg_replace('/\s+/', '', $value);
+          }
+          if($cell && count($cell) >= 9 && $key > 1){
             $seller = $cell[5];
             $string .= str_pad("1", 10, " ", STR_PAD_RIGHT);
             $string .= str_pad($cell[1], 20, " ", STR_PAD_LEFT);
             $string .= str_pad("CHK", 10, " ", STR_PAD_LEFT);
-            $string .= str_pad($cell[2], 20, "0", STR_PAD_LEFT);
+            $string .= str_pad(number_format($cell[2], 2, '.', ''), 20, "0", STR_PAD_LEFT);
             $string .= $cell[3];
             $string .= $cell[4];
-            $string .= str_pad($cell[5] , 30, " ", STR_PAD_LEFT);
+            $string .= str_pad(preg_replace('/\s+/', '', $cell[5]) , 30, " ", STR_PAD_LEFT); // Seller code
             $string .= $cell[6];
             $string .= str_pad($cell[7], 30, " ", STR_PAD_RIGHT);
-            $string .= str_pad(" ", 30, " ", STR_PAD_RIGHT);
-            $string .= str_pad(" ", 30, " ", STR_PAD_LEFT);
-            $string .= str_pad(" ", 30, " ", STR_PAD_LEFT);
-            $string .= str_pad($cell[8], 30, " ", STR_PAD_LEFT);
+            $string .= str_pad(" ", 30, " ", STR_PAD_RIGHT); // Currency Code
+            $string .= str_pad($cell[8], 30, " ", STR_PAD_LEFT); // Clearing type code
             $string .= str_pad($cell[9], 30, " ", STR_PAD_LEFT);
+            $string .= str_pad(str_pad($cell[10], 3, "0", STR_PAD_LEFT), 30, " ", STR_PAD_LEFT);
+            $string .= str_pad($cell[11], 30, " ", STR_PAD_LEFT); // Drawee bank branch code
+            $string .= str_pad(str_pad($cell[12], 9, "0", STR_PAD_LEFT), 30, " ", STR_PAD_LEFT); // Clearing location code
             $string .= "\r\n";
+            
           }
         }
+        
         if($string){
           $file = new File( REPORTS_DIR . DS .'ppm' . DS . "HDR" . date('dmY') . $seller . date('dmY') . '.txt', true);
           $string = "HDR" . $file->name . "   010070062" . "\r\n" . $string;
