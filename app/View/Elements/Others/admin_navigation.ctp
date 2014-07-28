@@ -28,9 +28,9 @@
 <ul>
   <li><?php echo $this->Html->link(__('Excel to PPM'), array('controller' => 'reports', 'action' => 'xls_ppm', 'admin' => true)); ?></li>
   <li><?php echo $this->Html->link(__('Generate PPM'), array('controller' => 'collections', 'action' => 'ppm', 'admin' => true)); ?></li>
-  <li><?php echo $this->Html->link(__('Or Inventory'), array('action' => 'or_inventory')); ?></li>
-  <li><?php echo $this->Html->link(__('Collection Report'), array('action' => 'collection_report')); ?> </li>
-  <li><?php echo $this->Html->link(__('ITD Report'), array('action' => 'itd_report')); ?> </li>
-  <li><?php echo $this->Html->link(__('Check Transmittal'), array('action' => 'check_transmittal')); ?> </li>
+  <li><?php echo $this->Html->link(__('Or Inventory'), array('controller' => 'reports', 'action' => 'or_inventory')); ?></li>
+  <li><?php echo $this->Html->link(__('Collection Report'), array('controller' => 'reports', 'action' => 'collection_report')); ?> </li>
+  <li><?php echo $this->Html->link(__('ITD Report'), array('controller' => 'reports', 'action' => 'itd_report')); ?> </li>
+  <li><?php echo $this->Html->link(__('Check Transmittal'), array('controller' => 'reports', 'action' => 'check_transmittal')); ?> </li>
 
 </ul>
