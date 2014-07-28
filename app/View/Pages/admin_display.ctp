@@ -17,4 +17,5 @@
 	<ul>
 		<li><?php echo $this->Html->link(__('Logout'), array('controller' => 'users', 'action' => 'logout', 'admin' => false)); ?></li>
 	</ul>
+  <?= $this->element('others/admin_navigation') ?>
 </div>
