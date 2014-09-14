@@ -5,7 +5,7 @@
 	<?php
 		echo $this->Form->input('id');
 		echo $this->Form->input('customer_id');
-		echo $this->Form->input('area_id');
+		//echo $this->Form->input('area_id');
     echo $this->Form->input('Address.address');
 		echo $this->Form->input('name');
 		echo $this->Form->input('seller_id', array('empty' => '---Select Seller---', 'label' => 'Parent Seller'));

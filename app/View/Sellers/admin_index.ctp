@@ -63,7 +63,7 @@
   <?= $this->Element('Others/admin_navigation') ?>
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
-		<li><?php echo $this->Html->link(__('New Seller'), array('action' => 'add')); ?></li>
+		<li><?php echo $this->Html->link(__(($affiliate) ? 'New Seller Affiliate' : 'New Seller'), array('action' => 'add')); ?></li>
 		<li><?php echo $this->Html->link(__('List Customers'), array('controller' => 'customers', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Customer'), array('controller' => 'customers', 'action' => 'add')); ?> </li>
 		<li><?php echo $this->Html->link(__('List Areas'), array('controller' => 'areas', 'action' => 'index')); ?> </li>

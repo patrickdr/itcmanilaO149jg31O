@@ -4,7 +4,7 @@
 		<legend><?php echo __('Admin Add Seller'); ?></legend>
 	<?php
 		echo $this->Form->input('customer_id');
-		echo $this->Form->input('area_id');
+		//echo $this->Form->input('area_id');
 		echo $this->Form->input('name');
     echo $this->Form->input('code');
 		echo $this->Form->input('seller_id', array('empty' => '---Select Seller---'));

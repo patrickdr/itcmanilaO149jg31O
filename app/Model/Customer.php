@@ -34,8 +34,18 @@ class Customer extends AppModel {
 		),
 		'code' => array(
 			'notEmpty' => array(
-				'rule' => array('notEmpty'),
+				'rule' => array(
+          'notEmpty'),
 				//'message' => 'Your custom message here',
+				//'allowEmpty' => false,
+				//'required' => false,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+			),
+      'isUnique' => array(
+				'rule' => array(
+          'isUnique'),
+				'message' => 'Code already exists.',
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
@@ -87,7 +97,7 @@ class Customer extends AppModel {
 			'foreignKey' => 'customer_id',
 			'dependent' => true,
 			'conditions' => array(
-        'SellerAffiliate.seller_id' => ""
+        'Seller.seller_id' => ""
       ),
 			'fields' => '',
 			'order' => '',
