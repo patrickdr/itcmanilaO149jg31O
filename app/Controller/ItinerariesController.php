@@ -29,7 +29,8 @@ class ItinerariesController extends AppController {
         'Buyer' => array('Area'),
         'SellerAffiliate' => array(
           'ParentSeller'
-        )        
+        ),
+		'Seller'	
       ),
       'conditions' => array(
         'Itinerary.trip_id' => null
