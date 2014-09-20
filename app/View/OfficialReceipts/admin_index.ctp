@@ -36,7 +36,7 @@
 			<?php echo $this->Html->link($officialReceipt['Customer']['name'], array('controller' => 'customers', 'action' => 'view', $officialReceipt['Customer']['id'])); ?>
 		</td>
 		<td><?php echo h($officialReceipt['OfficialReceipt']['or_number']); ?>&nbsp;</td>
-		<td><?php echo h($this->OfficialReceipt->stringify('status', $officialReceipt['OfficialReceipt']['status'])); ?>&nbsp;</td>
+		<td><?php echo $officialReceipt['OfficialReceipt']['status']; //echo h($this->OfficialReceipt->stringify('status', $officialReceipt['OfficialReceipt']['status'])); ?>&nbsp;</td>
 		<td><?php echo h($officialReceipt['OfficialReceipt']['date_received']); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $officialReceipt['OfficialReceipt']['id'])); ?>
