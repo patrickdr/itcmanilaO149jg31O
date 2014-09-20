@@ -66,7 +66,7 @@
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $itinerary['Itinerary']['id'])); ?>
 			<!--<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $itinerary['Itinerary']['id'])); ?>-->
-			<!--<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $itinerary['Itinerary']['id']), null, __('Are you sure you want to delete # %s?', $itinerary['Itinerary']['id'])); ?>--->
+			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $itinerary['Itinerary']['id']), null, __('Are you sure you want to delete # %s?', $itinerary['Itinerary']['id'])); ?>
 		</td>
 	</tr>
   <?php endforeach; ?>

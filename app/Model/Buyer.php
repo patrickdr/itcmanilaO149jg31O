@@ -155,7 +155,7 @@ class Buyer extends AppModel {
   public function findByBuyerCode($code, $options = array()){
     return $this->find('first', array(
       'conditions' => array(
-        'Buyer.code' => $code
+        'Buyer.code' => intval($code)
       ),
       'recursive' => -1
     ) + $options);
