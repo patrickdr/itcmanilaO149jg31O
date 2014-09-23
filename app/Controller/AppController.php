@@ -20,6 +20,8 @@
  */
 
 App::uses('Controller', 'Controller');
+App::import('Vendor', 'Spreadsheet_Excel_Reader', array('file' => 'Excel/reader.php'));
+
 
 /**
  * Application Controller
@@ -117,4 +119,19 @@ class AppController extends Controller {
 		}
 		return false;
 	}  
+  /**
+  * Validate excel file
+  */
+  protected function _validateBuyerExcel($headers = array(), $validHeaders = array()){   
+    if(count($headers) != count($validHeaders)){ 
+      return false;
+    }    
+    foreach($headers as $key => $header){
+      $check = strpos(strtolower($header), $validHeaders[$key]);
+      if($check === false){
+        return false;
+      }
+    }
+    return true;
+  }  
 }

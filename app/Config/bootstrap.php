@@ -105,3 +105,6 @@ CakeLog::config('error', array(
 	'types' => array('warning', 'error', 'critical', 'alert', 'emergency'),
 	'file' => 'error',
 ));
+
+require(implode(DS, array(APP, 'Config', 'functions.php')));
+require(implode(DS, array(APP, 'Config', 'constants.php')));
