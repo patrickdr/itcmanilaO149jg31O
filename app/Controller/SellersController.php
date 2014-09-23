@@ -80,7 +80,13 @@ class SellersController extends AppController {
 	public function admin_add() {
 		if ($this->request->is('post')) {
 			$this->Seller->create();
+      $this->Seller->set($this->request->data);
 			if ($this->Seller->save($this->request->data)) {
+        // Will save address starting from here
+        $this->request->data['Address']['source_id'] = $this->Seller->id;
+        $this->request->data['Address']['source_name'] = 'sellers';
+        $this->Seller->Address->save($this->request->data);
+        
 				$this->Session->setFlash(__('The seller has been saved.'));
 				return $this->redirect(array('action' => 'index'));
 			} else {

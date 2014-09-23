@@ -8,7 +8,7 @@
 		echo $this->Form->input('name');
     echo $this->Form->input('code');
 		echo $this->Form->input('seller_id', array('empty' => '---Select Seller---'));
-		echo $this->Form->input('address');
+		echo $this->Form->input('Address.address');
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

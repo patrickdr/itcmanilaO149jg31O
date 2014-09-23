@@ -19,6 +19,20 @@ class Seller extends AppModel {
 	public $displayField = 'name';
 
 
+	public $validate = array(
+    'code' => array(
+      'isUnique' => array(
+        'rule' => array('isUnique'),
+        'message' => "duplicate is not allowed."
+      )
+    ),
+    'name' => array(
+      'isUnique' => array(
+        'rule' => array('isUnique'),
+        'message' => "duplicate is not allowed."
+      )
+    )
+	);
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 /**

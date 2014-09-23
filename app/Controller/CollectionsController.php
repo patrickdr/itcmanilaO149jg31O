@@ -242,7 +242,7 @@ class CollectionsController extends AppController {
       $fileCount = end($fileCounts);
       $file = new File( REPORTS_DIR . DS .'ppm' . DS . "HDR" . date('dmY') . $seller . date('dmY') . $fileCount . '.txt', true);
       $string = "HDR" . $file->name . "   010070062" . "\r\n" . $string;
-      $string .= "TRL" . date("dmY") . count($collections);
+      $string .= "TRL" . date("dmY") . (count($collections) + 1);
       $file->write($string);
       $filename = $file->name;
       if($filename){

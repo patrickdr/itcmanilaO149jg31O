@@ -566,8 +566,8 @@ class ReportsController extends AppController {
             $string .= str_pad(str_pad($cell[10], 3, "0", STR_PAD_LEFT), 30, " ", STR_PAD_LEFT);
             $string .= str_pad($cell[11], 30, " ", STR_PAD_LEFT); // Drawee bank branch code
             $string .= str_pad(str_pad($cell[12], 9, "0", STR_PAD_LEFT), 30, " ", STR_PAD_LEFT); // Clearing location code
-            $string .= str_pad("", 372, " ", STR_PAD_LEFT);
-            $string .= str_pad($cell[13], 10, " ", STR_PAD_RIGHT);
+            $string .= str_pad("", 371, " ", STR_PAD_LEFT);
+            $string .= str_pad($cell[13], 10, " ", STR_PAD_LEFT);
             $string .= str_pad($cell[14], 35, " ", STR_PAD_RIGHT);
             $string .= "\r\n";            
           }
@@ -579,7 +579,7 @@ class ReportsController extends AppController {
           $fileCount = end($fileCounts);
           $file = new File( REPORTS_DIR . DS .'ppm' . DS . "HDR" . date('dmY') . $seller . date('dmY') . $fileCount . '.txt', true);
           $string = "HDR" . $file->name . "   010070062" . "\r\n" . $string;
-          $string .= "TRL" . date("dmY") . count($cells);
+          $string .= "TRL" . date("dmY") . (count($cells) + 1);
           $file->write($string);
           $filename = $file->name;
           $file->close();
